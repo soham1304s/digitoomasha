@@ -104,7 +104,6 @@ import {
   Loader2,
   Clock,
   Send,
-  Server,
   Image as ImageIcon,
   Tag,
   Twitter,
@@ -875,74 +874,45 @@ export default function ClientDashboard() {
   const [appTimezone, setAppTimezone] = useState('Asia/Kolkata');
   const [appearanceSaveSuccess, setAppearanceSaveSuccess] = useState(false);
 
-  // Email Gateway Settings State
-  const [smtpConfig, setSmtpConfig] = useState({
-    host: 'smtp.gmail.com',
-    port: '587',
-    encryption: 'TLS',
-    username: 'notifications@digitoomasha.com',
-    password: '••••••••••••••••'
-  });
-  const [showSmtpPass, setShowSmtpPass] = useState(false);
-  const [senderConfig, setSenderConfig] = useState({
-    senderName: 'DigiToomasha Agency',
-    senderEmail: 'notifications@digitoomasha.com',
-    replyToEmail: 'support@digitoomasha.com'
-  });
-  const [domainVerified, setDomainVerified] = useState(true);
-  const [verifyingDomain, setVerifyingDomain] = useState(false);
-  const [selectedTemplateKey, setSelectedTemplateKey] = useState('welcome');
-  const [emailTemplates, setEmailTemplates] = useState({
-    welcome: {
-      name: 'Welcome Email',
-      subject: 'Welcome to DigiToomasha Growth Portal 🎉',
-      body: 'Hello {{client_name}},\n\nWelcome to DigiToomasha! Your client dashboard is now active and monitoring your ad performance in real-time.\n\nBest regards,\nThe DigiToomasha Team'
-    },
-    reset: {
-      name: 'Password Reset',
-      subject: 'Reset Your DigiToomasha Password',
-      body: 'Hello {{client_name}},\n\nWe received a request to reset your password. Click the link below to verify:\n{{reset_link}}\n\nIf you did not request this, please ignore this email.'
-    },
-    report: {
-      name: 'Monthly Analytics Report',
-      subject: 'Monthly Performance Analytics Report - {{month}}',
-      body: 'Dear {{client_name}},\n\nYour monthly campaign performance metrics and ROI summary are ready for review.\n\nSummary:\n- Total Impressions: {{impressions}}\n- Conversions: {{conversions}}\n\nLog in to download your full PDF report.'
-    },
-    lead: {
-      name: 'New Lead Alert',
-      subject: '🔥 New High-Intent Lead Captured: {{lead_name}}',
-      body: 'Hi {{agent_name}},\n\nA new lead has filled out the contact funnel:\nName: {{lead_name}}\nEmail: {{lead_email}}\nBudget: {{lead_budget}}\n\nPlease follow up within 15 minutes.'
-    }
-  });
-  const [testEmailRecipient, setTestEmailRecipient] = useState('');
-  const [sendingTestEmail, setSendingTestEmail] = useState(false);
-  const [emailSaveSuccess, setEmailSaveSuccess] = useState(false);
-  const [testEmailSuccessMsg, setTestEmailSuccessMsg] = useState('');
+  // Notification Preferences State (6 Alert Categories)
+  const [notifPreferences, setNotifPreferences] = useState({
+    // 1. Email Notifications
+    emailEnabled: true,
+    emailFrequency: 'instant',
+    emailReportSummary: true,
+    emailMarketingNews: false,
 
-  // SMS & OTP Verification Settings State
-  const [smsConfig, setSmtpConfigSMS] = useState({
-    smsProvider: 'Twilio',
-    accountSid: 'AC9824059123851092830591',
-    authToken: '••••••••••••••••••••••••',
-    senderId: 'DGTMSH'
+    // 2. Push Notifications
+    pushEnabled: true,
+    pushBrowserDesktop: true,
+    pushSoundAlerts: true,
+    pushMobileApp: true,
+
+    // 3. Campaign Alerts
+    campaignStatusChanges: true,
+    campaignCtrDropAlert: true,
+    campaignRoiTargetMet: true,
+    campaignCreativeApproved: true,
+
+    // 4. Lead Alerts
+    leadInstantSms: true,
+    leadEmailAlert: true,
+    leadHighValueThreshold: '5000',
+    leadSlackWebhook: true,
+
+    // 5. Budget Alerts
+    budgetCap80Percent: true,
+    budgetCap90Percent: true,
+    budgetExhausted100: true,
+    budgetDailySpikeAlert: true,
+
+    // 6. System Notifications
+    sysNewLoginAlert: true,
+    sysSecurityChanges: true,
+    sysApiDisconnectAlert: true,
+    sysBackupComplete: false
   });
-  const [showSmsToken, setShowSmsToken] = useState(false);
-  const [otpConfig, setOtpConfig] = useState({
-    otpProvider: 'Twilio Verify API',
-    otpLength: '6',
-    otpType: 'Numeric',
-    otpExpiryMinutes: '3',
-    maxResendAttempts: '3',
-    cooldownSeconds: '60',
-    ipRateLimit: '5',
-    requireLogin2FA: true,
-    requireTransactionAuth: true,
-    requirePasswordReset: true
-  });
-  const [testMobileNumber, setTestMobileNumber] = useState('');
-  const [sendingTestOtp, setSendingTestOtp] = useState(false);
-  const [smsSaveSuccess, setSmsSaveSuccess] = useState(false);
-  const [testOtpSuccessMsg, setTestOtpSuccessMsg] = useState('');
+  const [notifSaveSuccess, setNotifSaveSuccess] = useState(false);
 
   const [activeSessionsList, setActiveSessionsList] = useState([
     { id: 1, device: 'Chrome on Linux (Ubuntu 24.04)', location: 'Kolkata, IN', ip: '103.24.12.8', lastActive: 'Active Now (Current Session)', isCurrent: true, type: 'desktop' },
@@ -973,7 +943,7 @@ export default function ClientDashboard() {
         setIpWhitelistInput(res.settings.ipWhitelistInput || '103.24.12.8, 192.168.1.*');
         if (Array.isArray(res.settings.activeSessionsList)) setActiveSessionsList(res.settings.activeSessionsList);
         if (Array.isArray(res.settings.loginHistoryList)) setLoginHistoryList(res.settings.loginHistoryList);
-        
+
         // Populate Appearance fields if returned
         if (res.settings.themeMode) setThemeMode(res.settings.themeMode);
         if (res.settings.accentColor) setAccentColor(res.settings.accentColor);
@@ -1014,14 +984,14 @@ export default function ClientDashboard() {
     document.body.classList.remove('dark-theme', 'dark-slate', 'dark-sapphire');
     root.classList.add('light-theme');
     document.body.classList.add('light-theme');
-    try { localStorage.setItem('digitoomasha_theme_mode', 'light'); } catch (e) {}
+    try { localStorage.setItem('digitoomasha_theme_mode', 'light'); } catch (e) { }
   }, []);
 
   // Live Application of Accent Color
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-accent', accentColor);
-    try { localStorage.setItem('digitoomasha_accent_color', accentColor); } catch (e) {}
+    try { localStorage.setItem('digitoomasha_accent_color', accentColor); } catch (e) { }
   }, [accentColor]);
 
   // Live Application of Density View (Compact vs Comfortable)
@@ -1032,7 +1002,7 @@ export default function ClientDashboard() {
     } else {
       root.classList.remove('compact-density');
     }
-    try { localStorage.setItem('digitoomasha_density_view', densityView); } catch (e) {}
+    try { localStorage.setItem('digitoomasha_density_view', densityView); } catch (e) { }
   }, [densityView]);
 
   // Live Application of Sidebar Behavior
@@ -1053,7 +1023,7 @@ export default function ClientDashboard() {
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }
-    try { localStorage.setItem('digitoomasha_sidebar_behavior', sidebarBehavior); } catch (e) {}
+    try { localStorage.setItem('digitoomasha_sidebar_behavior', sidebarBehavior); } catch (e) { }
   }, [sidebarBehavior]);
 
   const handleToggle2FA = async () => {
@@ -1260,7 +1230,7 @@ export default function ClientDashboard() {
             files: Array.isArray(t.files)
               ? t.files
               : typeof t.files === 'string'
-                ? (function() { try { return JSON.parse(t.files); } catch(e) { return []; } })()
+                ? (function () { try { return JSON.parse(t.files); } catch (e) { return []; } })()
                 : []
           }));
           setTaskItems(mapped);
@@ -1279,7 +1249,7 @@ export default function ClientDashboard() {
         const parsedFiles = Array.isArray(updatedTaskObj.files)
           ? updatedTaskObj.files
           : typeof updatedTaskObj.files === 'string'
-            ? (function() { try { return JSON.parse(updatedTaskObj.files); } catch(e) { return []; } })()
+            ? (function () { try { return JSON.parse(updatedTaskObj.files); } catch (e) { return []; } })()
             : [];
 
         setInspectedProject((prev) => {
@@ -1300,7 +1270,7 @@ export default function ClientDashboard() {
             const parsedFiles = Array.isArray(t.files)
               ? t.files
               : typeof t.files === 'string'
-                ? (function() { try { return JSON.parse(t.files); } catch(e) { return []; } })()
+                ? (function () { try { return JSON.parse(t.files); } catch (e) { return []; } })()
                 : [];
             return {
               id: t.id,
@@ -2056,17 +2026,17 @@ export default function ClientDashboard() {
             subtasks: Array.isArray(t.subtasks)
               ? t.subtasks
               : typeof t.subtasks === 'string'
-                ? (function() { try { return JSON.parse(t.subtasks); } catch(e) { return []; } })()
+                ? (function () { try { return JSON.parse(t.subtasks); } catch (e) { return []; } })()
                 : [],
             comments: Array.isArray(t.comments)
               ? t.comments
               : typeof t.comments === 'string'
-                ? (function() { try { return JSON.parse(t.comments); } catch(e) { return []; } })()
+                ? (function () { try { return JSON.parse(t.comments); } catch (e) { return []; } })()
                 : [],
             files: Array.isArray(t.files)
               ? t.files
               : typeof t.files === 'string'
-                ? (function() { try { return JSON.parse(t.files); } catch(e) { return []; } })()
+                ? (function () { try { return JSON.parse(t.files); } catch (e) { return []; } })()
                 : []
           }));
           setTaskItems(mapped);
@@ -2175,6 +2145,8 @@ export default function ClientDashboard() {
     {
       groupTitle: 'ORGANIZATION',
       items: [
+        { id: 'company', label: 'Company Settings', Icon: Building, desc: 'Brand logo, GST & business details' },
+        { id: 'team', label: 'Team Management', Icon: UserPlus, desc: 'Members, roles & permission audit' },
         { id: 'billing', label: 'Billing & Plans', Icon: CreditCard, desc: 'Subscriptions, invoices & tax info' }
       ]
     },
@@ -6177,17 +6149,16 @@ export default function ClientDashboard() {
 
                               <div className="tl-bar-track">
                                 <div
-                                  className={`tl-bar-fill ${
-                                    t.status === 'Completed' || t.status === 'Approved'
+                                  className={`tl-bar-fill ${t.status === 'Completed' || t.status === 'Approved'
                                       ? 'bg-emerald-grad'
                                       : t.status === 'Rejected'
-                                      ? 'bg-rose-grad'
-                                      : t.status === 'In Progress'
-                                      ? 'bg-purple-grad'
-                                      : t.status === 'In Review / QA'
-                                      ? 'bg-amber-grad'
-                                      : 'bg-blue-grad'
-                                  }`}
+                                        ? 'bg-rose-grad'
+                                        : t.status === 'In Progress'
+                                          ? 'bg-purple-grad'
+                                          : t.status === 'In Review / QA'
+                                            ? 'bg-amber-grad'
+                                            : 'bg-blue-grad'
+                                    }`}
                                   style={{ width: `${Math.max(percent, 12)}%` }}
                                 >
                                   <span className="tl-bar-txt font-mono">
@@ -6478,8 +6449,8 @@ export default function ClientDashboard() {
                       {st === 'All'
                         ? `All Accepted (${taskItems.filter(t => ['Approved', 'Accepted', 'In Progress', 'Completed'].includes(t.status)).length})`
                         : st === 'Approved'
-                        ? `Approved (${taskItems.filter(t => t.status === 'Approved' || t.status === 'Accepted').length})`
-                        : st}
+                          ? `Approved (${taskItems.filter(t => t.status === 'Approved' || t.status === 'Accepted').length})`
+                          : st}
                     </button>
                   ))}
                 </div>
@@ -6510,7 +6481,7 @@ export default function ClientDashboard() {
                     (p.campaign || '').toLowerCase().includes(projectSearchQuery.toLowerCase());
                   const matchStatus = projectStatusFilter === 'All' ? true :
                     projectStatusFilter === 'Approved' ? (p.status === 'Approved' || p.status === 'Accepted') :
-                    p.status === projectStatusFilter;
+                      p.status === projectStatusFilter;
                   return matchSearch && matchStatus;
                 });
 
@@ -8206,7 +8177,7 @@ export default function ClientDashboard() {
                             )}
                             <strong className="policy-box-title"><Globe className="w-4 h-4 text-blue inline mr-1.5" /> Corporate IP Access Whitelisting</strong>
                             <p className="salert-sub" style={{ margin: '0.25rem 0 0.75rem 0' }}>Restrict dashboard sign-ins to specified static IP addresses or CIDR blocks (comma-separated).</p>
-                            
+
                             <div className="ip-input-row">
                               <input
                                 type="text"
@@ -8566,103 +8537,344 @@ export default function ClientDashboard() {
                     </div>
                   )}
 
-                  {/* 4. BILLING & PLANS PANEL */}
-                  {activeSettingsTab === 'billing' && (
-                    <div className="settings-panel-wrapper">
-                      {/* Header */}
-                      <div className="security-panel-header">
-                        <div>
-                          <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                            <CreditCard className="text-purple w-7 h-7" /> Billing & Subscription Plans
-                          </h2>
-                          <p className="profile-user-email">Manage your active agency subscription, billing cycle, invoices, and payment methods.</p>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f3e8ff', color: '#7c3aed', padding: '0.4rem 0.9rem', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}>
-                          <Sparkles className="w-4 h-4 text-purple" /> Coming Soon in v2.4
-                        </div>
-                      </div>
+                  {activeSettingsTab === 'sms' && (
+    <div className="settings-panel-wrapper">
+      {/* Header */}
+      <div className="security-panel-header">
+        <div>
+          <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <Smartphone className="text-purple w-7 h-7" /> SMS, OTP & Verification Settings
+          </h2>
+          <p className="profile-user-email">Configure SMS gateway providers, OTP authentication engines, expiration timeouts, resend rate limits, and security verification policies.</p>
+        </div>
+        {smsSaveSuccess && (
+          <div className="alert-success-banner" style={{ padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.82rem' }}>
+            <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> SMS & OTP Gateway Settings Saved!
+          </div>
+        )}
+      </div>
 
-                      {/* Current Active Plan Card */}
-                      <div className="settings-card-block margin-top-md" style={{ background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)', border: '1px solid #e9d5ff' }}>
-                        <div className="card-block-header">
-                          <Zap className="card-block-ic text-purple" />
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                              <h3 className="card-block-title" style={{ color: '#581c87', fontSize: '1.1rem' }}>Pro Growth Agency Plan</h3>
-                              <span style={{ background: '#7c3aed', color: '#ffffff', padding: '0.2rem 0.65rem', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>Active</span>
-                            </div>
-                            <p className="card-block-sub" style={{ color: '#6b21a8' }}>Full access to ad automation engines, social scheduler, CRM hub, and AI content creation.</p>
-                          </div>
-                        </div>
+      {/* 1. SMS PROVIDER CONFIGURATION */}
+      <div className="settings-card-block margin-top-md">
+        <div className="card-block-header">
+          <Smartphone className="card-block-ic text-purple" />
+          <div>
+            <h3 className="card-block-title">SMS Gateway Provider Setup</h3>
+            <p className="card-block-sub">Choose your SMS API gateway for transactional SMS, alerts, and mobile notifications.</p>
+          </div>
+        </div>
 
-                        <div className="card-block-body" style={{ marginTop: '0.5rem' }}>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-                            <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #e9d5ff' }}>
-                              <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 600 }}>Billing Cycle</span>
-                              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e293b', marginTop: '0.25rem' }}>₹14,999 / month</div>
-                            </div>
-                            <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #e9d5ff' }}>
-                              <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 600 }}>Next Renewal Date</span>
-                              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e293b', marginTop: '0.25rem' }}>Sept 1, 2026</div>
-                            </div>
-                            <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #e9d5ff' }}>
-                              <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 600 }}>AI Token Credits</span>
-                              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#10b981', marginTop: '0.25rem' }}>Unlimited (Pro Tier)</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+        <div className="card-block-body">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">SMS Provider</label>
+              <select
+                value={smsConfig.smsProvider}
+                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, smsProvider: e.target.value })}
+                className="form-input"
+                style={{ fontWeight: 600 }}
+              >
+                <option value="Twilio">Twilio (Global SMS API)</option>
+                <option value="Textlocal">Textlocal (DLT Approved - India)</option>
+                <option value="MSG91">MSG91 (India DLT & WhatsApp)</option>
+                <option value="AWS_SNS">Amazon Web Services (AWS SNS)</option>
+                <option value="Vonage">Vonage / Nexmo</option>
+              </select>
+            </div>
 
-                      {/* Coming Soon Features Grid */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Sparkles className="card-block-ic text-orange" />
-                          <div>
-                            <h3 className="card-block-title">Upcoming Billing Features (Coming Soon)</h3>
-                            <p className="card-block-sub">We are working on releasing full self-serve payment automation and tax invoice management.</p>
-                          </div>
-                        </div>
+            <div className="form-group">
+              <label className="form-label">Account SID / API Key</label>
+              <input
+                type="text"
+                value={smsConfig.accountSid}
+                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, accountSid: e.target.value })}
+                className="form-input font-mono"
+                placeholder="Enter Account SID or API Key"
+              />
+            </div>
 
-                        <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
-                            <div style={{ padding: '1.1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                                <CreditCard className="w-5 h-5 text-purple" />
-                                <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Stripe & Razorpay Integration</strong>
-                              </div>
-                              <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
-                                Auto-debit via UPI, Credit Cards, NetBanking, and PayPal with multi-currency checkout support.
-                              </p>
-                              <span style={{ display: 'inline-block', marginTop: '0.75rem', background: '#fef3c7', color: '#b45309', padding: '0.2rem 0.55rem', borderRadius: '10px', fontSize: '0.72rem', fontWeight: 700 }}>
-                                Coming Soon in v2.4
-                              </span>
-                            </div>
+            <div className="form-group">
+              <label className="form-label">Sender ID / DLT Header</label>
+              <input
+                type="text"
+                value={smsConfig.senderId}
+                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, senderId: e.target.value })}
+                className="form-input font-mono"
+                placeholder="e.g. DGTMSH"
+              />
+            </div>
 
-                            <div style={{ padding: '1.1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                                <FileText className="w-5 h-5 text-blue" />
-                                <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>GST Compliant Tax Invoices</strong>
-                              </div>
-                              <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
-                                Automated monthly GST tax invoices with custom GSTIN, SAC codes, and PDF receipt downloads.
-                              </p>
-                              <span style={{ display: 'inline-block', marginTop: '0.75rem', background: '#fef3c7', color: '#b45309', padding: '0.2rem 0.55rem', borderRadius: '10px', fontSize: '0.72rem', fontWeight: 700 }}>
-                                Coming Soon in v2.4
-                              </span>
-                            </div>
+            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+              <label className="form-label">Auth Token / API Secret</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showSmsToken ? 'text' : 'password'}
+                  value={smsConfig.authToken}
+                  onChange={(e) => setSmtpConfigSMS({ ...smsConfig, authToken: e.target.value })}
+                  className="form-input font-mono"
+                  placeholder="Enter Auth Token or Secret"
+                  style={{ paddingRight: '2.5rem' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowSmsToken(!showSmsToken)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#64748b'
+                  }}
+                >
+                  {showSmsToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                            <div style={{ padding: '1.1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                                <TrendingUp className="w-5 h-5 text-green" />
-                                <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Add-on Seat Management</strong>
-                              </div>
-                              <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
-                                Add additional team seats, client viewer passes, and dedicated account manager add-ons.
-                              </p>
-                              <span style={{ display: 'inline-block', marginTop: '0.75rem', background: '#fef3c7', color: '#b45309', padding: '0.2rem 0.55rem', borderRadius: '10px', fontSize: '0.72rem', fontWeight: 700 }}>
-                                Coming Soon in v2.4
-                              </span>
-                            </div>
+      {/* 2. OTP PROVIDER & CODE ENGINE */}
+      <div className="settings-card-block margin-top-md">
+        <div className="card-block-header">
+          <ShieldCheck className="card-block-ic text-blue" />
+          <div>
+            <h3 className="card-block-title">OTP Provider & Code Generation Engine</h3>
+            <p className="card-block-sub">Configure how One-Time Passwords (OTP) are generated and delivered.</p>
+          </div>
+        </div>
+
+        <div className="card-block-body">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">OTP Provider Service</label>
+              <select
+                value={otpConfig.otpProvider}
+                onChange={(e) => setOtpConfig({ ...otpConfig, otpProvider: e.target.value })}
+                className="form-input"
+              >
+                <option value="Twilio Verify API">Twilio Verify API (Managed OTP)</option>
+                <option value="Firebase Phone Auth">Firebase Phone Authentication</option>
+                <option value="Custom SMS OTP">Custom In-House SMS OTP Engine</option>
+                <option value="WhatsApp Business OTP">WhatsApp Business OTP Service</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">OTP Code Length</label>
+              <select
+                value={otpConfig.otpLength}
+                onChange={(e) => setOtpConfig({ ...otpConfig, otpLength: e.target.value })}
+                className="form-input"
+              >
+                <option value="6">6 Digits (Recommended - e.g. 849204)</option>
+                <option value="4">4 Digits (Fast - e.g. 4920)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">OTP Code Character Set</label>
+              <select
+                value={otpConfig.otpType}
+                onChange={(e) => setOtpConfig({ ...otpConfig, otpType: e.target.value })}
+                className="form-input"
+              >
+                <option value="Numeric">Numeric Only (0-9)</option>
+                <option value="Alphanumeric">Alphanumeric (A-Z, 0-9)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. OTP EXPIRATION TIMEOUT */}
+      <div className="settings-card-block margin-top-md">
+        <div className="card-block-header">
+          <Clock className="card-block-ic text-orange" />
+          <div>
+            <h3 className="card-block-title">OTP Expiration Lifespan</h3>
+            <p className="card-block-sub">Set the maximum duration before a generated OTP code expires automatically.</p>
+          </div>
+        </div>
+
+        <div className="card-block-body">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">OTP Expiration Time</label>
+              <select
+                value={otpConfig.otpExpiryMinutes}
+                onChange={(e) => setOtpConfig({ ...otpConfig, otpExpiryMinutes: e.target.value })}
+                className="form-input"
+                style={{ fontWeight: 600 }}
+              >
+                <option value="1">1 Minute (Strict Security)</option>
+                <option value="3">3 Minutes (Default Recommended)</option>
+                <option value="5">5 Minutes (Standard)</option>
+                <option value="10">10 Minutes (Extended)</option>
+              </select>
+            </div>
+
+            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+              <label className="form-label">Failed Attempt Policy</label>
+              <div style={{ padding: '0.75rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '0.85rem', color: '#475569' }}>
+                🔒 Codes automatically invalidate after <strong>3 consecutive failed verification attempts</strong> to prevent brute-force entry.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. RESEND LIMITS & ANTI-ABUSE RATE LIMITING */}
+      <div className="settings-card-block margin-top-md">
+        <div className="card-block-header">
+          <SlidersHorizontal className="card-block-ic text-red" />
+          <div>
+            <h3 className="card-block-title">Resend Limits & Anti-Abuse Rate Limiting</h3>
+            <p className="card-block-sub">Prevent SMS spam and control Gateway API costs with strict request limits.</p>
+          </div>
+        </div>
+
+        <div className="card-block-body">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Max Resend Attempts (per 10 Mins)</label>
+              <select
+                value={otpConfig.maxResendAttempts}
+                onChange={(e) => setOtpConfig({ ...otpConfig, maxResendAttempts: e.target.value })}
+                className="form-input"
+              >
+                <option value="3">3 Attempts (Recommended)</option>
+                <option value="5">5 Attempts</option>
+                <option value="10">10 Attempts</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Resend Cooldown Delay</label>
+              <select
+                value={otpConfig.cooldownSeconds}
+                onChange={(e) => setOtpConfig({ ...otpConfig, cooldownSeconds: e.target.value })}
+                className="form-input"
+              >
+                <option value="30">30 Seconds</option>
+                <option value="60">60 Seconds (1 Minute Recommended)</option>
+                <option value="120">120 Seconds (2 Minutes)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">IP Address Hourly Limit</label>
+              <select
+                value={otpConfig.ipRateLimit}
+                onChange={(e) => setOtpConfig({ ...otpConfig, ipRateLimit: e.target.value })}
+                className="form-input"
+              >
+                <option value="5">Max 5 OTP requests / IP / hour</option>
+                <option value="10">Max 10 OTP requests / IP / hour</option>
+                <option value="20">Max 20 OTP requests / IP / hour</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. VERIFICATION ENFORCEMENT SETTINGS */}
+      <div className="settings-card-block margin-top-md">
+        <div className="card-block-header">
+          <Lock className="card-block-ic text-emerald" />
+          <div>
+            <h3 className="card-block-title">Verification Enforcement Settings</h3>
+            <p className="card-block-sub">Enable or disable mandatory OTP verification for key account actions.</p>
+          </div>
+        </div>
+
+        <div className="card-block-body">
+          <div className="sec-methods-grid">
+            <div
+              className={`sec-method-card ${otpConfig.requireLogin2FA ? 'selected' : ''}`}
+              onClick={() => setOtpConfig({ ...otpConfig, requireLogin2FA: !otpConfig.requireLogin2FA })}
+            >
+              <div className="sec-icon-wrap"><ShieldCheck className="w-5 h-5 text-purple" /></div>
+              <div className="sec-method-text">
+                <strong className="sec-title">2FA User Login Verification</strong>
+                <p className="sec-sub">Require OTP verification code when signing into portal from new devices.</p>
+              </div>
+              <span className="sec-radio-dot">{otpConfig.requireLogin2FA && <Check className="w-3.5 h-3.5 text-white" />}</span>
+            </div>
+
+            <div
+              className={`sec-method-card ${otpConfig.requireTransactionAuth ? 'selected' : ''}`}
+              onClick={() => setOtpConfig({ ...otpConfig, requireTransactionAuth: !otpConfig.requireTransactionAuth })}
+            >
+              <div className="sec-icon-wrap"><Lock className="w-5 h-5 text-blue" /></div>
+              <div className="sec-method-text">
+                <strong className="sec-title">High-Risk Campaign & Budget Changes</strong>
+                <p className="sec-sub">Require OTP verification when increasing monthly budget caps above ₹50,000.</p>
+              </div>
+              <span className="sec-radio-dot">{otpConfig.requireTransactionAuth && <Check className="w-3.5 h-3.5 text-white" />}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 6. TEST OTP DISPATCH & SAVE */}
+      <div className="settings-card-block margin-top-md">
+        <div className="card-block-header">
+          <Send className="card-block-ic text-purple" />
+          <div>
+            <h3 className="card-block-title">Test OTP Deliverability & Save Gateway</h3>
+            <p className="card-block-sub">Send a live test OTP message to verify SMS gateway routing and DLT headers.</p>
+          </div>
+        </div>
+
+        <div className="card-block-body">
+          {testOtpSuccessMsg && (
+            <div className="alert-success-banner" style={{ marginBottom: '1rem', padding: '0.6rem 1rem' }}>
+              <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> {testOtpSuccessMsg}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <input
+              type="tel"
+              value={testMobileNumber}
+              onChange={(e) => setTestMobileNumber(e.target.value)}
+              placeholder="Enter mobile number (e.g. +91 98765 43210)"
+              className="form-input"
+              style={{ maxWidth: '320px' }}
+            />
+
+            <button
+              type="button"
+              className="btn-outline-purple sm-btn"
+              disabled={sendingTestOtp}
+              onClick={() => {
+                setSendingTestOtp(true);
+                setTimeout(() => {
+                  setSendingTestOtp(false);
+                  setTestOtpSuccessMsg(`✨ Test OTP SMS successfully dispatched to ${testMobileNumber || '+91 98765 43210'} via ${smsConfig.smsProvider}!`);
+                  setTimeout(() => setTestOtpSuccessMsg(''), 4000);
+                }, 1200);
+              }}
+            >
+              {sendingTestOtp ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <Send className="w-3.5 h-3.5 mr-1 inline" />}
+              Dispatch Test OTP SMS
+            </button>
+
+            <button
+              type="button"
+              className="btn-primary-purple sm-btn"
+              style={{ marginLeft: 'auto' }}
+              onClick={() => {
+                setSmsSaveSuccess(true);
+                setTimeout(() => setSmsSaveSuccess(false), 3000);
+              }}
+            >
+              <Save className="w-4 h-4 mr-1 inline" /> Save SMS & OTP Settings
+            </button>
                           </div>
                         </div>
                       </div>
@@ -8670,709 +8882,389 @@ export default function ClientDashboard() {
                     </div>
                   )}
 
-                  {/* 5. EMAIL GATEWAY & SMTP COMMUNICATIONS PANEL */}
-                  {activeSettingsTab === 'email' && (
+                  {/* 7. NOTIFICATIONS PREFERENCES & ALERTS CENTER PANEL */}
+                  {activeSettingsTab === 'notifications' && (
                     <div className="settings-panel-wrapper">
                       {/* Header */}
                       <div className="security-panel-header">
                         <div>
                           <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                            <Mail className="text-purple w-7 h-7" /> Email Gateway & Communications
+                            <Bell className="text-purple w-7 h-7" /> Notification Preferences & Alert Hub
                           </h2>
-                          <p className="profile-user-email">Configure SMTP credentials, sender addresses, email verification status, custom templates, and deliverability testing tools.</p>
+                          <p className="profile-user-email">Configure email digests, browser push notifications, campaign performance triggers, lead intake alerts, budget thresholds, and security event logs.</p>
                         </div>
-                        {emailSaveSuccess && (
+                        {notifSaveSuccess && (
                           <div className="alert-success-banner" style={{ padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.82rem' }}>
-                            <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> Email Gateway Configuration Saved!
+                            <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> Notification Preferences Saved!
                           </div>
                         )}
                       </div>
 
-                      {/* 1. SMTP CONFIGURATION BLOCK */}
+                      {/* 1. EMAIL NOTIFICATIONS */}
                       <div className="settings-card-block margin-top-md">
                         <div className="card-block-header">
-                          <Server className="card-block-ic text-purple" />
+                          <Mail className="card-block-ic text-purple" />
                           <div>
-                            <h3 className="card-block-title">SMTP Server Configuration</h3>
-                            <p className="card-block-sub">Set up your outbound mail server credentials for transactional and campaign emails.</p>
+                            <h3 className="card-block-title">Email Notifications</h3>
+                            <p className="card-block-sub">Manage email digest frequency and outbound email alerts.</p>
                           </div>
                         </div>
 
                         <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                            <div className="form-group">
-                              <label className="form-label">SMTP Server Host</label>
-                              <input
-                                type="text"
-                                value={smtpConfig.host}
-                                onChange={(e) => setSmtpConfig({ ...smtpConfig, host: e.target.value })}
-                                className="form-input"
-                                placeholder="e.g. smtp.gmail.com or smtp.sendgrid.net"
-                              />
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', paddingBottom: '0.85rem', borderBottom: '1px solid #e2e8f0' }}>
+                            <div>
+                              <strong style={{ fontSize: '0.92rem', color: '#1e293b' }}>Enable Outbound Email Notifications</strong>
+                              <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>Receive email summaries and critical alerts at {profileData.email}</p>
                             </div>
-
-                            <div className="form-group">
-                              <label className="form-label">SMTP Server Port</label>
-                              <select
-                                value={smtpConfig.port}
-                                onChange={(e) => setSmtpConfig({ ...smtpConfig, port: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="587">587 (TLS / STARTTLS - Recommended)</option>
-                                <option value="465">465 (SSL - Secure)</option>
-                                <option value="25">25 (Unencrypted Standard)</option>
-                                <option value="2525">2525 (Alternate Port)</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Encryption Protocol</label>
-                              <select
-                                value={smtpConfig.encryption}
-                                onChange={(e) => setSmtpConfig({ ...smtpConfig, encryption: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="TLS">TLS (STARTTLS)</option>
-                                <option value="SSL">SSL</option>
-                                <option value="None">None (Insecure)</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">SMTP Username</label>
-                              <input
-                                type="text"
-                                value={smtpConfig.username}
-                                onChange={(e) => setSmtpConfig({ ...smtpConfig, username: e.target.value })}
-                                className="form-input"
-                                placeholder="e.g. notifications@digitoomasha.com"
-                              />
-                            </div>
-
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                              <label className="form-label">SMTP Password / API App Key</label>
-                              <div style={{ position: 'relative' }}>
-                                <input
-                                  type={showSmtpPass ? 'text' : 'password'}
-                                  value={smtpConfig.password}
-                                  onChange={(e) => setSmtpConfig({ ...smtpConfig, password: e.target.value })}
-                                  className="form-input"
-                                  placeholder="Enter SMTP App Password or SendGrid API Key"
-                                  style={{ paddingRight: '2.5rem' }}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => setShowSmtpPass(!showSmtpPass)}
-                                  style={{
-                                    position: 'absolute',
-                                    right: '0.75rem',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    color: '#64748b'
-                                  }}
-                                >
-                                  {showSmtpPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 2. SENDER & REPLY-TO EMAIL ADDRESSES */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Send className="card-block-ic text-blue" />
-                          <div>
-                            <h3 className="card-block-title">Sender & Reply-To Addresses</h3>
-                            <p className="card-block-sub">Specify the display sender name and email accounts used for recipient responses.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-                            <div className="form-group">
-                              <label className="form-label">Sender Display Name</label>
-                              <input
-                                type="text"
-                                value={senderConfig.senderName}
-                                onChange={(e) => setSenderConfig({ ...senderConfig, senderName: e.target.value })}
-                                className="form-input"
-                                placeholder="e.g. DigiToomasha Agency"
-                              />
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Default Sender Email</label>
-                              <input
-                                type="email"
-                                value={senderConfig.senderEmail}
-                                onChange={(e) => setSenderConfig({ ...senderConfig, senderEmail: e.target.value })}
-                                className="form-input"
-                                placeholder="notifications@digitoomasha.com"
-                              />
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Reply-To Email Address</label>
-                              <input
-                                type="email"
-                                value={senderConfig.replyToEmail}
-                                onChange={(e) => setSenderConfig({ ...senderConfig, replyToEmail: e.target.value })}
-                                className="form-input"
-                                placeholder="support@digitoomasha.com"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 3. EMAIL VERIFICATION & DOMAIN AUTHENTICATION */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <ShieldCheck className="card-block-ic text-emerald" />
-                          <div>
-                            <h3 className="card-block-title">Email Verification & Domain Authentication</h3>
-                            <p className="card-block-sub">Ensure high deliverability by verifying DKIM, SPF, and DMARC DNS records.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1rem', marginBottom: '1rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                <Globe className="w-5 h-5 text-purple" />
-                                <strong style={{ fontSize: '0.95rem', color: '#1e293b' }}>Sending Domain: digitoomasha.com</strong>
-                              </div>
-                              <span style={{
-                                background: domainVerified ? '#d1fae5' : '#fee2e2',
-                                color: domainVerified ? '#065f46' : '#991b1b',
-                                padding: '0.25rem 0.75rem',
-                                borderRadius: '16px',
-                                fontSize: '0.78rem',
-                                fontWeight: 700,
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.35rem'
-                              }}>
-                                {domainVerified ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald" /> : <AlertCircle className="w-3.5 h-3.5 text-red" />}
-                                {domainVerified ? 'Verified & Authenticated' : 'DNS Records Unverified'}
-                              </span>
-                            </div>
-
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', fontSize: '0.82rem' }}>
-                              <div style={{ background: '#ffffff', padding: '0.6rem 0.85rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                                <span style={{ color: '#64748b', fontWeight: 600 }}>SPF Record:</span>
-                                <div style={{ color: '#0f172a', fontFamily: 'monospace', fontSize: '0.75rem', marginTop: '0.2rem' }}>v=spf1 include:_spf.google.com ~all</div>
-                                <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.7rem' }}>✓ Pass</span>
-                              </div>
-                              <div style={{ background: '#ffffff', padding: '0.6rem 0.85rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                                <span style={{ color: '#64748b', fontWeight: 600 }}>DKIM Key:</span>
-                                <div style={{ color: '#0f172a', fontFamily: 'monospace', fontSize: '0.75rem', marginTop: '0.2rem' }}>v=DKIM1; k=rsa; p=MIGfMA...</div>
-                                <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.7rem' }}>✓ Active</span>
-                              </div>
-                              <div style={{ background: '#ffffff', padding: '0.6rem 0.85rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                                <span style={{ color: '#64748b', fontWeight: 600 }}>DMARC Policy:</span>
-                                <div style={{ color: '#0f172a', fontFamily: 'monospace', fontSize: '0.75rem', marginTop: '0.2rem' }}>v=DMARC1; p=quarantine;</div>
-                                <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.7rem' }}>✓ Active</span>
-                              </div>
-                            </div>
-
                             <button
                               type="button"
-                              className="btn-outline-purple sm-btn"
-                              style={{ marginTop: '0.85rem' }}
-                              disabled={verifyingDomain}
-                              onClick={() => {
-                                setVerifyingDomain(true);
-                                setTimeout(() => {
-                                  setVerifyingDomain(false);
-                                  setDomainVerified(true);
-                                }, 1500);
-                              }}
+                              className={`btn-outline-purple sm-btn ${notifPreferences.emailEnabled ? 'active-swatch' : ''}`}
+                              onClick={() => setNotifPreferences({ ...notifPreferences, emailEnabled: !notifPreferences.emailEnabled })}
                             >
-                              {verifyingDomain ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <RefreshCw className="w-3.5 h-3.5 mr-1 inline" />}
-                              Re-Verify DNS Records
+                              {notifPreferences.emailEnabled ? 'Enabled ✅' : 'Disabled ❌'}
                             </button>
                           </div>
-                        </div>
-                      </div>
 
-                      {/* 4. EMAIL TEMPLATES EDITOR */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <FileText className="card-block-ic text-orange" />
-                          <div>
-                            <h3 className="card-block-title">Email Templates Management</h3>
-                            <p className="card-block-sub">Customize dynamic email templates and automated response subject lines.</p>
-                          </div>
-                        </div>
+                          {notifPreferences.emailEnabled && (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                              <div className="form-group">
+                                <label className="form-label">Email Alert Frequency</label>
+                                <select
+                                  value={notifPreferences.emailFrequency}
+                                  onChange={(e) => setNotifPreferences({ ...notifPreferences, emailFrequency: e.target.value })}
+                                  className="form-input"
+                                >
+                                  <option value="instant">Instant Real-time Dispatch</option>
+                                  <option value="daily">Daily Executive Digest (09:00 AM)</option>
+                                  <option value="weekly">Weekly Summary (Mondays)</option>
+                                </select>
+                              </div>
 
-                        <div className="card-block-body">
-                          <div className="form-group" style={{ marginBottom: '1rem' }}>
-                            <label className="form-label">Select Email Template</label>
-                            <select
-                              value={selectedTemplateKey}
-                              onChange={(e) => setSelectedTemplateKey(e.target.value)}
-                              className="form-input"
-                              style={{ fontWeight: 600 }}
-                            >
-                              {Object.keys(emailTemplates).map((key) => (
-                                <option key={key} value={key}>{emailTemplates[key].name}</option>
-                              ))}
-                            </select>
-                          </div>
-
-                          <div className="form-group" style={{ marginBottom: '1rem' }}>
-                            <label className="form-label">Template Subject Line</label>
-                            <input
-                              type="text"
-                              value={emailTemplates[selectedTemplateKey]?.subject || ''}
-                              onChange={(e) => setEmailTemplates({
-                                ...emailTemplates,
-                                [selectedTemplateKey]: {
-                                  ...emailTemplates[selectedTemplateKey],
-                                  subject: e.target.value
-                                }
-                              })}
-                              className="form-input"
-                            />
-                          </div>
-
-                          <div className="form-group">
-                            <label className="form-label">Email Body Template (Supports HTML & Dynamic Tags)</label>
-                            <textarea
-                              rows={6}
-                              value={emailTemplates[selectedTemplateKey]?.body || ''}
-                              onChange={(e) => setEmailTemplates({
-                                ...emailTemplates,
-                                [selectedTemplateKey]: {
-                                  ...emailTemplates[selectedTemplateKey],
-                                  body: e.target.value
-                                }
-                              })}
-                              className="form-input font-mono"
-                              style={{ fontSize: '0.85rem', lineHeight: 1.5 }}
-                            />
-                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>
-                              Available Merge Tags: <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{client_name}}"}</code>, <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{reset_link}}"}</code>, <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{month}}"}</code>, <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{lead_name}}"}</code>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 5. TEST EMAIL & SAVE BUTTONS */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Send className="card-block-ic text-purple" />
-                          <div>
-                            <h3 className="card-block-title">Send Test Email & Save Gateway</h3>
-                            <p className="card-block-sub">Dispatch a live test email to verify SMTP handshake and deliverability.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          {testEmailSuccessMsg && (
-                            <div className="alert-success-banner" style={{ marginBottom: '1rem', padding: '0.6rem 1rem' }}>
-                              <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> {testEmailSuccessMsg}
+                              <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                                <label className="form-label">Subscribed Email Reports</label>
+                                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                                    <input
+                                      type="checkbox"
+                                      checked={notifPreferences.emailReportSummary}
+                                      onChange={(e) => setNotifPreferences({ ...notifPreferences, emailReportSummary: e.target.checked })}
+                                    />
+                                    Weekly ROI & Performance Report
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                                    <input
+                                      type="checkbox"
+                                      checked={notifPreferences.emailMarketingNews}
+                                      onChange={(e) => setNotifPreferences({ ...notifPreferences, emailMarketingNews: e.target.checked })}
+                                    />
+                                    Product Updates & Ad Strategy Tips
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           )}
-
-                          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                            <input
-                              type="email"
-                              value={testEmailRecipient || profileData.email}
-                              onChange={(e) => setTestEmailRecipient(e.target.value)}
-                              placeholder="Enter test recipient email address"
-                              className="form-input"
-                              style={{ maxWidth: '320px' }}
-                            />
-
-                            <button
-                              type="button"
-                              className="btn-outline-purple sm-btn"
-                              disabled={sendingTestEmail}
-                              onClick={() => {
-                                setSendingTestEmail(true);
-                                setTimeout(() => {
-                                  setSendingTestEmail(false);
-                                  setTestEmailSuccessMsg(`✨ Test email successfully dispatched to ${testEmailRecipient || profileData.email} via ${smtpConfig.host}!`);
-                                  setTimeout(() => setTestEmailSuccessMsg(''), 4000);
-                                }, 1200);
-                              }}
-                            >
-                              {sendingTestEmail ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <Send className="w-3.5 h-3.5 mr-1 inline" />}
-                              Send Test Email
-                            </button>
-
-                            <button
-                              type="button"
-                              className="btn-primary-purple sm-btn"
-                              style={{ marginLeft: 'auto' }}
-                              onClick={() => {
-                                setEmailSaveSuccess(true);
-                                setTimeout(() => setEmailSaveSuccess(false), 3000);
-                              }}
-                            >
-                              <Save className="w-4 h-4 mr-1 inline" /> Save Email Gateway Config
-                            </button>
-                          </div>
                         </div>
                       </div>
 
-                    </div>
-                  )}
-
-                  {/* 6. SMS PROVIDER, OTP PROVIDER & NOTIFICATION VERIFICATION PANEL */}
-                  {(activeSettingsTab === 'sms' || activeSettingsTab === 'notifications') && (
-                    <div className="settings-panel-wrapper">
-                      {/* Header */}
-                      <div className="security-panel-header">
-                        <div>
-                          <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                            <Smartphone className="text-purple w-7 h-7" /> SMS, OTP & Verification Settings
-                          </h2>
-                          <p className="profile-user-email">Configure SMS gateway providers, OTP authentication engines, expiration timeouts, resend rate limits, and security verification policies.</p>
-                        </div>
-                        {smsSaveSuccess && (
-                          <div className="alert-success-banner" style={{ padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.82rem' }}>
-                            <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> SMS & OTP Gateway Settings Saved!
-                          </div>
-                        )}
-                      </div>
-
-                      {/* 1. SMS PROVIDER CONFIGURATION */}
+                      {/* 2. PUSH NOTIFICATIONS */}
                       <div className="settings-card-block margin-top-md">
                         <div className="card-block-header">
-                          <Smartphone className="card-block-ic text-purple" />
+                          <Bell className="card-block-ic text-blue" />
                           <div>
-                            <h3 className="card-block-title">SMS Gateway Provider Setup</h3>
-                            <p className="card-block-sub">Choose your SMS API gateway for transactional SMS, alerts, and mobile notifications.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                            <div className="form-group">
-                              <label className="form-label">SMS Provider</label>
-                              <select
-                                value={smsConfig.smsProvider}
-                                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, smsProvider: e.target.value })}
-                                className="form-input"
-                                style={{ fontWeight: 600 }}
-                              >
-                                <option value="Twilio">Twilio (Global SMS API)</option>
-                                <option value="Textlocal">Textlocal (DLT Approved - India)</option>
-                                <option value="MSG91">MSG91 (India DLT & WhatsApp)</option>
-                                <option value="AWS_SNS">Amazon Web Services (AWS SNS)</option>
-                                <option value="Vonage">Vonage / Nexmo</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Account SID / API Key</label>
-                              <input
-                                type="text"
-                                value={smsConfig.accountSid}
-                                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, accountSid: e.target.value })}
-                                className="form-input font-mono"
-                                placeholder="Enter Account SID or API Key"
-                              />
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Sender ID / DLT Header</label>
-                              <input
-                                type="text"
-                                value={smsConfig.senderId}
-                                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, senderId: e.target.value })}
-                                className="form-input font-mono"
-                                placeholder="e.g. DGTMSH"
-                              />
-                            </div>
-
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                              <label className="form-label">Auth Token / API Secret</label>
-                              <div style={{ position: 'relative' }}>
-                                <input
-                                  type={showSmsToken ? 'text' : 'password'}
-                                  value={smsConfig.authToken}
-                                  onChange={(e) => setSmtpConfigSMS({ ...smsConfig, authToken: e.target.value })}
-                                  className="form-input font-mono"
-                                  placeholder="Enter Auth Token or Secret"
-                                  style={{ paddingRight: '2.5rem' }}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => setShowSmsToken(!showSmsToken)}
-                                  style={{
-                                    position: 'absolute',
-                                    right: '0.75rem',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    color: '#64748b'
-                                  }}
-                                >
-                                  {showSmsToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 2. OTP PROVIDER & CODE ENGINE */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <ShieldCheck className="card-block-ic text-blue" />
-                          <div>
-                            <h3 className="card-block-title">OTP Provider & Code Generation Engine</h3>
-                            <p className="card-block-sub">Configure how One-Time Passwords (OTP) are generated and delivered.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                            <div className="form-group">
-                              <label className="form-label">OTP Provider Service</label>
-                              <select
-                                value={otpConfig.otpProvider}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, otpProvider: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="Twilio Verify API">Twilio Verify API (Managed OTP)</option>
-                                <option value="Firebase Phone Auth">Firebase Phone Authentication</option>
-                                <option value="Custom SMS OTP">Custom In-House SMS OTP Engine</option>
-                                <option value="WhatsApp Business OTP">WhatsApp Business OTP Service</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">OTP Code Length</label>
-                              <select
-                                value={otpConfig.otpLength}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, otpLength: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="6">6 Digits (Recommended - e.g. 849204)</option>
-                                <option value="4">4 Digits (Fast - e.g. 4920)</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">OTP Code Character Set</label>
-                              <select
-                                value={otpConfig.otpType}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, otpType: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="Numeric">Numeric Only (0-9)</option>
-                                <option value="Alphanumeric">Alphanumeric (A-Z, 0-9)</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 3. OTP EXPIRATION TIMEOUT */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Clock className="card-block-ic text-orange" />
-                          <div>
-                            <h3 className="card-block-title">OTP Expiration Lifespan</h3>
-                            <p className="card-block-sub">Set the maximum duration before a generated OTP code expires automatically.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                            <div className="form-group">
-                              <label className="form-label">OTP Expiration Time</label>
-                              <select
-                                value={otpConfig.otpExpiryMinutes}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, otpExpiryMinutes: e.target.value })}
-                                className="form-input"
-                                style={{ fontWeight: 600 }}
-                              >
-                                <option value="1">1 Minute (Strict Security)</option>
-                                <option value="3">3 Minutes (Default Recommended)</option>
-                                <option value="5">5 Minutes (Standard)</option>
-                                <option value="10">10 Minutes (Extended)</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                              <label className="form-label">Failed Attempt Policy</label>
-                              <div style={{ padding: '0.75rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '0.85rem', color: '#475569' }}>
-                                🔒 Codes automatically invalidate after <strong>3 consecutive failed verification attempts</strong> to prevent brute-force entry.
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 4. RESEND LIMITS & ANTI-ABUSE RATE LIMITING */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <SlidersHorizontal className="card-block-ic text-red" />
-                          <div>
-                            <h3 className="card-block-title">Resend Limits & Anti-Abuse Rate Limiting</h3>
-                            <p className="card-block-sub">Prevent SMS spam and control Gateway API costs with strict request limits.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-                            <div className="form-group">
-                              <label className="form-label">Max Resend Attempts (per 10 Mins)</label>
-                              <select
-                                value={otpConfig.maxResendAttempts}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, maxResendAttempts: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="3">3 Attempts (Recommended)</option>
-                                <option value="5">5 Attempts</option>
-                                <option value="10">10 Attempts</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Resend Cooldown Delay</label>
-                              <select
-                                value={otpConfig.cooldownSeconds}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, cooldownSeconds: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="30">30 Seconds</option>
-                                <option value="60">60 Seconds (1 Minute Recommended)</option>
-                                <option value="120">120 Seconds (2 Minutes)</option>
-                              </select>
-                            </div>
-
-                            <div className="form-group">
-                              <label className="form-label">IP Address Hourly Limit</label>
-                              <select
-                                value={otpConfig.ipRateLimit}
-                                onChange={(e) => setOtpConfig({ ...otpConfig, ipRateLimit: e.target.value })}
-                                className="form-input"
-                              >
-                                <option value="5">Max 5 OTP requests / IP / hour</option>
-                                <option value="10">Max 10 OTP requests / IP / hour</option>
-                                <option value="20">Max 20 OTP requests / IP / hour</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 5. VERIFICATION ENFORCEMENT SETTINGS */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Lock className="card-block-ic text-emerald" />
-                          <div>
-                            <h3 className="card-block-title">Verification Enforcement Settings</h3>
-                            <p className="card-block-sub">Enable or disable mandatory OTP verification for key account actions.</p>
+                            <h3 className="card-block-title">Push Notifications</h3>
+                            <p className="card-block-sub">Configure real-time desktop pop-ups, mobile push alerts, and sound notifications.</p>
                           </div>
                         </div>
 
                         <div className="card-block-body">
                           <div className="sec-methods-grid">
                             <div
-                              className={`sec-method-card ${otpConfig.requireLogin2FA ? 'selected' : ''}`}
-                              onClick={() => setOtpConfig({ ...otpConfig, requireLogin2FA: !otpConfig.requireLogin2FA })}
+                              className={`sec-method-card ${notifPreferences.pushBrowserDesktop ? 'selected' : ''}`}
+                              onClick={() => setNotifPreferences({ ...notifPreferences, pushBrowserDesktop: !notifPreferences.pushBrowserDesktop })}
                             >
-                              <div className="sec-icon-wrap"><ShieldCheck className="w-5 h-5 text-purple" /></div>
+                              <div className="sec-icon-wrap"><Bell className="w-5 h-5 text-purple" /></div>
                               <div className="sec-method-text">
-                                <strong className="sec-title">2FA User Login Verification</strong>
-                                <p className="sec-sub">Require OTP verification code when signing into portal from new devices.</p>
+                                <strong className="sec-title">Browser Desktop Pop-Up Badges</strong>
+                                <p className="sec-sub">Show instant browser pop-up banners when portal is open.</p>
                               </div>
-                              <span className="sec-radio-dot">{otpConfig.requireLogin2FA && <Check className="w-3.5 h-3.5 text-white" />}</span>
+                              <span className="sec-radio-dot">{notifPreferences.pushBrowserDesktop && <Check className="w-3.5 h-3.5 text-white" />}</span>
                             </div>
 
                             <div
-                              className={`sec-method-card ${otpConfig.requireTransactionAuth ? 'selected' : ''}`}
-                              onClick={() => setOtpConfig({ ...otpConfig, requireTransactionAuth: !otpConfig.requireTransactionAuth })}
+                              className={`sec-method-card ${notifPreferences.pushSoundAlerts ? 'selected' : ''}`}
+                              onClick={() => setNotifPreferences({ ...notifPreferences, pushSoundAlerts: !notifPreferences.pushSoundAlerts })}
                             >
-                              <div className="sec-icon-wrap"><Lock className="w-5 h-5 text-blue" /></div>
+                              <div className="sec-icon-wrap"><Sparkles className="w-5 h-5 text-blue" /></div>
                               <div className="sec-method-text">
-                                <strong className="sec-title">High-Risk Campaign & Budget Changes</strong>
-                                <p className="sec-sub">Require OTP verification when increasing monthly budget caps above ₹50,000.</p>
+                                <strong className="sec-title">Audio Sound Chimes</strong>
+                                <p className="sec-sub">Play subtle sound alerts on incoming lead alerts or budget warnings.</p>
                               </div>
-                              <span className="sec-radio-dot">{otpConfig.requireTransactionAuth && <Check className="w-3.5 h-3.5 text-white" />}</span>
+                              <span className="sec-radio-dot">{notifPreferences.pushSoundAlerts && <Check className="w-3.5 h-3.5 text-white" />}</span>
+                            </div>
+
+                            <div
+                              className={`sec-method-card ${notifPreferences.pushMobileApp ? 'selected' : ''}`}
+                              onClick={() => setNotifPreferences({ ...notifPreferences, pushMobileApp: !notifPreferences.pushMobileApp })}
+                            >
+                              <div className="sec-icon-wrap"><Smartphone className="w-5 h-5 text-emerald" /></div>
+                              <div className="sec-method-text">
+                                <strong className="sec-title">Mobile App Push Alerts</strong>
+                                <p className="sec-sub">Push notifications to linked iOS & Android devices.</p>
+                              </div>
+                              <span className="sec-radio-dot">{notifPreferences.pushMobileApp && <Check className="w-3.5 h-3.5 text-white" />}</span>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* 6. TEST OTP DISPATCH & SAVE */}
+                      {/* 3. CAMPAIGN ALERTS */}
                       <div className="settings-card-block margin-top-md">
                         <div className="card-block-header">
-                          <Send className="card-block-ic text-purple" />
+                          <Megaphone className="card-block-ic text-orange" />
                           <div>
-                            <h3 className="card-block-title">Test OTP Deliverability & Save Gateway</h3>
-                            <p className="card-block-sub">Send a live test OTP message to verify SMS gateway routing and DLT headers.</p>
+                            <h3 className="card-block-title">Campaign Performance Alerts</h3>
+                            <p className="card-block-sub">Set up real-time triggers for ad status changes, CTR fluctuations, and ROAS milestones.</p>
                           </div>
                         </div>
 
                         <div className="card-block-body">
-                          {testOtpSuccessMsg && (
-                            <div className="alert-success-banner" style={{ marginBottom: '1rem', padding: '0.6rem 1rem' }}>
-                              <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> {testOtpSuccessMsg}
-                            </div>
-                          )}
-
-                          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                            <input
-                              type="tel"
-                              value={testMobileNumber}
-                              onChange={(e) => setTestMobileNumber(e.target.value)}
-                              placeholder="Enter mobile number (e.g. +91 98765 43210)"
-                              className="form-input"
-                              style={{ maxWidth: '320px' }}
-                            />
-
-                            <button
-                              type="button"
-                              className="btn-outline-purple sm-btn"
-                              disabled={sendingTestOtp}
-                              onClick={() => {
-                                setSendingTestOtp(true);
-                                setTimeout(() => {
-                                  setSendingTestOtp(false);
-                                  setTestOtpSuccessMsg(`✨ Test OTP SMS successfully dispatched to ${testMobileNumber || '+91 98765 43210'} via ${smsConfig.smsProvider}!`);
-                                  setTimeout(() => setTestOtpSuccessMsg(''), 4000);
-                                }, 1200);
-                              }}
-                            >
-                              {sendingTestOtp ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <Send className="w-3.5 h-3.5 mr-1 inline" />}
-                              Dispatch Test OTP SMS
-                            </button>
-
-                            <button
-                              type="button"
-                              className="btn-primary-purple sm-btn"
-                              style={{ marginLeft: 'auto' }}
-                              onClick={() => {
-                                setSmsSaveSuccess(true);
-                                setTimeout(() => setSmsSaveSuccess(false), 3000);
-                              }}
-                            >
-                              <Save className="w-4 h-4 mr-1 inline" /> Save SMS & OTP Settings
-                            </button>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem' }}>
+                            {[
+                              { key: 'campaignStatusChanges', label: 'Campaign Status Changes', sub: 'Notify when campaigns pause, activate, or complete' },
+                              { key: 'campaignCtrDropAlert', label: 'CTR Drop Alert (< 1.5%)', sub: 'Alert when click-through rate drops sharply' },
+                              { key: 'campaignRoiTargetMet', label: 'Target ROAS Milestone Reached', sub: 'Notify when campaign hits target ROAS goals' },
+                              { key: 'campaignCreativeApproved', label: 'Ad Creative Approval / Rejection', sub: 'Alert on Meta/Google ad review updates' }
+                            ].map((item) => (
+                              <div
+                                key={item.key}
+                                style={{
+                                  padding: '0.85rem 1rem',
+                                  borderRadius: '12px',
+                                  border: '1px solid #e2e8f0',
+                                  background: notifPreferences[item.key] ? '#faf5ff' : '#ffffff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'space-between',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => setNotifPreferences({ ...notifPreferences, [item.key]: !notifPreferences[item.key] })}
+                              >
+                                <div>
+                                  <strong style={{ fontSize: '0.88rem', color: '#1e293b', display: 'block' }}>{item.label}</strong>
+                                  <span style={{ fontSize: '0.76rem', color: '#64748b' }}>{item.sub}</span>
+                                </div>
+                                <span style={{
+                                  width: '20px',
+                                  height: '20px',
+                                  borderRadius: '50%',
+                                  background: notifPreferences[item.key] ? '#7c3aed' : '#cbd5e1',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: '#ffffff'
+                                }}>
+                                  {notifPreferences[item.key] && <Check className="w-3.5 h-3.5" />}
+                                </span>
+                              </div>
+                            ))}
                           </div>
                         </div>
+                      </div>
+
+                      {/* 4. LEAD ALERTS */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Users className="card-block-ic text-emerald" />
+                          <div>
+                            <h3 className="card-block-title">Lead Alerts & Intake Notifications</h3>
+                            <p className="card-block-sub">Instant alerts for new client lead form submissions and high-intent prospects.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">Minimum Lead Budget Threshold</label>
+                              <select
+                                value={notifPreferences.leadHighValueThreshold}
+                                onChange={(e) => setNotifPreferences({ ...notifPreferences, leadHighValueThreshold: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="0">All Leads (No Minimum Budget)</option>
+                                <option value="5000">High-Value Leads Only (≥ ₹5,000)</option>
+                                <option value="25000">Enterprise Leads Only (≥ ₹25,000)</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem' }}>
+                            {[
+                              { key: 'leadEmailAlert', label: 'Instant Email Alert for New Leads', sub: 'Receive lead name, email & budget in email inbox' },
+                              { key: 'leadInstantSms', label: 'Instant Mobile SMS Notification', sub: 'Send SMS alert to designated sales phone number' },
+                              { key: 'leadSlackWebhook', label: 'Slack & Teams Webhook Dispatch', sub: 'Broadcast lead card directly to sales team channel' }
+                            ].map((item) => (
+                              <div
+                                key={item.key}
+                                style={{
+                                  padding: '0.85rem 1rem',
+                                  borderRadius: '12px',
+                                  border: '1px solid #e2e8f0',
+                                  background: notifPreferences[item.key] ? '#f0fdf4' : '#ffffff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'space-between',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => setNotifPreferences({ ...notifPreferences, [item.key]: !notifPreferences[item.key] })}
+                              >
+                                <div>
+                                  <strong style={{ fontSize: '0.88rem', color: '#1e293b', display: 'block' }}>{item.label}</strong>
+                                  <span style={{ fontSize: '0.76rem', color: '#64748b' }}>{item.sub}</span>
+                                </div>
+                                <span style={{
+                                  width: '20px',
+                                  height: '20px',
+                                  borderRadius: '50%',
+                                  background: notifPreferences[item.key] ? '#10b981' : '#cbd5e1',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'center',
+                                  color: '#ffffff'
+                                }}>
+                                  {notifPreferences[item.key] && <Check className="w-3.5 h-3.5" />}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 5. BUDGET ALERTS */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <DollarSign className="card-block-ic text-red" />
+                          <div>
+                            <h3 className="card-block-title">Budget Threshold Alerts</h3>
+                            <p className="card-block-sub">Monitor ad spending caps and prevent budget overruns with automated limit warnings.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem' }}>
+                            {[
+                              { key: 'budgetCap80Percent', label: '80% Budget Limit Reached', sub: 'Warning alert when campaign spend touches 80%' },
+                              { key: 'budgetCap90Percent', label: '90% Budget Limit Reached', sub: 'Urgent alert when campaign spend touches 90%' },
+                              { key: 'budgetExhausted100', label: '100% Budget Exhausted', sub: 'Critical alert when campaign budget is completely spent' },
+                              { key: 'budgetDailySpikeAlert', label: 'Daily Spend Spike Alert (> 150%)', sub: 'Warn if daily spend exceeds 150% of expected rate' }
+                            ].map((item) => (
+                              <div
+                                key={item.key}
+                                style={{
+                                  padding: '0.85rem 1rem',
+                                  borderRadius: '12px',
+                                  border: '1px solid #e2e8f0',
+                                  background: notifPreferences[item.key] ? '#fef2f2' : '#ffffff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'space-between',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => setNotifPreferences({ ...notifPreferences, [item.key]: !notifPreferences[item.key] })}
+                              >
+                                <div>
+                                  <strong style={{ fontSize: '0.88rem', color: '#1e293b', display: 'block' }}>{item.label}</strong>
+                                  <span style={{ fontSize: '0.76rem', color: '#64748b' }}>{item.sub}</span>
+                                </div>
+                                <span style={{
+                                  width: '20px',
+                                  height: '20px',
+                                  borderRadius: '50%',
+                                  background: notifPreferences[item.key] ? '#ef4444' : '#cbd5e1',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'center',
+                                  color: '#ffffff'
+                                }}>
+                                  {notifPreferences[item.key] && <Check className="w-3.5 h-3.5" />}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 6. SYSTEM NOTIFICATIONS */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Shield className="card-block-ic text-purple" />
+                          <div>
+                            <h3 className="card-block-title">System & Security Notifications</h3>
+                            <p className="card-block-sub">Security log alerts, third-party API disconnections, and system backup notifications.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem' }}>
+                            {[
+                              { key: 'sysNewLoginAlert', label: 'New Device Login Alert', sub: 'Notify when account is accessed from a new IP or device' },
+                              { key: 'sysSecurityChanges', label: 'Security & Password Changes', sub: 'Alert when passwords, 2FA, or API keys are updated' },
+                              { key: 'sysApiDisconnectAlert', label: 'API Integration Disconnections', sub: 'Alert if Meta, Google, or Stripe access token expires' },
+                              { key: 'sysBackupComplete', label: 'Database Nightly Backup Logs', sub: 'Confirmation alert after nightly database backup finishes' }
+                            ].map((item) => (
+                              <div
+                                key={item.key}
+                                style={{
+                                  padding: '0.85rem 1rem',
+                                  borderRadius: '12px',
+                                  border: '1px solid #e2e8f0',
+                                  background: notifPreferences[item.key] ? '#faf5ff' : '#ffffff',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'space-between',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => setNotifPreferences({ ...notifPreferences, [item.key]: !notifPreferences[item.key] })}
+                              >
+                                <div>
+                                  <strong style={{ fontSize: '0.88rem', color: '#1e293b', display: 'block' }}>{item.label}</strong>
+                                  <span style={{ fontSize: '0.76rem', color: '#64748b' }}>{item.sub}</span>
+                                </div>
+                                <span style={{
+                                  width: '20px',
+                                  height: '20px',
+                                  borderRadius: '50%',
+                                  background: notifPreferences[item.key] ? '#7c3aed' : '#cbd5e1',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justify: 'center',
+                                  color: '#ffffff'
+                                }}>
+                                  {notifPreferences[item.key] && <Check className="w-3.5 h-3.5" />}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SAVE ACTION BAR */}
+                      <div className="settings-card-block margin-top-md" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          type="button"
+                          className="btn-primary-purple sm-btn"
+                          onClick={() => {
+                            setNotifSaveSuccess(true);
+                            setTimeout(() => setNotifSaveSuccess(false), 3000);
+                          }}
+                        >
+                          <Save className="w-4 h-4 mr-1 inline" /> Save Notification Preferences
+                        </button>
                       </div>
 
                     </div>
                   )}
 
-                  {/* 7. OTHER SETTINGS PANELS FALLBACK */}
+                  {/* 8. OTHER SETTINGS PANELS FALLBACK */}
                   {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && activeSettingsTab !== 'billing' && activeSettingsTab !== 'email' && activeSettingsTab !== 'sms' && activeSettingsTab !== 'notifications' && (
                     <div className="settings-panel-box">
                       <h2 className="panel-title"><Shield className="panel-ic" /> Settings Module</h2>
