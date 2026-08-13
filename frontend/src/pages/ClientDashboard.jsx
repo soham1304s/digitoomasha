@@ -825,6 +825,17 @@ export default function ClientDashboard() {
   const { currentUser, updateUser, logout } = useAuth();
   const navigate = useNavigate();
 
+  const getStoredUser = () => {
+    try {
+      const stored = localStorage.getItem('digitoomasha_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const storedUser = getStoredUser();
+
   // Hidden File Input Ref for Cloudinary Avatar Upload
   const avatarFileInputRef = useRef(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -2037,18 +2048,7 @@ export default function ClientDashboard() {
     loadPipelineData();
   }, []);
 
-  // Helper to load persisted user data
-  const getStoredUser = () => {
 
-    try {
-      const stored = localStorage.getItem('digitoomasha_user');
-      return stored ? JSON.parse(stored) : null;
-    } catch (e) {
-      return null;
-    }
-  };
-
-  const storedUser = getStoredUser();
 
   // Sign-Up Profile Details Form State
   const [profileData, setProfileData] = useState({
