@@ -509,7 +509,10 @@
       ],
       "email": "sohammondal1304@gmail.com",
       "accentColor": "rose",
-      "themeMode": "dark"
+      "themeMode": "light",
+      "dashboardLayout": "grid",
+      "densityView": "comfortable",
+      "sidebarBehavior": "auto"
     }
   }
 }

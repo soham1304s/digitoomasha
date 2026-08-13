@@ -62,7 +62,7 @@ class ErrorBoundary extends Component {
             <button
               onClick={() => {
                 this.setState({ hasError: false });
-                window.location.reload();
+                window.location.href = '/dashboard';
               }}
               style={{
                 background: 'linear-gradient(135deg, #7c3aed 0%, #6366f1 100%)',

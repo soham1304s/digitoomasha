@@ -926,30 +926,15 @@ export default function ClientDashboard() {
     }
   }, [activeSettingsTab]);
 
-  // Live Application of Theme Mode (Light / Midnight Onyx Slate / Cyber Sapphire / System)
+  // Permanent Light Mode Enforcement
   useEffect(() => {
     const root = document.documentElement;
-    let effective = themeMode;
-    if (themeMode === 'system') {
-      const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      effective = isDark ? 'dark' : 'light';
-    }
-
-    root.classList.remove('dark-theme', 'dark-slate', 'dark-sapphire', 'light-theme');
-    document.body.classList.remove('dark-theme', 'dark-slate', 'dark-sapphire', 'light-theme');
-
-    if (effective === 'dark' || effective === 'dark-slate') {
-      root.classList.add('dark-theme', 'dark-slate');
-      document.body.classList.add('dark-theme', 'dark-slate');
-    } else if (effective === 'dark-sapphire') {
-      root.classList.add('dark-theme', 'dark-sapphire');
-      document.body.classList.add('dark-theme', 'dark-sapphire');
-    } else {
-      root.classList.add('light-theme');
-      document.body.classList.add('light-theme');
-    }
-    try { localStorage.setItem('digitoomasha_theme_mode', themeMode); } catch (e) {}
-  }, [themeMode]);
+    root.classList.remove('dark-theme', 'dark-slate', 'dark-sapphire');
+    document.body.classList.remove('dark-theme', 'dark-slate', 'dark-sapphire');
+    root.classList.add('light-theme');
+    document.body.classList.add('light-theme');
+    try { localStorage.setItem('digitoomasha_theme_mode', 'light'); } catch (e) {}
+  }, []);
 
   // Live Application of Accent Color
   useEffect(() => {
@@ -3366,7 +3351,7 @@ export default function ClientDashboard() {
                           <div className="task-text-wrap">
                             <span className="task-item-text">{t.text}</span>
                             <div className="task-meta-row">
-                              <span className={`task-priority-pill p-${t.priority.toLowerCase()}`}>{t.priority}</span>
+                              <span className={`task-priority-pill p-${(t.priority || 'medium').toLowerCase()}`}>{t.priority}</span>
                               <span className="task-date-str"><Calendar className="tdate-ic" /> {t.date}</span>
                             </div>
                           </div>
@@ -3637,7 +3622,7 @@ export default function ClientDashboard() {
                       {st} <span className="status-count-tag">
                         {st === 'All'
                           ? socialPosts.length
-                          : socialPosts.filter((p) => p.status.toLowerCase() === st.toLowerCase()).length}
+                          : socialPosts.filter((p) => (p.status || '').toLowerCase() === st.toLowerCase()).length}
                       </span>
                     </button>
                   ))}
@@ -3683,7 +3668,7 @@ export default function ClientDashboard() {
                           )}
 
                           {/* Status Tag Pill Overlay */}
-                          <span className={`post-status-badge status-${post.status.toLowerCase()}`}>
+                          <span className={`post-status-badge status-${(post.status || 'scheduled').toLowerCase()}`}>
                             {post.status}
                           </span>
 
@@ -3785,7 +3770,7 @@ export default function ClientDashboard() {
                             </div>
                           </td>
                           <td>
-                            <span className={`post-status-badge status-${post.status.toLowerCase()}`}>{post.status}</span>
+                            <span className={`post-status-badge status-${(post.status || 'scheduled').toLowerCase()}`}>{post.status}</span>
                           </td>
                           <td className="font-mono text-sm">
                             {post.scheduledDate ? `${post.scheduledDate} ${post.scheduledTime}` : 'Draft'}
@@ -3835,7 +3820,7 @@ export default function ClientDashboard() {
                             {dayPosts.map((dp) => (
                               <div
                                 key={dp.id}
-                                className={`cal-post-chip status-${dp.status.toLowerCase()}`}
+                                className={`cal-post-chip status-${(dp.status || 'scheduled').toLowerCase()}`}
                                 onClick={() => handleOpenComposer(dp)}
                                 title={`${dp.title} (${dp.platforms.join(', ')})`}
                               >
@@ -4755,8 +4740,8 @@ export default function ClientDashboard() {
                           {filteredBiCampaigns.map((cmp) => (
                             <tr key={cmp.id}>
                               <td><strong className="cmp-table-name">{cmp.name}</strong></td>
-                              <td><span className={`pbadge-chip chip-${cmp.platform.toLowerCase().replace(/\s+/g, '')}`}>{cmp.platform}</span></td>
-                              <td><span className={`post-status-badge status-${cmp.status.toLowerCase()}`}>{cmp.status}</span></td>
+                              <td><span className={`pbadge-chip chip-${(cmp.platform || '').toLowerCase().replace(/\s+/g, '')}`}>{cmp.platform}</span></td>
+                              <td><span className={`post-status-badge status-${(cmp.status || '').toLowerCase()}`}>{cmp.status}</span></td>
                               <td className="font-mono">₹{(cmp.spend * 1.25).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                               <td className="font-mono">₹{cmp.spend.toLocaleString()}</td>
                               <td className="font-mono font-bold text-green-600">₹{cmp.revenue.toLocaleString()}</td>
@@ -6448,8 +6433,8 @@ export default function ClientDashboard() {
               {(() => {
                 const approvedProjectsList = taskItems.filter(t => ['Approved', 'Accepted', 'In Progress', 'Completed'].includes(t.status));
                 const filteredList = approvedProjectsList.filter((p) => {
-                  const matchSearch = p.title.toLowerCase().includes(projectSearchQuery.toLowerCase()) ||
-                    p.campaign.toLowerCase().includes(projectSearchQuery.toLowerCase());
+                  const matchSearch = (p.title || '').toLowerCase().includes(projectSearchQuery.toLowerCase()) ||
+                    (p.campaign || '').toLowerCase().includes(projectSearchQuery.toLowerCase());
                   const matchStatus = projectStatusFilter === 'All' ? true :
                     projectStatusFilter === 'Approved' ? (p.status === 'Approved' || p.status === 'Accepted') :
                     p.status === projectStatusFilter;
@@ -8194,88 +8179,7 @@ export default function ClientDashboard() {
                         )}
                       </div>
 
-                      {/* 1. LIGHT / DARK / SYSTEM THEME */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Sun className="card-block-ic text-orange" />
-                          <div>
-                            <h3 className="card-block-title">Interface Theme Mode</h3>
-                            <p className="card-block-sub">Choose between Light, Dark, or automatic system preference synchronization.</p>
-                          </div>
-                        </div>
 
-                        <div className="card-block-body">
-                          <div className="sec-methods-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
-                            <div
-                              className={`sec-method-card ${themeMode === 'light' ? 'selected' : ''}`}
-                              onClick={async () => {
-                                setThemeMode('light');
-                                setAppearanceSaveSuccess(true);
-                                await syncSecurityFieldToBackend({ themeMode: 'light' });
-                                setTimeout(() => setAppearanceSaveSuccess(false), 2500);
-                              }}
-                            >
-                              <div className="sec-icon-wrap" style={{ background: '#fef3c7', color: '#d97706' }}><Sun className="w-5 h-5" /></div>
-                              <div className="sec-method-text">
-                                <strong className="sec-title">Light Mode</strong>
-                                <p className="sec-sub">Crisp high-contrast light aesthetics with vibrant purple highlights for bright environments.</p>
-                              </div>
-                              <span className="sec-radio-dot">{themeMode === 'light' && <Check className="w-3.5 h-3.5 text-white" />}</span>
-                            </div>
-
-                            <div
-                              className={`sec-method-card ${(themeMode === 'dark' || themeMode === 'dark-slate') ? 'selected' : ''}`}
-                              onClick={async () => {
-                                setThemeMode('dark');
-                                setAppearanceSaveSuccess(true);
-                                await syncSecurityFieldToBackend({ themeMode: 'dark' });
-                                setTimeout(() => setAppearanceSaveSuccess(false), 2500);
-                              }}
-                            >
-                              <div className="sec-icon-wrap" style={{ background: '#090d16', color: '#38bdf8', border: '1px solid #1e293b' }}><Moon className="w-5 h-5" /></div>
-                              <div className="sec-method-text">
-                                <strong className="sec-title">Midnight Onyx Slate</strong>
-                                <p className="sec-sub">Ultra-sleek obsidian dark theme with graphite cards and silver contrast text.</p>
-                              </div>
-                              <span className="sec-radio-dot">{(themeMode === 'dark' || themeMode === 'dark-slate') && <Check className="w-3.5 h-3.5 text-white" />}</span>
-                            </div>
-
-                            <div
-                              className={`sec-method-card ${themeMode === 'dark-sapphire' ? 'selected' : ''}`}
-                              onClick={async () => {
-                                setThemeMode('dark-sapphire');
-                                setAppearanceSaveSuccess(true);
-                                await syncSecurityFieldToBackend({ themeMode: 'dark-sapphire' });
-                                setTimeout(() => setAppearanceSaveSuccess(false), 2500);
-                              }}
-                            >
-                              <div className="sec-icon-wrap" style={{ background: '#080c19', color: '#818cf8', border: '1px solid #1e2942' }}><Sparkles className="w-5 h-5" /></div>
-                              <div className="sec-method-text">
-                                <strong className="sec-title">Cyber Obsidian Sapphire</strong>
-                                <p className="sec-sub">Deep luxury sapphire dark theme with royal indigo cards & glowing accents.</p>
-                              </div>
-                              <span className="sec-radio-dot">{themeMode === 'dark-sapphire' && <Check className="w-3.5 h-3.5 text-white" />}</span>
-                            </div>
-
-                            <div
-                              className={`sec-method-card ${themeMode === 'system' ? 'selected' : ''}`}
-                              onClick={async () => {
-                                setThemeMode('system');
-                                setAppearanceSaveSuccess(true);
-                                await syncSecurityFieldToBackend({ themeMode: 'system' });
-                                setTimeout(() => setAppearanceSaveSuccess(false), 2500);
-                              }}
-                            >
-                              <div className="sec-icon-wrap" style={{ background: '#e0e7ff', color: '#4f46e5' }}><Monitor className="w-5 h-5" /></div>
-                              <div className="sec-method-text">
-                                <strong className="sec-title">System Auto Preference</strong>
-                                <p className="sec-sub">Automatically match your operating system (macOS / Windows / Ubuntu) color theme settings.</p>
-                              </div>
-                              <span className="sec-radio-dot">{themeMode === 'system' && <Check className="w-3.5 h-3.5 text-white" />}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                       {/* 2. ACCENT COLOR SELECTION */}
                       <div className="settings-card-block margin-top-md">
