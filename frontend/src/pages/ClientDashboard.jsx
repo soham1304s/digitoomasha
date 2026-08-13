@@ -919,6 +919,31 @@ export default function ClientDashboard() {
   const [emailSaveSuccess, setEmailSaveSuccess] = useState(false);
   const [testEmailSuccessMsg, setTestEmailSuccessMsg] = useState('');
 
+  // SMS & OTP Verification Settings State
+  const [smsConfig, setSmtpConfigSMS] = useState({
+    smsProvider: 'Twilio',
+    accountSid: 'AC9824059123851092830591',
+    authToken: '••••••••••••••••••••••••',
+    senderId: 'DGTMSH'
+  });
+  const [showSmsToken, setShowSmsToken] = useState(false);
+  const [otpConfig, setOtpConfig] = useState({
+    otpProvider: 'Twilio Verify API',
+    otpLength: '6',
+    otpType: 'Numeric',
+    otpExpiryMinutes: '3',
+    maxResendAttempts: '3',
+    cooldownSeconds: '60',
+    ipRateLimit: '5',
+    requireLogin2FA: true,
+    requireTransactionAuth: true,
+    requirePasswordReset: true
+  });
+  const [testMobileNumber, setTestMobileNumber] = useState('');
+  const [sendingTestOtp, setSendingTestOtp] = useState(false);
+  const [smsSaveSuccess, setSmsSaveSuccess] = useState(false);
+  const [testOtpSuccessMsg, setTestOtpSuccessMsg] = useState('');
+
   const [activeSessionsList, setActiveSessionsList] = useState([
     { id: 1, device: 'Chrome on Linux (Ubuntu 24.04)', location: 'Kolkata, IN', ip: '103.24.12.8', lastActive: 'Active Now (Current Session)', isCurrent: true, type: 'desktop' },
     { id: 2, device: 'DigiToomasha Mobile App (iOS 17.5)', location: 'Mumbai, IN', ip: '49.36.120.1', lastActive: '14 minutes ago', isCurrent: false, type: 'mobile' },
@@ -9001,8 +9026,354 @@ export default function ClientDashboard() {
                     </div>
                   )}
 
-                  {/* 6. OTHER SETTINGS PANELS FALLBACK */}
-                  {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && activeSettingsTab !== 'billing' && activeSettingsTab !== 'email' && (
+                  {/* 6. SMS PROVIDER, OTP PROVIDER & NOTIFICATION VERIFICATION PANEL */}
+                  {(activeSettingsTab === 'sms' || activeSettingsTab === 'notifications') && (
+                    <div className="settings-panel-wrapper">
+                      {/* Header */}
+                      <div className="security-panel-header">
+                        <div>
+                          <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                            <Smartphone className="text-purple w-7 h-7" /> SMS, OTP & Verification Settings
+                          </h2>
+                          <p className="profile-user-email">Configure SMS gateway providers, OTP authentication engines, expiration timeouts, resend rate limits, and security verification policies.</p>
+                        </div>
+                        {smsSaveSuccess && (
+                          <div className="alert-success-banner" style={{ padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.82rem' }}>
+                            <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> SMS & OTP Gateway Settings Saved!
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 1. SMS PROVIDER CONFIGURATION */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Smartphone className="card-block-ic text-purple" />
+                          <div>
+                            <h3 className="card-block-title">SMS Gateway Provider Setup</h3>
+                            <p className="card-block-sub">Choose your SMS API gateway for transactional SMS, alerts, and mobile notifications.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">SMS Provider</label>
+                              <select
+                                value={smsConfig.smsProvider}
+                                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, smsProvider: e.target.value })}
+                                className="form-input"
+                                style={{ fontWeight: 600 }}
+                              >
+                                <option value="Twilio">Twilio (Global SMS API)</option>
+                                <option value="Textlocal">Textlocal (DLT Approved - India)</option>
+                                <option value="MSG91">MSG91 (India DLT & WhatsApp)</option>
+                                <option value="AWS_SNS">Amazon Web Services (AWS SNS)</option>
+                                <option value="Vonage">Vonage / Nexmo</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">Account SID / API Key</label>
+                              <input
+                                type="text"
+                                value={smsConfig.accountSid}
+                                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, accountSid: e.target.value })}
+                                className="form-input font-mono"
+                                placeholder="Enter Account SID or API Key"
+                              />
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">Sender ID / DLT Header</label>
+                              <input
+                                type="text"
+                                value={smsConfig.senderId}
+                                onChange={(e) => setSmtpConfigSMS({ ...smsConfig, senderId: e.target.value })}
+                                className="form-input font-mono"
+                                placeholder="e.g. DGTMSH"
+                              />
+                            </div>
+
+                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                              <label className="form-label">Auth Token / API Secret</label>
+                              <div style={{ position: 'relative' }}>
+                                <input
+                                  type={showSmsToken ? 'text' : 'password'}
+                                  value={smsConfig.authToken}
+                                  onChange={(e) => setSmtpConfigSMS({ ...smsConfig, authToken: e.target.value })}
+                                  className="form-input font-mono"
+                                  placeholder="Enter Auth Token or Secret"
+                                  style={{ paddingRight: '2.5rem' }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowSmsToken(!showSmsToken)}
+                                  style={{
+                                    position: 'absolute',
+                                    right: '0.75rem',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    color: '#64748b'
+                                  }}
+                                >
+                                  {showSmsToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 2. OTP PROVIDER & CODE ENGINE */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <ShieldCheck className="card-block-ic text-blue" />
+                          <div>
+                            <h3 className="card-block-title">OTP Provider & Code Generation Engine</h3>
+                            <p className="card-block-sub">Configure how One-Time Passwords (OTP) are generated and delivered.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">OTP Provider Service</label>
+                              <select
+                                value={otpConfig.otpProvider}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, otpProvider: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="Twilio Verify API">Twilio Verify API (Managed OTP)</option>
+                                <option value="Firebase Phone Auth">Firebase Phone Authentication</option>
+                                <option value="Custom SMS OTP">Custom In-House SMS OTP Engine</option>
+                                <option value="WhatsApp Business OTP">WhatsApp Business OTP Service</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">OTP Code Length</label>
+                              <select
+                                value={otpConfig.otpLength}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, otpLength: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="6">6 Digits (Recommended - e.g. 849204)</option>
+                                <option value="4">4 Digits (Fast - e.g. 4920)</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">OTP Code Character Set</label>
+                              <select
+                                value={otpConfig.otpType}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, otpType: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="Numeric">Numeric Only (0-9)</option>
+                                <option value="Alphanumeric">Alphanumeric (A-Z, 0-9)</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 3. OTP EXPIRATION TIMEOUT */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Clock className="card-block-ic text-orange" />
+                          <div>
+                            <h3 className="card-block-title">OTP Expiration Lifespan</h3>
+                            <p className="card-block-sub">Set the maximum duration before a generated OTP code expires automatically.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">OTP Expiration Time</label>
+                              <select
+                                value={otpConfig.otpExpiryMinutes}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, otpExpiryMinutes: e.target.value })}
+                                className="form-input"
+                                style={{ fontWeight: 600 }}
+                              >
+                                <option value="1">1 Minute (Strict Security)</option>
+                                <option value="3">3 Minutes (Default Recommended)</option>
+                                <option value="5">5 Minutes (Standard)</option>
+                                <option value="10">10 Minutes (Extended)</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                              <label className="form-label">Failed Attempt Policy</label>
+                              <div style={{ padding: '0.75rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '0.85rem', color: '#475569' }}>
+                                🔒 Codes automatically invalidate after <strong>3 consecutive failed verification attempts</strong> to prevent brute-force entry.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 4. RESEND LIMITS & ANTI-ABUSE RATE LIMITING */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <SlidersHorizontal className="card-block-ic text-red" />
+                          <div>
+                            <h3 className="card-block-title">Resend Limits & Anti-Abuse Rate Limiting</h3>
+                            <p className="card-block-sub">Prevent SMS spam and control Gateway API costs with strict request limits.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">Max Resend Attempts (per 10 Mins)</label>
+                              <select
+                                value={otpConfig.maxResendAttempts}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, maxResendAttempts: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="3">3 Attempts (Recommended)</option>
+                                <option value="5">5 Attempts</option>
+                                <option value="10">10 Attempts</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">Resend Cooldown Delay</label>
+                              <select
+                                value={otpConfig.cooldownSeconds}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, cooldownSeconds: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="30">30 Seconds</option>
+                                <option value="60">60 Seconds (1 Minute Recommended)</option>
+                                <option value="120">120 Seconds (2 Minutes)</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">IP Address Hourly Limit</label>
+                              <select
+                                value={otpConfig.ipRateLimit}
+                                onChange={(e) => setOtpConfig({ ...otpConfig, ipRateLimit: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="5">Max 5 OTP requests / IP / hour</option>
+                                <option value="10">Max 10 OTP requests / IP / hour</option>
+                                <option value="20">Max 20 OTP requests / IP / hour</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 5. VERIFICATION ENFORCEMENT SETTINGS */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Lock className="card-block-ic text-emerald" />
+                          <div>
+                            <h3 className="card-block-title">Verification Enforcement Settings</h3>
+                            <p className="card-block-sub">Enable or disable mandatory OTP verification for key account actions.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div className="sec-methods-grid">
+                            <div
+                              className={`sec-method-card ${otpConfig.requireLogin2FA ? 'selected' : ''}`}
+                              onClick={() => setOtpConfig({ ...otpConfig, requireLogin2FA: !otpConfig.requireLogin2FA })}
+                            >
+                              <div className="sec-icon-wrap"><ShieldCheck className="w-5 h-5 text-purple" /></div>
+                              <div className="sec-method-text">
+                                <strong className="sec-title">2FA User Login Verification</strong>
+                                <p className="sec-sub">Require OTP verification code when signing into portal from new devices.</p>
+                              </div>
+                              <span className="sec-radio-dot">{otpConfig.requireLogin2FA && <Check className="w-3.5 h-3.5 text-white" />}</span>
+                            </div>
+
+                            <div
+                              className={`sec-method-card ${otpConfig.requireTransactionAuth ? 'selected' : ''}`}
+                              onClick={() => setOtpConfig({ ...otpConfig, requireTransactionAuth: !otpConfig.requireTransactionAuth })}
+                            >
+                              <div className="sec-icon-wrap"><Lock className="w-5 h-5 text-blue" /></div>
+                              <div className="sec-method-text">
+                                <strong className="sec-title">High-Risk Campaign & Budget Changes</strong>
+                                <p className="sec-sub">Require OTP verification when increasing monthly budget caps above ₹50,000.</p>
+                              </div>
+                              <span className="sec-radio-dot">{otpConfig.requireTransactionAuth && <Check className="w-3.5 h-3.5 text-white" />}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 6. TEST OTP DISPATCH & SAVE */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Send className="card-block-ic text-purple" />
+                          <div>
+                            <h3 className="card-block-title">Test OTP Deliverability & Save Gateway</h3>
+                            <p className="card-block-sub">Send a live test OTP message to verify SMS gateway routing and DLT headers.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          {testOtpSuccessMsg && (
+                            <div className="alert-success-banner" style={{ marginBottom: '1rem', padding: '0.6rem 1rem' }}>
+                              <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> {testOtpSuccessMsg}
+                            </div>
+                          )}
+
+                          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <input
+                              type="tel"
+                              value={testMobileNumber}
+                              onChange={(e) => setTestMobileNumber(e.target.value)}
+                              placeholder="Enter mobile number (e.g. +91 98765 43210)"
+                              className="form-input"
+                              style={{ maxWidth: '320px' }}
+                            />
+
+                            <button
+                              type="button"
+                              className="btn-outline-purple sm-btn"
+                              disabled={sendingTestOtp}
+                              onClick={() => {
+                                setSendingTestOtp(true);
+                                setTimeout(() => {
+                                  setSendingTestOtp(false);
+                                  setTestOtpSuccessMsg(`✨ Test OTP SMS successfully dispatched to ${testMobileNumber || '+91 98765 43210'} via ${smsConfig.smsProvider}!`);
+                                  setTimeout(() => setTestOtpSuccessMsg(''), 4000);
+                                }, 1200);
+                              }}
+                            >
+                              {sendingTestOtp ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <Send className="w-3.5 h-3.5 mr-1 inline" />}
+                              Dispatch Test OTP SMS
+                            </button>
+
+                            <button
+                              type="button"
+                              className="btn-primary-purple sm-btn"
+                              style={{ marginLeft: 'auto' }}
+                              onClick={() => {
+                                setSmsSaveSuccess(true);
+                                setTimeout(() => setSmsSaveSuccess(false), 3000);
+                              }}
+                            >
+                              <Save className="w-4 h-4 mr-1 inline" /> Save SMS & OTP Settings
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {/* 7. OTHER SETTINGS PANELS FALLBACK */}
+                  {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && activeSettingsTab !== 'billing' && activeSettingsTab !== 'email' && activeSettingsTab !== 'sms' && activeSettingsTab !== 'notifications' && (
                     <div className="settings-panel-box">
                       <h2 className="panel-title"><Shield className="panel-ic" /> Settings Module</h2>
                       <p className="panel-sub">Manage active module configurations and policies.</p>
