@@ -8307,8 +8307,9 @@ export default function ClientDashboard() {
                                   gap: '0.6rem',
                                   padding: '0.65rem 0.85rem',
                                   borderRadius: '12px',
-                                  border: accentColor === col.id ? `2px solid ${col.hex}` : '1px solid #e2e8f0',
-                                  backgroundColor: col.bg,
+                                  border: accentColor === col.id ? `2px solid ${col.hex}` : '1px solid var(--border-color, #e2e8f0)',
+                                  backgroundColor: themeMode === 'light' ? col.bg : 'var(--pill-bg, #151e2e)',
+                                  color: 'var(--text-primary, #1e293b)',
                                   cursor: 'pointer',
                                   transition: 'all 0.2s ease',
                                   outline: 'none'
@@ -8320,8 +8321,8 @@ export default function ClientDashboard() {
                                   setTimeout(() => setAppearanceSaveSuccess(false), 2500);
                                 }}
                               >
-                                <span style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: col.hex, display: 'inline-block', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}></span>
-                                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#1e293b' }}>{col.name}</span>
+                                <span style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: col.hex, display: 'inline-block', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}></span>
+                                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'inherit' }}>{col.name}</span>
                                 {accentColor === col.id && <Check className="w-3.5 h-3.5 ml-auto" style={{ color: col.hex }} />}
                               </button>
                             ))}
