@@ -2963,7 +2963,7 @@ export default function ClientDashboard() {
                         </span>
                       </div>
                       <h1 className="welcome-greeting-title">
-                        {getTimeGreeting()}, {profileData.fullName.split(' ')[0]} 👋
+                        {getTimeGreeting()}, {(profileData?.fullName || 'User').split(' ')[0]} 👋
                       </h1>
                       <p className="welcome-subtitle">
                         Here is your live marketing performance snapshot for <strong>{profileData.companyName || 'Lumière Skincare Inc.'}</strong>. All ad pixels and conversion tracking engines are operating at peak efficiency.
@@ -5857,7 +5857,7 @@ export default function ClientDashboard() {
                           <div className="task-card-progress">
                             <div className="task-card-progress-header">
                               <span>Subtask Checkpoints</span>
-                              <span>0/{newTaskData.subtasksInput.split(',').filter(Boolean).length || 1} (0%)</span>
+                              <span>0/{(newTaskData?.subtasksInput || '').split(',').filter(Boolean).length || 1} (0%)</span>
                             </div>
                             <div className="task-card-progress-bar">
                               <div className="task-card-progress-fill" style={{ width: '0%' }} />
