@@ -513,6 +513,87 @@
       "dashboardLayout": "grid",
       "densityView": "comfortable",
       "sidebarBehavior": "auto"
+    },
+    "emilia@digitoomasha.com": {
+      "userEmail": "emilia@digitoomasha.com",
+      "twoFactorEnabled": true,
+      "twoFactorMethod": "authenticator",
+      "autoExpiry90Days": false,
+      "alertNewLogin": true,
+      "alertSecurityChanges": true,
+      "alertApiKeyGen": true,
+      "ipWhitelistInput": "103.24.12.8, 192.168.1.*",
+      "activeSessionsList": [
+        {
+          "id": 1,
+          "device": "Chrome on Linux (Ubuntu 24.04)",
+          "location": "Kolkata, IN",
+          "ip": "103.24.12.8",
+          "lastActive": "Active Now (Current Session)",
+          "isCurrent": true,
+          "type": "desktop"
+        },
+        {
+          "id": 2,
+          "device": "DigiToomasha Mobile App (iOS 17.5)",
+          "location": "Mumbai, IN",
+          "ip": "49.36.120.1",
+          "lastActive": "14 minutes ago",
+          "isCurrent": false,
+          "type": "mobile"
+        },
+        {
+          "id": 3,
+          "device": "Safari on macOS Sonoma",
+          "location": "San Francisco, US",
+          "ip": "192.168.1.42",
+          "lastActive": "2 days ago",
+          "isCurrent": false,
+          "type": "desktop"
+        }
+      ],
+      "loginHistoryList": [
+        {
+          "id": 101,
+          "timestamp": "Today, 12:44 PM",
+          "browser": "Chrome 127 / Linux x86_64",
+          "location": "Kolkata, IN",
+          "ip": "103.24.12.8",
+          "status": "Success"
+        },
+        {
+          "id": 102,
+          "timestamp": "Yesterday, 04:15 PM",
+          "browser": "Mobile App / iOS 17.5",
+          "location": "Mumbai, IN",
+          "ip": "49.36.120.1",
+          "status": "Success"
+        },
+        {
+          "id": 103,
+          "timestamp": "Aug 11, 2026 09:30 AM",
+          "browser": "Firefox 128 / Windows 11",
+          "location": "Delhi, IN",
+          "ip": "182.74.5.12",
+          "status": "Failed Attempt"
+        },
+        {
+          "id": 104,
+          "timestamp": "Aug 10, 2026 02:10 PM",
+          "browser": "Safari 17 / macOS",
+          "location": "San Francisco, US",
+          "ip": "192.168.1.42",
+          "status": "Success"
+        },
+        {
+          "id": 105,
+          "timestamp": "Aug 08, 2026 07:22 PM",
+          "browser": "Chrome 126 / Android 14",
+          "location": "Kolkata, IN",
+          "ip": "103.24.12.8",
+          "status": "Success"
+        }
+      ]
     }
   }
 }

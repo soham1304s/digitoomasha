@@ -2105,8 +2105,6 @@ export default function ClientDashboard() {
     {
       groupTitle: 'ORGANIZATION',
       items: [
-        { id: 'company', label: 'Company Settings', Icon: Building, desc: 'Brand logo, GST & business details' },
-        { id: 'team', label: 'Team Management', Icon: UserPlus, desc: 'Members, roles & permission audit' },
         { id: 'billing', label: 'Billing & Plans', Icon: CreditCard, desc: 'Subscriptions, invoices & tax info' }
       ]
     },
