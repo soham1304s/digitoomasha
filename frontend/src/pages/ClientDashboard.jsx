@@ -802,7 +802,7 @@ const UserAvatar = ({ src, name, className = '' }) => {
   const isCustomPhoto = src && typeof src === 'string' && src.trim() !== '' && !src.includes('photo-1534528741775-53994a69daeb');
 
   const getInitials = (fullName) => {
-    if (!fullName) return 'U';
+    if (!fullName || typeof fullName !== 'string') return 'U';
     const parts = fullName.trim().split(' ').filter(Boolean);
     if (parts.length >= 2) {
       return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
