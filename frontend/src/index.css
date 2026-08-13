@@ -16029,23 +16029,40 @@ textarea.pdc-input {
 
 /* --- MASTER HIGH-CONTRAST & SUB-NAV FIXES FOR DARK THEMES --- */
 .dark-theme .set-tab-title,
+.dark-slate .set-tab-title,
 .dark-sapphire .set-tab-title {
   color: #f8fafc !important;
 }
 
 .dark-theme .set-tab-desc,
+.dark-slate .set-tab-desc,
 .dark-sapphire .set-tab-desc {
   color: #94a3b8 !important;
 }
 
 .dark-theme .settings-nav-group-title,
+.dark-slate .settings-nav-group-title,
 .dark-sapphire .settings-nav-group-title {
   color: #818cf8 !important;
   font-weight: 800 !important;
   letter-spacing: 0.05em !important;
 }
 
+.dark-theme .settings-tab-btn,
+.dark-slate .settings-tab-btn,
+.dark-sapphire .settings-tab-btn {
+  color: #cbd5e1 !important;
+}
+
+.dark-theme .settings-tab-btn:hover,
+.dark-slate .settings-tab-btn:hover,
+.dark-sapphire .settings-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+}
+
 .dark-theme .settings-tab-btn.active,
+.dark-slate .settings-tab-btn.active,
 .dark-sapphire .settings-tab-btn.active {
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(99, 102, 241, 0.15) 100%) !important;
   border-left: 3px solid var(--primary-purple, #7c3aed) !important;
@@ -16056,20 +16073,63 @@ textarea.pdc-input {
 }
 
 .dark-theme .settings-tab-btn.active .set-tab-title,
+.dark-slate .settings-tab-btn.active .set-tab-title,
 .dark-sapphire .settings-tab-btn.active .set-tab-title {
   color: #ffffff !important;
 }
 
 .dark-theme .settings-tab-btn.active .set-tab-icon,
+.dark-slate .settings-tab-btn.active .set-tab-icon,
 .dark-sapphire .settings-tab-btn.active .set-tab-icon {
   color: #a7f3d0 !important;
 }
 
-/* Fix Clashing White Rectangles in Card Headers */
-.dark-theme .card-block-header,
-.dark-sapphire .card-block-header,
+/* Fix Clashing White Rectangles in Profile Header Banner & Card Headers */
+.dark-theme .profile-header-banner,
+.dark-slate .profile-header-banner,
 .dark-theme .profile-header-card,
+.dark-slate .profile-header-card {
+  background: linear-gradient(135deg, #151e2e 0%, #101726 100%) !important;
+  border: 1px solid #283548 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-sapphire .profile-header-banner,
 .dark-sapphire .profile-header-card {
+  background: linear-gradient(135deg, #131c35 0%, #0d1427 100%) !important;
+  border: 1px solid #233256 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-theme .profile-user-name,
+.dark-slate .profile-user-name,
+.dark-sapphire .profile-user-name {
+  color: #f8fafc !important;
+}
+
+.dark-theme .profile-user-email,
+.dark-slate .profile-user-email,
+.dark-sapphire .profile-user-email {
+  color: #94a3b8 !important;
+}
+
+.dark-theme .profile-role-badge,
+.dark-slate .profile-role-badge,
+.dark-sapphire .profile-role-badge {
+  background-color: rgba(124, 58, 237, 0.2) !important;
+  color: #c4b5fd !important;
+  border: 1px solid rgba(124, 58, 237, 0.4) !important;
+}
+
+.dark-theme .online-status-badge,
+.dark-slate .online-status-badge,
+.dark-sapphire .online-status-badge {
+  border-color: #151e2e !important;
+}
+
+.dark-theme .card-block-header,
+.dark-slate .card-block-header,
+.dark-sapphire .card-block-header {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
