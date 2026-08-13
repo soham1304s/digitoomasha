@@ -104,6 +104,7 @@ import {
   Loader2,
   Clock,
   Send,
+  Server,
   Image as ImageIcon,
   Tag,
   Twitter,
@@ -873,6 +874,50 @@ export default function ClientDashboard() {
   const [appCurrency, setAppCurrency] = useState('INR');
   const [appTimezone, setAppTimezone] = useState('Asia/Kolkata');
   const [appearanceSaveSuccess, setAppearanceSaveSuccess] = useState(false);
+
+  // Email Gateway Settings State
+  const [smtpConfig, setSmtpConfig] = useState({
+    host: 'smtp.gmail.com',
+    port: '587',
+    encryption: 'TLS',
+    username: 'notifications@digitoomasha.com',
+    password: '••••••••••••••••'
+  });
+  const [showSmtpPass, setShowSmtpPass] = useState(false);
+  const [senderConfig, setSenderConfig] = useState({
+    senderName: 'DigiToomasha Agency',
+    senderEmail: 'notifications@digitoomasha.com',
+    replyToEmail: 'support@digitoomasha.com'
+  });
+  const [domainVerified, setDomainVerified] = useState(true);
+  const [verifyingDomain, setVerifyingDomain] = useState(false);
+  const [selectedTemplateKey, setSelectedTemplateKey] = useState('welcome');
+  const [emailTemplates, setEmailTemplates] = useState({
+    welcome: {
+      name: 'Welcome Email',
+      subject: 'Welcome to DigiToomasha Growth Portal 🎉',
+      body: 'Hello {{client_name}},\n\nWelcome to DigiToomasha! Your client dashboard is now active and monitoring your ad performance in real-time.\n\nBest regards,\nThe DigiToomasha Team'
+    },
+    reset: {
+      name: 'Password Reset',
+      subject: 'Reset Your DigiToomasha Password',
+      body: 'Hello {{client_name}},\n\nWe received a request to reset your password. Click the link below to verify:\n{{reset_link}}\n\nIf you did not request this, please ignore this email.'
+    },
+    report: {
+      name: 'Monthly Analytics Report',
+      subject: 'Monthly Performance Analytics Report - {{month}}',
+      body: 'Dear {{client_name}},\n\nYour monthly campaign performance metrics and ROI summary are ready for review.\n\nSummary:\n- Total Impressions: {{impressions}}\n- Conversions: {{conversions}}\n\nLog in to download your full PDF report.'
+    },
+    lead: {
+      name: 'New Lead Alert',
+      subject: '🔥 New High-Intent Lead Captured: {{lead_name}}',
+      body: 'Hi {{agent_name}},\n\nA new lead has filled out the contact funnel:\nName: {{lead_name}}\nEmail: {{lead_email}}\nBudget: {{lead_budget}}\n\nPlease follow up within 15 minutes.'
+    }
+  });
+  const [testEmailRecipient, setTestEmailRecipient] = useState('');
+  const [sendingTestEmail, setSendingTestEmail] = useState(false);
+  const [emailSaveSuccess, setEmailSaveSuccess] = useState(false);
+  const [testEmailSuccessMsg, setTestEmailSuccessMsg] = useState('');
 
   const [activeSessionsList, setActiveSessionsList] = useState([
     { id: 1, device: 'Chrome on Linux (Ubuntu 24.04)', location: 'Kolkata, IN', ip: '103.24.12.8', lastActive: 'Active Now (Current Session)', isCurrent: true, type: 'desktop' },
@@ -8600,8 +8645,364 @@ export default function ClientDashboard() {
                     </div>
                   )}
 
-                  {/* 5. OTHER SETTINGS PANELS FALLBACK */}
-                  {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && activeSettingsTab !== 'billing' && (
+                  {/* 5. EMAIL GATEWAY & SMTP COMMUNICATIONS PANEL */}
+                  {activeSettingsTab === 'email' && (
+                    <div className="settings-panel-wrapper">
+                      {/* Header */}
+                      <div className="security-panel-header">
+                        <div>
+                          <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                            <Mail className="text-purple w-7 h-7" /> Email Gateway & Communications
+                          </h2>
+                          <p className="profile-user-email">Configure SMTP credentials, sender addresses, email verification status, custom templates, and deliverability testing tools.</p>
+                        </div>
+                        {emailSaveSuccess && (
+                          <div className="alert-success-banner" style={{ padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.82rem' }}>
+                            <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> Email Gateway Configuration Saved!
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 1. SMTP CONFIGURATION BLOCK */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Server className="card-block-ic text-purple" />
+                          <div>
+                            <h3 className="card-block-title">SMTP Server Configuration</h3>
+                            <p className="card-block-sub">Set up your outbound mail server credentials for transactional and campaign emails.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">SMTP Server Host</label>
+                              <input
+                                type="text"
+                                value={smtpConfig.host}
+                                onChange={(e) => setSmtpConfig({ ...smtpConfig, host: e.target.value })}
+                                className="form-input"
+                                placeholder="e.g. smtp.gmail.com or smtp.sendgrid.net"
+                              />
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">SMTP Server Port</label>
+                              <select
+                                value={smtpConfig.port}
+                                onChange={(e) => setSmtpConfig({ ...smtpConfig, port: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="587">587 (TLS / STARTTLS - Recommended)</option>
+                                <option value="465">465 (SSL - Secure)</option>
+                                <option value="25">25 (Unencrypted Standard)</option>
+                                <option value="2525">2525 (Alternate Port)</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">Encryption Protocol</label>
+                              <select
+                                value={smtpConfig.encryption}
+                                onChange={(e) => setSmtpConfig({ ...smtpConfig, encryption: e.target.value })}
+                                className="form-input"
+                              >
+                                <option value="TLS">TLS (STARTTLS)</option>
+                                <option value="SSL">SSL</option>
+                                <option value="None">None (Insecure)</option>
+                              </select>
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">SMTP Username</label>
+                              <input
+                                type="text"
+                                value={smtpConfig.username}
+                                onChange={(e) => setSmtpConfig({ ...smtpConfig, username: e.target.value })}
+                                className="form-input"
+                                placeholder="e.g. notifications@digitoomasha.com"
+                              />
+                            </div>
+
+                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                              <label className="form-label">SMTP Password / API App Key</label>
+                              <div style={{ position: 'relative' }}>
+                                <input
+                                  type={showSmtpPass ? 'text' : 'password'}
+                                  value={smtpConfig.password}
+                                  onChange={(e) => setSmtpConfig({ ...smtpConfig, password: e.target.value })}
+                                  className="form-input"
+                                  placeholder="Enter SMTP App Password or SendGrid API Key"
+                                  style={{ paddingRight: '2.5rem' }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowSmtpPass(!showSmtpPass)}
+                                  style={{
+                                    position: 'absolute',
+                                    right: '0.75rem',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    color: '#64748b'
+                                  }}
+                                >
+                                  {showSmtpPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 2. SENDER & REPLY-TO EMAIL ADDRESSES */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Send className="card-block-ic text-blue" />
+                          <div>
+                            <h3 className="card-block-title">Sender & Reply-To Addresses</h3>
+                            <p className="card-block-sub">Specify the display sender name and email accounts used for recipient responses.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                            <div className="form-group">
+                              <label className="form-label">Sender Display Name</label>
+                              <input
+                                type="text"
+                                value={senderConfig.senderName}
+                                onChange={(e) => setSenderConfig({ ...senderConfig, senderName: e.target.value })}
+                                className="form-input"
+                                placeholder="e.g. DigiToomasha Agency"
+                              />
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">Default Sender Email</label>
+                              <input
+                                type="email"
+                                value={senderConfig.senderEmail}
+                                onChange={(e) => setSenderConfig({ ...senderConfig, senderEmail: e.target.value })}
+                                className="form-input"
+                                placeholder="notifications@digitoomasha.com"
+                              />
+                            </div>
+
+                            <div className="form-group">
+                              <label className="form-label">Reply-To Email Address</label>
+                              <input
+                                type="email"
+                                value={senderConfig.replyToEmail}
+                                onChange={(e) => setSenderConfig({ ...senderConfig, replyToEmail: e.target.value })}
+                                className="form-input"
+                                placeholder="support@digitoomasha.com"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 3. EMAIL VERIFICATION & DOMAIN AUTHENTICATION */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <ShieldCheck className="card-block-ic text-emerald" />
+                          <div>
+                            <h3 className="card-block-title">Email Verification & Domain Authentication</h3>
+                            <p className="card-block-sub">Ensure high deliverability by verifying DKIM, SPF, and DMARC DNS records.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1rem', marginBottom: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                <Globe className="w-5 h-5 text-purple" />
+                                <strong style={{ fontSize: '0.95rem', color: '#1e293b' }}>Sending Domain: digitoomasha.com</strong>
+                              </div>
+                              <span style={{
+                                background: domainVerified ? '#d1fae5' : '#fee2e2',
+                                color: domainVerified ? '#065f46' : '#991b1b',
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '16px',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.35rem'
+                              }}>
+                                {domainVerified ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald" /> : <AlertCircle className="w-3.5 h-3.5 text-red" />}
+                                {domainVerified ? 'Verified & Authenticated' : 'DNS Records Unverified'}
+                              </span>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', fontSize: '0.82rem' }}>
+                              <div style={{ background: '#ffffff', padding: '0.6rem 0.85rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                                <span style={{ color: '#64748b', fontWeight: 600 }}>SPF Record:</span>
+                                <div style={{ color: '#0f172a', fontFamily: 'monospace', fontSize: '0.75rem', marginTop: '0.2rem' }}>v=spf1 include:_spf.google.com ~all</div>
+                                <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.7rem' }}>✓ Pass</span>
+                              </div>
+                              <div style={{ background: '#ffffff', padding: '0.6rem 0.85rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                                <span style={{ color: '#64748b', fontWeight: 600 }}>DKIM Key:</span>
+                                <div style={{ color: '#0f172a', fontFamily: 'monospace', fontSize: '0.75rem', marginTop: '0.2rem' }}>v=DKIM1; k=rsa; p=MIGfMA...</div>
+                                <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.7rem' }}>✓ Active</span>
+                              </div>
+                              <div style={{ background: '#ffffff', padding: '0.6rem 0.85rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                                <span style={{ color: '#64748b', fontWeight: 600 }}>DMARC Policy:</span>
+                                <div style={{ color: '#0f172a', fontFamily: 'monospace', fontSize: '0.75rem', marginTop: '0.2rem' }}>v=DMARC1; p=quarantine;</div>
+                                <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.7rem' }}>✓ Active</span>
+                              </div>
+                            </div>
+
+                            <button
+                              type="button"
+                              className="btn-outline-purple sm-btn"
+                              style={{ marginTop: '0.85rem' }}
+                              disabled={verifyingDomain}
+                              onClick={() => {
+                                setVerifyingDomain(true);
+                                setTimeout(() => {
+                                  setVerifyingDomain(false);
+                                  setDomainVerified(true);
+                                }, 1500);
+                              }}
+                            >
+                              {verifyingDomain ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <RefreshCw className="w-3.5 h-3.5 mr-1 inline" />}
+                              Re-Verify DNS Records
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 4. EMAIL TEMPLATES EDITOR */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <FileText className="card-block-ic text-orange" />
+                          <div>
+                            <h3 className="card-block-title">Email Templates Management</h3>
+                            <p className="card-block-sub">Customize dynamic email templates and automated response subject lines.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label">Select Email Template</label>
+                            <select
+                              value={selectedTemplateKey}
+                              onChange={(e) => setSelectedTemplateKey(e.target.value)}
+                              className="form-input"
+                              style={{ fontWeight: 600 }}
+                            >
+                              {Object.keys(emailTemplates).map((key) => (
+                                <option key={key} value={key}>{emailTemplates[key].name}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="form-group" style={{ marginBottom: '1rem' }}>
+                            <label className="form-label">Template Subject Line</label>
+                            <input
+                              type="text"
+                              value={emailTemplates[selectedTemplateKey]?.subject || ''}
+                              onChange={(e) => setEmailTemplates({
+                                ...emailTemplates,
+                                [selectedTemplateKey]: {
+                                  ...emailTemplates[selectedTemplateKey],
+                                  subject: e.target.value
+                                }
+                              })}
+                              className="form-input"
+                            />
+                          </div>
+
+                          <div className="form-group">
+                            <label className="form-label">Email Body Template (Supports HTML & Dynamic Tags)</label>
+                            <textarea
+                              rows={6}
+                              value={emailTemplates[selectedTemplateKey]?.body || ''}
+                              onChange={(e) => setEmailTemplates({
+                                ...emailTemplates,
+                                [selectedTemplateKey]: {
+                                  ...emailTemplates[selectedTemplateKey],
+                                  body: e.target.value
+                                }
+                              })}
+                              className="form-input font-mono"
+                              style={{ fontSize: '0.85rem', lineHeight: 1.5 }}
+                            />
+                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>
+                              Available Merge Tags: <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{client_name}}"}</code>, <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{reset_link}}"}</code>, <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{month}}"}</code>, <code style={{ background: '#f1f5f9', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>{"{{lead_name}}"}</code>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 5. TEST EMAIL & SAVE BUTTONS */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Send className="card-block-ic text-purple" />
+                          <div>
+                            <h3 className="card-block-title">Send Test Email & Save Gateway</h3>
+                            <p className="card-block-sub">Dispatch a live test email to verify SMTP handshake and deliverability.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          {testEmailSuccessMsg && (
+                            <div className="alert-success-banner" style={{ marginBottom: '1rem', padding: '0.6rem 1rem' }}>
+                              <CheckCircle2 className="w-4 h-4 text-green inline mr-1" /> {testEmailSuccessMsg}
+                            </div>
+                          )}
+
+                          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <input
+                              type="email"
+                              value={testEmailRecipient || profileData.email}
+                              onChange={(e) => setTestEmailRecipient(e.target.value)}
+                              placeholder="Enter test recipient email address"
+                              className="form-input"
+                              style={{ maxWidth: '320px' }}
+                            />
+
+                            <button
+                              type="button"
+                              className="btn-outline-purple sm-btn"
+                              disabled={sendingTestEmail}
+                              onClick={() => {
+                                setSendingTestEmail(true);
+                                setTimeout(() => {
+                                  setSendingTestEmail(false);
+                                  setTestEmailSuccessMsg(`✨ Test email successfully dispatched to ${testEmailRecipient || profileData.email} via ${smtpConfig.host}!`);
+                                  setTimeout(() => setTestEmailSuccessMsg(''), 4000);
+                                }, 1200);
+                              }}
+                            >
+                              {sendingTestEmail ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1 inline" /> : <Send className="w-3.5 h-3.5 mr-1 inline" />}
+                              Send Test Email
+                            </button>
+
+                            <button
+                              type="button"
+                              className="btn-primary-purple sm-btn"
+                              style={{ marginLeft: 'auto' }}
+                              onClick={() => {
+                                setEmailSaveSuccess(true);
+                                setTimeout(() => setEmailSaveSuccess(false), 3000);
+                              }}
+                            >
+                              <Save className="w-4 h-4 mr-1 inline" /> Save Email Gateway Config
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {/* 6. OTHER SETTINGS PANELS FALLBACK */}
+                  {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && activeSettingsTab !== 'billing' && activeSettingsTab !== 'email' && (
                     <div className="settings-panel-box">
                       <h2 className="panel-title"><Shield className="panel-ic" /> Settings Module</h2>
                       <p className="panel-sub">Manage active module configurations and policies.</p>
