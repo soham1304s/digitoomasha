@@ -8496,8 +8496,112 @@ export default function ClientDashboard() {
                     </div>
                   )}
 
-                  {/* 4. OTHER SETTINGS PANELS FALLBACK */}
-                  {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && (
+                  {/* 4. BILLING & PLANS PANEL */}
+                  {activeSettingsTab === 'billing' && (
+                    <div className="settings-panel-wrapper">
+                      {/* Header */}
+                      <div className="security-panel-header">
+                        <div>
+                          <h2 className="profile-user-name" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                            <CreditCard className="text-purple w-7 h-7" /> Billing & Subscription Plans
+                          </h2>
+                          <p className="profile-user-email">Manage your active agency subscription, billing cycle, invoices, and payment methods.</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f3e8ff', color: '#7c3aed', padding: '0.4rem 0.9rem', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}>
+                          <Sparkles className="w-4 h-4 text-purple" /> Coming Soon in v2.4
+                        </div>
+                      </div>
+
+                      {/* Current Active Plan Card */}
+                      <div className="settings-card-block margin-top-md" style={{ background: 'linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%)', border: '1px solid #e9d5ff' }}>
+                        <div className="card-block-header">
+                          <Zap className="card-block-ic text-purple" />
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <h3 className="card-block-title" style={{ color: '#581c87', fontSize: '1.1rem' }}>Pro Growth Agency Plan</h3>
+                              <span style={{ background: '#7c3aed', color: '#ffffff', padding: '0.2rem 0.65rem', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>Active</span>
+                            </div>
+                            <p className="card-block-sub" style={{ color: '#6b21a8' }}>Full access to ad automation engines, social scheduler, CRM hub, and AI content creation.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body" style={{ marginTop: '0.5rem' }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                            <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #e9d5ff' }}>
+                              <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 600 }}>Billing Cycle</span>
+                              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e293b', marginTop: '0.25rem' }}>₹14,999 / month</div>
+                            </div>
+                            <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #e9d5ff' }}>
+                              <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 600 }}>Next Renewal Date</span>
+                              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#1e293b', marginTop: '0.25rem' }}>Sept 1, 2026</div>
+                            </div>
+                            <div style={{ background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #e9d5ff' }}>
+                              <span style={{ fontSize: '0.75rem', color: '#6b21a8', fontWeight: 600 }}>AI Token Credits</span>
+                              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#10b981', marginTop: '0.25rem' }}>Unlimited (Pro Tier)</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Coming Soon Features Grid */}
+                      <div className="settings-card-block margin-top-md">
+                        <div className="card-block-header">
+                          <Sparkles className="card-block-ic text-orange" />
+                          <div>
+                            <h3 className="card-block-title">Upcoming Billing Features (Coming Soon)</h3>
+                            <p className="card-block-sub">We are working on releasing full self-serve payment automation and tax invoice management.</p>
+                          </div>
+                        </div>
+
+                        <div className="card-block-body">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+                            <div style={{ padding: '1.1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                                <CreditCard className="w-5 h-5 text-purple" />
+                                <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Stripe & Razorpay Integration</strong>
+                              </div>
+                              <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+                                Auto-debit via UPI, Credit Cards, NetBanking, and PayPal with multi-currency checkout support.
+                              </p>
+                              <span style={{ display: 'inline-block', marginTop: '0.75rem', background: '#fef3c7', color: '#b45309', padding: '0.2rem 0.55rem', borderRadius: '10px', fontSize: '0.72rem', fontWeight: 700 }}>
+                                Coming Soon in v2.4
+                              </span>
+                            </div>
+
+                            <div style={{ padding: '1.1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                                <FileText className="w-5 h-5 text-blue" />
+                                <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>GST Compliant Tax Invoices</strong>
+                              </div>
+                              <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+                                Automated monthly GST tax invoices with custom GSTIN, SAC codes, and PDF receipt downloads.
+                              </p>
+                              <span style={{ display: 'inline-block', marginTop: '0.75rem', background: '#fef3c7', color: '#b45309', padding: '0.2rem 0.55rem', borderRadius: '10px', fontSize: '0.72rem', fontWeight: 700 }}>
+                                Coming Soon in v2.4
+                              </span>
+                            </div>
+
+                            <div style={{ padding: '1.1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                                <TrendingUp className="w-5 h-5 text-green" />
+                                <strong style={{ fontSize: '0.9rem', color: '#1e293b' }}>Add-on Seat Management</strong>
+                              </div>
+                              <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+                                Add additional team seats, client viewer passes, and dedicated account manager add-ons.
+                              </p>
+                              <span style={{ display: 'inline-block', marginTop: '0.75rem', background: '#fef3c7', color: '#b45309', padding: '0.2rem 0.55rem', borderRadius: '10px', fontSize: '0.72rem', fontWeight: 700 }}>
+                                Coming Soon in v2.4
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {/* 5. OTHER SETTINGS PANELS FALLBACK */}
+                  {activeSettingsTab !== 'profile' && activeSettingsTab !== 'security' && activeSettingsTab !== 'appearance' && activeSettingsTab !== 'billing' && (
                     <div className="settings-panel-box">
                       <h2 className="panel-title"><Shield className="panel-ic" /> Settings Module</h2>
                       <p className="panel-sub">Manage active module configurations and policies.</p>
