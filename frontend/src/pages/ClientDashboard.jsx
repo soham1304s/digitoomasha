@@ -1440,16 +1440,18 @@ export default function ClientDashboard() {
     }
   };
 
-  const filteredSocialPosts = socialPosts.filter((post) => {
+  const filteredSocialPosts = (Array.isArray(socialPosts) ? socialPosts : []).filter((post) => {
+    if (!post) return false;
+    const platforms = Array.isArray(post.platforms) ? post.platforms : ['Linkedin'];
     const matchesPlatform =
-      postPlatformFilter === 'All' || post.platforms.includes(postPlatformFilter);
+      postPlatformFilter === 'All' || platforms.includes(postPlatformFilter);
     const matchesStatus =
-      postStatusFilter === 'All' || post.status.toLowerCase() === postStatusFilter.toLowerCase();
+      postStatusFilter === 'All' || (post.status || '').toLowerCase() === postStatusFilter.toLowerCase();
     const matchesSearch =
       !postSearchQuery.trim() ||
-      post.title.toLowerCase().includes(postSearchQuery.toLowerCase()) ||
-      post.caption.toLowerCase().includes(postSearchQuery.toLowerCase()) ||
-      post.category.toLowerCase().includes(postSearchQuery.toLowerCase());
+      (post.title || '').toLowerCase().includes(postSearchQuery.toLowerCase()) ||
+      (post.caption || '').toLowerCase().includes(postSearchQuery.toLowerCase()) ||
+      (post.category || '').toLowerCase().includes(postSearchQuery.toLowerCase());
 
     return matchesPlatform && matchesStatus && matchesSearch;
   });
@@ -1543,15 +1545,16 @@ export default function ClientDashboard() {
     alert('✨ Customer Profile created and synced to CRM Hub successfully!');
   };
 
-  const filteredAudienceContacts = audienceContacts.filter((ct) => {
+  const filteredAudienceContacts = (Array.isArray(audienceContacts) ? audienceContacts : []).filter((ct) => {
+    if (!ct) return false;
     const matchesSegment =
       selectedAudienceSegment === 'All' || ct.segment === selectedAudienceSegment;
     const matchesSearch =
       !audienceSearchQuery.trim() ||
-      ct.name.toLowerCase().includes(audienceSearchQuery.toLowerCase()) ||
-      ct.email.toLowerCase().includes(audienceSearchQuery.toLowerCase()) ||
-      ct.company.toLowerCase().includes(audienceSearchQuery.toLowerCase()) ||
-      ct.location.toLowerCase().includes(audienceSearchQuery.toLowerCase());
+      (ct.name || '').toLowerCase().includes(audienceSearchQuery.toLowerCase()) ||
+      (ct.email || '').toLowerCase().includes(audienceSearchQuery.toLowerCase()) ||
+      (ct.company || '').toLowerCase().includes(audienceSearchQuery.toLowerCase()) ||
+      (ct.location || '').toLowerCase().includes(audienceSearchQuery.toLowerCase());
 
     return matchesSegment && matchesSearch;
   });
@@ -1848,13 +1851,14 @@ export default function ClientDashboard() {
     alert('✨ Budget Allocation & Daily Cap updated in real-time!');
   };
 
-  const filteredBudgets = budgetAllocations.filter((bgt) => {
+  const filteredBudgets = (Array.isArray(budgetAllocations) ? budgetAllocations : []).filter((bgt) => {
+    if (!bgt) return false;
     const matchesChannel =
       selectedBudgetChannel === 'All' || bgt.channel === selectedBudgetChannel;
     const matchesSearch =
       !budgetSearchQuery.trim() ||
-      bgt.campaignName.toLowerCase().includes(budgetSearchQuery.toLowerCase()) ||
-      bgt.channel.toLowerCase().includes(budgetSearchQuery.toLowerCase());
+      (bgt.campaignName || '').toLowerCase().includes(budgetSearchQuery.toLowerCase()) ||
+      (bgt.channel || '').toLowerCase().includes(budgetSearchQuery.toLowerCase());
 
     return matchesChannel && matchesSearch;
   });
@@ -1928,14 +1932,15 @@ export default function ClientDashboard() {
     alert('✨ Custom Webhook endpoint configured and listening!');
   };
 
-  const filteredIntegrations = connectedServices.filter((service) => {
+  const filteredIntegrations = (Array.isArray(connectedServices) ? connectedServices : []).filter((service) => {
+    if (!service) return false;
     const matchesCategory =
       selectedIntegrationCategory === 'All' || service.category === selectedIntegrationCategory;
     const matchesSearch =
       !integrationSearchQuery.trim() ||
-      service.name.toLowerCase().includes(integrationSearchQuery.toLowerCase()) ||
-      service.description.toLowerCase().includes(integrationSearchQuery.toLowerCase()) ||
-      service.category.toLowerCase().includes(integrationSearchQuery.toLowerCase());
+      (service.name || '').toLowerCase().includes(integrationSearchQuery.toLowerCase()) ||
+      (service.description || '').toLowerCase().includes(integrationSearchQuery.toLowerCase()) ||
+      (service.category || '').toLowerCase().includes(integrationSearchQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
   });
@@ -3680,7 +3685,7 @@ export default function ClientDashboard() {
                         <div className="post-card-body">
                           {/* Platform Badge Bar */}
                           <div className="post-platform-badges-row">
-                            {post.platforms.map((plat) => (
+                            {(Array.isArray(post.platforms) ? post.platforms : ['Linkedin']).map((plat) => (
                               <span key={plat} className={`pbadge-chip chip-${plat.toLowerCase()}`}>
                                 {plat}
                               </span>
@@ -3758,13 +3763,13 @@ export default function ClientDashboard() {
                               )}
                               <div>
                                 <strong className="t-post-title">{post.title}</strong>
-                                <p className="t-post-caption">{post.caption.slice(0, 75)}...</p>
+                                <p className="t-post-caption">{(post.caption || '').slice(0, 75)}...</p>
                               </div>
                             </div>
                           </td>
                           <td>
                             <div className="table-platforms-row">
-                              {post.platforms.map((plat) => (
+                              {(Array.isArray(post.platforms) ? post.platforms : ['Linkedin']).map((plat) => (
                                 <span key={plat} className={`pbadge-chip chip-${plat.toLowerCase()}`}>{plat}</span>
                               ))}
                             </div>
@@ -3822,7 +3827,7 @@ export default function ClientDashboard() {
                                 key={dp.id}
                                 className={`cal-post-chip status-${(dp.status || 'scheduled').toLowerCase()}`}
                                 onClick={() => handleOpenComposer(dp)}
-                                title={`${dp.title} (${dp.platforms.join(', ')})`}
+                                title={`${dp.title} (${(Array.isArray(dp.platforms) ? dp.platforms : ['Linkedin']).join(', ')})`}
                               >
                                 <span className="cal-chip-time">{dp.scheduledTime || '12:00'}</span>
                                 <span className="cal-chip-title">{dp.title}</span>
