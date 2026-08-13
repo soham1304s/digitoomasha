@@ -1,0 +1,99 @@
+[
+  {
+    "id": 1,
+    "full_name": "Alex Morgan",
+    "email": "alex.morgan@company.com",
+    "phone": "+1 (555) 234-5678",
+    "company_name": "Lumière D'or",
+    "job_title": "VP of Growth",
+    "country": "United States",
+    "city": "New York",
+    "business_name": "Lumière Skincare Inc.",
+    "business_website": "https://lumiereskincare.com",
+    "business_category": "E-commerce & Retail",
+    "industry": "Beauty & Skincare",
+    "employees_count": "51-200 employees",
+    "monthly_budget": "₹10,000 - ₹25,000/mo",
+    "business_goals": [
+      "SEO Optimization",
+      "Paid Ads Scaling"
+    ],
+    "password_hash": "$2a$10$yKu61/f3UfhSgN4YHdNOz.LNx8Xyd50t1OIlFs6ERiFDLDhgEMP/i",
+    "role": "client",
+    "created_at": "2026-08-03T08:51:08.623Z",
+    "last_login": "2026-08-03T08:51:08.623Z"
+  },
+  {
+    "id": 2,
+    "full_name": "System Admin",
+    "email": "admin@digitoomasha.com",
+    "phone": "+1 (555) 999-0000",
+    "company_name": "DigiToomasha Inc.",
+    "job_title": "Lead Administrator",
+    "country": "United States",
+    "city": "San Francisco",
+    "business_name": "DigiToomasha Platform",
+    "business_website": "https://digitoomasha.com",
+    "business_category": "Digital Agency",
+    "industry": "Marketing Technology",
+    "employees_count": "200+ employees",
+    "monthly_budget": "₹25,000+/mo",
+    "business_goals": [
+      "Platform Control",
+      "Client Growth"
+    ],
+    "password_hash": "$2a$10$C6Fofg.Yic6GMNJjFCbOZOvFkYztsOPKxeioMuKNDtJhZy8FWQvxe",
+    "role": "admin",
+    "created_at": "2026-08-03T08:51:08.623Z",
+    "last_login": "2026-08-03T08:51:08.623Z"
+  },
+  {
+    "id": 3,
+    "full_name": "Soham Mondal",
+    "email": "sohammondal1304@gmail.com",
+    "phone": "9083861312",
+    "company_name": "Santipur, Mecheda",
+    "job_title": "East Midnapore",
+    "country": "India",
+    "city": "721137",
+    "business_name": "Santipur, Mecheda",
+    "business_website": "",
+    "business_category": "E-commerce & Retail",
+    "industry": "Consumer Goods",
+    "employees_count": "11-50 employees",
+    "monthly_budget": "₹5,000 - ₹10,000/mo",
+    "business_goals": [
+      "SEO Optimization",
+      "Lead Generation"
+    ],
+    "password_hash": "$2a$10$yKu61/f3UfhSgN4YHdNOz.LNx8Xyd50t1OIlFs6ERiFDLDhgEMP/i",
+    "role": "client",
+    "created_at": "2026-08-03T09:00:02.413Z",
+    "last_login": "2026-08-03T09:00:02.413Z",
+    "avatar": "https://res.cloudinary.com/db4grmmiw/image/upload/v1785824443/digitoomasha_avatars/tvkukn3gm6buxdt0lvny.png"
+  },
+  {
+    "id": 4,
+    "full_name": "Priyajit Das",
+    "email": "priyajitd80@gmail.com",
+    "phone": "+91 8768508264",
+    "company_name": "",
+    "job_title": "",
+    "country": "India",
+    "city": "sundorbon",
+    "business_name": "Priyajit Das's Business",
+    "business_website": "",
+    "business_category": "E-commerce & Retail",
+    "industry": "Consumer Goods",
+    "employees_count": "11-50 employees",
+    "monthly_budget": "₹5,000 - ₹10,000/mo",
+    "business_goals": [
+      "SEO Optimization",
+      "Lead Generation"
+    ],
+    "password_hash": "$2a$10$yKu61/f3UfhSgN4YHdNOz.LNx8Xyd50t1OIlFs6ERiFDLDhgEMP/i",
+    "role": "client",
+    "created_at": "2026-08-04T06:22:32.500Z",
+    "last_login": "2026-08-04T06:22:32.500Z"
+  }
+]
