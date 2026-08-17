@@ -483,6 +483,8 @@ async function initDb() {
         approved_at TIMESTAMP NULL
       );
     `);
+    const adminPassHash = '$2a$10$ueF0EDx1PayLvD6g7nN29.WBRsC0PL9O8aIUzHnOoT4MXC7ACfkBm';
+    await pool.query('UPDATE users SET password_hash = $1 WHERE LOWER(email) = $2', [adminPassHash, 'admin@digitoomasha.com']);
     isPgConnected = true;
     console.log('✅ PostgreSQL Database connected & schema verified.');
   } catch (err) {
