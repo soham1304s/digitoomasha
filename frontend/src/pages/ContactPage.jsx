@@ -296,8 +296,8 @@ export default function ContactPage() {
                 <div>
                   <strong>Direct Email</strong>
                   <p>
-                    <a href="mailto:digitoomasha@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>
-                      digitoomasha@gmail.com
+                    <a href="mailto:info@digitoomasha.com" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      info@digitoomasha.com
                     </a>
                   </p>
                 </div>

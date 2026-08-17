@@ -19,10 +19,10 @@ export const LandingFooter = () => {
             </div>
             <div className="mt-8">
               <a 
-                href="mailto:digitoomasha@gmail.com" 
+                href="mailto:info@digitoomasha.com" 
                 className="text-lg md:text-2xl font-extrabold tracking-tight text-white hover:text-[#D99B00] transition-colors inline-flex items-center gap-2 text-decoration-none"
               >
-                digitoomasha@gmail.com
+                info@digitoomasha.com
                 <ArrowUpRight className="w-5 h-5 text-[#D99B00]" />
               </a>
             </div>
