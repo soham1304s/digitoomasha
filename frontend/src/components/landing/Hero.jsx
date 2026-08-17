@@ -22,26 +22,26 @@ export const Hero = () => {
       { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 0.8 }
     )
-    .fromTo('.hero-title-line',
-      { opacity: 0, y: 70, rotateX: 20 },
-      { opacity: 1, y: 0, rotateX: 0, stagger: 0.15 },
-      '-=0.4'
-    )
-    .fromTo('.hero-subtext',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.9 },
-      '-=0.6'
-    )
-    .fromTo('.hero-cta-group',
-      { opacity: 0, scale: 0.95 },
-      { opacity: 1, scale: 1, duration: 0.8 },
-      '-=0.6'
-    )
-    .fromTo(cardRef.current,
-      { opacity: 0, scale: 0.88, rotateY: -10, y: 50 },
-      { opacity: 1, scale: 1, rotateY: 0, y: 0, duration: 1.4, ease: 'power3.out' },
-      '-=1.0'
-    );
+      .fromTo('.hero-title-line',
+        { opacity: 0, y: 70, rotateX: 20 },
+        { opacity: 1, y: 0, rotateX: 0, stagger: 0.15 },
+        '-=0.4'
+      )
+      .fromTo('.hero-subtext',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.9 },
+        '-=0.6'
+      )
+      .fromTo('.hero-cta-group',
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.8 },
+        '-=0.6'
+      )
+      .fromTo(cardRef.current,
+        { opacity: 0, scale: 0.88, rotateY: -10, y: 50 },
+        { opacity: 1, scale: 1, rotateY: 0, y: 0, duration: 1.4, ease: 'power3.out' },
+        '-=1.0'
+      );
 
     // Parallax & Shrink Transition on Scroll
     gsap.to(contentRef.current, {
@@ -60,8 +60,8 @@ export const Hero = () => {
   }, { scope: containerRef });
 
   return (
-    <section 
-      ref={containerRef} 
+    <section
+      ref={containerRef}
       className="relative min-h-[85vh] w-full flex items-center overflow-hidden pt-28 md:pt-36 pb-20 px-6 md:px-12 bg-[#FAF8F2]"
     >
       {/* Background Subtle Warm Gradient Auras */}
@@ -72,10 +72,10 @@ export const Hero = () => {
 
       <div ref={contentRef} className="container mx-auto max-w-7xl relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
+
           {/* Main Hero Headlines & Copy */}
           <div className="lg:col-span-7 flex flex-col justify-center">
-            
+
             {/* Tagline Badge */}
             <div className="hero-tag-reveal flex items-center gap-2.5 mb-6 bg-[#EAE6D6] border border-[#D8D4C4] px-4 py-1.5 rounded-full w-fit">
               <span className="w-2.5 h-2.5 rounded-full bg-[#D99B00] animate-pulse" />
@@ -100,16 +100,16 @@ export const Hero = () => {
 
             {/* Call to Action Buttons */}
             <div className="hero-cta-group flex flex-wrap items-center gap-4">
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="group flex items-center gap-3 bg-[#1E3A2B] text-white px-8 py-4 rounded-full font-extrabold text-xs uppercase tracking-wider hover:bg-[#14291E] transition-all duration-300 shadow-md text-decoration-none hover:scale-105"
               >
                 START A PROJECT
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              
-              <Link 
-                to="/work" 
+
+              <Link
+                to="/work"
                 className="group flex items-center gap-3 bg-white border border-[#E0DDD2] text-[#1A1A1A] px-8 py-4 rounded-full font-extrabold text-xs uppercase tracking-wider hover:border-[#1E3A2B] transition-all duration-300 text-decoration-none hover:scale-105 shadow-sm"
               >
                 EXPLORE WORK
@@ -121,20 +121,20 @@ export const Hero = () => {
 
           {/* Right Visual Card Component */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end relative">
-            
+
             {/* Background Golden Arch behind card matching reference image */}
             <div className="absolute -top-10 -right-6 w-[88%] h-[110%] bg-[#EFE1B3] rounded-t-[14rem] rounded-b-[3rem] -z-0 opacity-80" />
 
-            <div 
+            <div
               ref={cardRef}
               className="relative z-10 w-full max-w-[480px] bg-[#FAF8F2] border border-[#E0DDD2] p-4 md:p-6 rounded-[2.5rem] shadow-2xl hover:shadow-3xl transition-shadow duration-500 group"
             >
               {/* Media Preview Box */}
               <div className="relative w-full h-[320px] md:h-[400px] overflow-hidden rounded-[2rem] bg-[#1E3A2B]">
                 {/* Image */}
-                <img 
-                  src={growthChartImg} 
-                  alt="DigiToomasha Digital Performance Growth Showcase" 
+                <img
+                  src={growthChartImg}
+                  alt="DigiToomasha Digital Performance Growth Showcase"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out opacity-95"
                 />
               </div>
