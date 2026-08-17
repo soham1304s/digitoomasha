@@ -461,17 +461,21 @@ body {
 }
 
 /* 2nd Section - Video Feature Showcase Banner */
+/* 2nd Section - Video Feature Showcase Banner */
 .video-showcase-section {
   position: relative;
   width: 100%;
-  height: 480px;
-  margin: 1.5rem 0 3.5rem 0;
-  border-radius: 16px;
+  max-width: 1100px;
+  margin: 2.5rem auto 4rem auto;
+  border-radius: 24px;
   background-color: #fafafa;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  padding: 1.25rem;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 
@@ -495,113 +499,86 @@ body {
   background-color: #f1f5f9;
 }
 
-.showcase-portrait-wrapper {
+.showcase-video-embed-container {
   position: relative;
   z-index: 2;
-  height: 94%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.showcase-portrait-img {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.05));
-}
-
-/* Glassmorphic Play Button */
-.play-btn-glass {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  background: rgba(30, 41, 59, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 4;
-}
-
-.play-btn-glass:hover {
-  background: rgba(15, 23, 42, 0.85);
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
-  border-color: rgba(255, 255, 255, 0.7);
-}
-
-.play-icon {
-  width: 24px;
-  height: 24px;
-  margin-left: 3px;
-  fill: currentColor;
-}
-
-/* Interactive Video Modal */
-.video-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  animation: fadeIn 0.2s ease;
-}
-
-.video-modal-content {
-  position: relative;
   width: 100%;
-  max-width: 860px;
-  background-color: #000;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: #000000;
 }
 
-.video-modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.video-status-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+}
+
+.live-autopill-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #e2e8f0;
+}
+
+.pulse-red-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px #ef4444;
+  animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.5; }
+}
+
+.sound-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
   cursor: pointer;
-  z-index: 10;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.video-modal-close:hover {
-  background: rgba(255, 255, 255, 0.4);
+.sound-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
 
-.responsive-video-container {
+.sound-ic {
+  width: 14px;
+  height: 14px;
+}
+
+.responsive-video-frame {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
+  background: #000;
 }
 
-.responsive-video-container iframe {
+.responsive-video-frame iframe {
   position: absolute;
   top: 0;
   left: 0;
