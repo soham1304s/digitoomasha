@@ -1003,47 +1003,47 @@ export default function AdminDashboardPage({ initialView }) {
       </aside>
 
       <main className="admin-main-stage">
-        {activeTab !== 'tasks' && (
-          <div className="admin-header-row" style={{ marginBottom: '1.5rem', paddingBottom: '1rem' }}>
-            <div>
-              <div className="admin-header-top-line">
-                <div className="admin-badge">
-                  {activeTab === 'overview' && 'System Dashboard'}
-                  {activeTab === 'templates' && 'Templates & Project Delivery'}
-                  {activeTab === 'social-studio' && 'Social Content Studio'}
-                  {activeTab === 'projects' && 'Approved Client Projects Center'}
-                  {activeTab === 'project-detail' && 'Project Technical Specification Inspection'}
-                  {activeTab === 'clients' && 'Client Management'}
-                  {activeTab === 'live-feed' && 'Live Sockets Broadcast'}
-                </div>
-                <span className="admin-verified-pill">
-                  <ShieldCheck className="vpill-icon" />
-                  <span>Super Admin Session Active</span>
-                </span>
+        <div className="admin-header-row" style={{ marginBottom: '1.5rem', paddingBottom: '1rem' }}>
+          <div>
+            <div className="admin-header-top-line">
+              <div className="admin-badge">
+                {activeTab === 'overview' && 'System Dashboard'}
+                {activeTab === 'templates' && 'Templates & Project Delivery'}
+                {activeTab === 'social-studio' && 'Social Content Studio'}
+                {activeTab === 'tasks' && 'Sprint Tasks Deliverables'}
+                {activeTab === 'projects' && 'Approved Client Projects Center'}
+                {activeTab === 'project-detail' && 'Project Technical Specification Inspection'}
+                {activeTab === 'clients' && 'Client Management'}
+                {activeTab === 'live-feed' && 'Live Sockets Broadcast'}
               </div>
-              <h1 className="admin-title">
-                {activeTab === 'overview' && 'Admin Control Center'}
-                {activeTab === 'templates' && 'Project Delivery & Templates Center'}
-                {activeTab === 'social-studio' && 'Social Content Studio (Omnichannel)'}
-                {activeTab === 'projects' && 'Manage high-value agency contracts, live sprint execution, subtasks velocity, and architecture specs.'}
-                {activeTab === 'project-detail' && 'Inspect GitHub-style technical documentation, subtask milestones, and deployment telemetry.'}
-                {activeTab === 'clients' && 'Registered Clients Database'}
-                {activeTab === 'live-feed' && 'Live WebSockets Event Feed'}
-              </h1>
+              <span className="admin-verified-pill">
+                <ShieldCheck className="vpill-icon" />
+                <span>Super Admin Session Active</span>
+              </span>
             </div>
-
-            <div className="admin-header-actions">
-              <div className={`socket-status-badge ${isConnected ? 'status-online' : 'status-offline'}`}>
-                <Radio className={`pulse-icon ${isConnected ? 'anim-pulse' : ''}`} />
-                <span>{isConnected ? `Sockets Live (${onlineSocketsCount})` : 'Sockets Disconnected'}</span>
-              </div>
-              <button className="admin-refresh-btn" onClick={() => { fetchUsers(); fetchSocialPosts(); fetchTasks(); }}>
-                <RefreshCw className={loading ? 'spin-icon' : ''} />
-                <span>Refresh</span>
-              </button>
-            </div>
+            <h1 className="admin-title">
+              {activeTab === 'overview' && 'Admin Control Center'}
+              {activeTab === 'templates' && 'Project Delivery & Templates Center'}
+              {activeTab === 'social-studio' && 'Social Content Studio (Omnichannel)'}
+              {activeTab === 'tasks' && 'Sprint Deliverables & Task Management'}
+              {activeTab === 'projects' && 'Manage high-value agency contracts, live sprint execution, subtasks velocity, and architecture specs.'}
+              {activeTab === 'project-detail' && 'Inspect GitHub-style technical documentation, subtask milestones, and deployment telemetry.'}
+              {activeTab === 'clients' && 'Registered Clients Database'}
+              {activeTab === 'live-feed' && 'Live WebSockets Event Feed'}
+            </h1>
           </div>
-        )}
+
+          <div className="admin-header-actions">
+            <div className={`socket-status-badge ${isConnected ? 'status-online' : 'status-offline'}`}>
+              <Radio className={`pulse-icon ${isConnected ? 'anim-pulse' : ''}`} />
+              <span>{isConnected ? `Sockets Live (${onlineSocketsCount})` : 'Sockets Disconnected'}</span>
+            </div>
+            <button className="admin-refresh-btn" onClick={() => { fetchUsers(); fetchSocialPosts(); fetchTasks(); }}>
+              <RefreshCw className={loading ? 'spin-icon' : ''} />
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
 
         {/* VIEW 1: OVERVIEW TAB */}
         {activeTab === 'overview' && (

@@ -865,13 +865,28 @@ async function createTask(data) {
 }
 
 async function updateTask(id, updateData) {
+  const sanitized = {};
+  if (updateData.title !== undefined) sanitized.title = updateData.title;
+  if (updateData.description !== undefined) sanitized.description = updateData.description;
+  if (updateData.status !== undefined) sanitized.status = updateData.status;
+  if (updateData.priority !== undefined) sanitized.priority = updateData.priority;
+  if (updateData.campaign !== undefined) sanitized.campaign = updateData.campaign;
+  if (updateData.assigneeName !== undefined) sanitized.assignee_name = updateData.assigneeName;
+  if (updateData.assignee_name !== undefined) sanitized.assignee_name = updateData.assignee_name;
+  if (updateData.dueDate !== undefined) sanitized.due_date = updateData.dueDate;
+  if (updateData.due_date !== undefined) sanitized.due_date = updateData.due_date;
+  if (updateData.subtasks !== undefined) sanitized.subtasks = typeof updateData.subtasks === 'string' ? updateData.subtasks : JSON.stringify(updateData.subtasks);
+  if (updateData.files !== undefined) sanitized.files = typeof updateData.files === 'string' ? updateData.files : JSON.stringify(updateData.files);
+
   if (isPgConnected) {
     try {
-      const keys = Object.keys(updateData);
-      const setClause = keys.map((key, i) => `${key} = $${i + 2}`).join(', ');
-      const values = [id, ...Object.values(updateData)];
-      const res = await pool.query(`UPDATE tasks SET ${setClause} WHERE id = $1 RETURNING *`, values);
-      if (res.rows[0]) return res.rows[0];
+      const keys = Object.keys(sanitized);
+      if (keys.length > 0) {
+        const setClause = keys.map((key, i) => `${key} = $${i + 2}`).join(', ');
+        const values = [id, ...Object.values(sanitized)];
+        const res = await pool.query(`UPDATE tasks SET ${setClause} WHERE id = $1 RETURNING *`, values);
+        if (res.rows[0]) return res.rows[0];
+      }
     } catch (err) {
       console.error('Pg updateTask Error:', err);
     }
@@ -881,6 +896,8 @@ async function updateTask(id, updateData) {
   const index = store.tasks.findIndex((t) => t.id === id);
   if (index !== -1) {
     store.tasks[index] = { ...store.tasks[index], ...updateData };
+    if (updateData.assigneeName) store.tasks[index].assignee_name = updateData.assigneeName;
+    if (updateData.dueDate) store.tasks[index].due_date = updateData.dueDate;
     writeStore(store);
     return store.tasks[index];
   }
