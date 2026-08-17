@@ -1,66 +1,66 @@
 import React, { useState } from 'react';
-import iunikImg from '../assets/portfolio_iunik.png';
-import waterbankImg from '../assets/portfolio_waterbank.png';
-import onetwofreeImg from '../assets/portfolio_onetwofree.png';
-import heartleafImg from '../assets/portfolio_heartleaf.png';
-import luminereImg from '../assets/portfolio_luminere.png';
-import auraImg from '../assets/portfolio_aura.png';
+import fintechAppImg from '../assets/project_fintech_app.png';
+import telehealthWebappImg from '../assets/project_telehealth_webapp.png';
+import tradingPlatformImg from '../assets/project_trading_platform.png';
+import ecommerceHeadlessImg from '../assets/project_ecommerce_headless.png';
+import saasDashboardImg from '../assets/project_saas_dashboard.png';
+import mobilityAppImg from '../assets/project_mobility_app.png';
 
 const PORTFOLIO_ALL = [
   {
-    id: 'iunik',
-    title: 'IUNIK',
-    image: iunikImg,
-    tags: ['Marketing', 'SEO'],
-    impact: '+226% Organic Conversions',
-    desc: 'Complete search engine optimization and influencer marketing campaign for luxury serum line.',
+    id: 'nexus-pay',
+    title: 'Nexus Pay - Fintech Mobile App',
+    image: fintechAppImg,
+    tags: ['Mobile App', 'Marketing', 'PPC'],
+    impact: '1.2M+ App Downloads',
+    desc: 'Full-stack iOS/Android fintech application, high-converting onboarding web funnel, and targeted user acquisition campaign.',
   },
   {
-    id: 'waterbank',
-    title: 'Water Bank',
-    image: waterbankImg,
-    tags: ['PPC', 'SEO'],
-    impact: '+546% PPC ROAS Increase',
-    desc: 'Targeted Google Shopping & Search campaign coupled with technical landing page speed optimization.',
+    id: 'pulse-health',
+    title: 'Pulse Health - Telehealth Web Platform',
+    image: telehealthWebappImg,
+    tags: ['Web App', 'SEO', 'Marketing'],
+    impact: '+480% Patient Consults',
+    desc: 'HIPAA-compliant React web portal, programmatic search engine strategy, and automated patient booking pipeline.',
   },
   {
-    id: 'onetwofree',
-    title: 'One Two Free',
-    image: onetwofreeImg,
-    tags: ['Social Media', 'Marketing'],
-    impact: '+451% Monthly Unit Sales',
-    desc: 'Meta ad creatives and viral Instagram reels campaign resulting in sold-out product launches.',
+    id: 'apex-trading',
+    title: 'Apex Trading - Crypto & Algorithmic Platform',
+    image: tradingPlatformImg,
+    tags: ['Web App', 'SEO', 'PPC'],
+    impact: '5.8x Campaign ROAS Yield',
+    desc: 'Real-time web & desktop trading interface, high-intent Google PPC search ads, and global digital PR distribution.',
   },
   {
-    id: 'heartleaf',
-    title: 'Heartleaf 88',
-    image: heartleafImg,
-    tags: ['Marketing', 'PPC'],
-    impact: '+350% Sales Volume Growth',
-    desc: 'Amazon Advertising and Google Search acquisition strategy for botanical skincare brand.',
+    id: 'nova-commerce',
+    title: 'NovaCommerce - Headless E-Commerce',
+    image: ecommerceHeadlessImg,
+    tags: ['Web App', 'Marketing', 'SEO'],
+    impact: '+340% Mobile Conversion Rate',
+    desc: 'Next.js headless storefront, sub-second checkout performance, and automated customer retention workflows.',
   },
   {
-    id: 'luminere',
-    title: 'Lumière D\'or',
-    image: luminereImg,
-    tags: ['Marketing', 'SEO'],
-    impact: '+180% High Ticket Revenue',
-    desc: 'Omnichannel brand positioning, premium Google Search rankings, and high-ticket customer funnel.',
+    id: 'omniflow-saas',
+    title: 'OmniFlow - AI SaaS Analytics Dashboard',
+    image: saasDashboardImg,
+    tags: ['Web App', 'PPC', 'Marketing'],
+    impact: '+620% Monthly Recurring Revenue',
+    desc: 'High-converting B2B SaaS landing pages, Meta & LinkedIn video ad campaigns, and interactive onboarding product tour.',
   },
   {
-    id: 'aura',
-    title: 'Aura Skin',
-    image: auraImg,
-    tags: ['Social Media', 'SEO'],
-    impact: '+310% Repeat Customer Retention',
-    desc: 'Minimalist brand redesign and automated customer lifecycle marketing campaign.',
+    id: 'urbanride-app',
+    title: 'UrbanRide - EV Fleet & Ride App',
+    image: mobilityAppImg,
+    tags: ['Mobile App', 'PPC', 'Social Media'],
+    impact: '+250,000 Active Monthly Users',
+    desc: 'Cross-platform rider app, geo-targeted hyper-local ads, and viral social media influencer partnership campaign.',
   },
 ];
 
 export default function PortfolioPage() {
   const [selectedTag, setSelectedTag] = useState('All');
 
-  const filterTags = ['All', 'Marketing', 'PPC', 'SEO', 'Social Media'];
+  const filterTags = ['All', 'Marketing', 'PPC', 'SEO', 'Web App', 'Mobile App'];
 
   const filteredItems =
     selectedTag === 'All'
@@ -74,7 +74,7 @@ export default function PortfolioPage() {
         <span className="section-category-tag">CLIENT CASE STUDIES</span>
         <h1 className="page-main-title">Client Success Stories & Featured Work</h1>
         <p className="page-hero-subtitle">
-          Explore how we partner with forward-thinking brands to build recognition, drive sales volume, and outpace market competitors.
+          Explore how we partner with forward-thinking tech, digital marketing, web & app brands to build recognition, drive sales volume, and outpace market competitors.
         </p>
       </section>
 
