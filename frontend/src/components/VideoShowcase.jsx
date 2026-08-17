@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Sparkles } from 'lucide-react';
 
 export default function VideoShowcase() {
   const sectionRef = useRef(null);
   const [shouldPlay, setShouldPlay] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -15,7 +13,7 @@ export default function VideoShowcase() {
           }
         });
       },
-      { threshold: 0.25 }
+      { threshold: 0.15 }
     );
 
     if (sectionRef.current) {
@@ -30,7 +28,7 @@ export default function VideoShowcase() {
   }, []);
 
   const videoId = "QsY8fnvMn6c";
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${shouldPlay ? 1 : 0}&mute=${isMuted ? 1 : 0}&loop=1&playlist=${videoId}&enablejsapi=1&controls=1&rel=0&modestbranding=1`;
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${shouldPlay ? 1 : 0}&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&disablekb=1&playsinline=1`;
 
   return (
     <section className="video-showcase-section" ref={sectionRef}>
@@ -44,30 +42,12 @@ export default function VideoShowcase() {
         ))}
       </div>
 
-      {/* Embedded Auto-playing Video Container */}
-      <div className="showcase-video-embed-container">
-        <div className="video-status-header">
-          <div className="live-autopill-group">
-            <span className="pulse-red-dot" />
-            <span className="live-autopill-text">
-              {shouldPlay ? 'Auto-Playing Showcase' : 'Scroll to Play Showcase'}
-            </span>
-          </div>
-
-          <button
-            className="sound-toggle-btn"
-            onClick={() => setIsMuted(!isMuted)}
-            title={isMuted ? "Click to Unmute Sound" : "Mute Sound"}
-          >
-            {isMuted ? <VolumeX className="sound-ic" /> : <Volume2 className="sound-ic text-green" />}
-            <span>{isMuted ? "Unmute Sound" : "Muted"}</span>
-          </button>
-        </div>
-
-        <div className="responsive-video-frame">
+      {/* Ultra-Premium Pure Cinematic Video Showcase */}
+      <div className="showcase-video-embed-container pure-cinematic-frame">
+        <div className="responsive-video-frame pure-video-viewport">
           <iframe
             src={embedUrl}
-            title="Digital Marketing Success Story"
+            title="DigiToomasha Showcase"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
