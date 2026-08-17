@@ -865,7 +865,7 @@ export default function ClientDashboard() {
 
   // Appearance & Theme State
   const [themeMode, setThemeMode] = useState('system'); // 'light', 'dark', 'system'
-  const [accentColor, setAccentColor] = useState('purple'); // 'purple', 'blue', 'emerald', 'orange', 'rose', 'cyan'
+  const [accentColor, setAccentColor] = useState('emerald'); // 'emerald', 'purple', 'blue', 'orange', 'rose', 'cyan'
   const [dashboardLayout, setDashboardLayout] = useState('grid'); // 'grid', 'kanban', 'table'
   const [densityView, setDensityView] = useState('comfortable'); // 'comfortable', 'compact'
   const [sidebarBehavior, setSidebarBehavior] = useState('expanded'); // 'expanded', 'collapsed', 'auto'
@@ -1965,7 +1965,7 @@ export default function ClientDashboard() {
       name: `Custom Webhook: ${newWebhookData.name}`,
       category: 'Workflow Engine',
       description: `Target: ${newWebhookData.targetUrl} • Trigger: ${newWebhookData.eventTrigger}`,
-      iconBg: '#7C3AED',
+      iconBg: '#1E3A2B',
       status: 'Connected',
       lastSync: 'Just now',
       apiKeyMasked: `Endpoint: ${newWebhookData.targetUrl.substring(0, 24)}...`,
@@ -2370,7 +2370,7 @@ export default function ClientDashboard() {
       ctr: '5.12%',
       audience: 'Urban Females 18-34 Beauty & Skincare',
       trend: '+28%',
-      color: '#2563eb'
+      color: '#1E3A2B'
     },
     {
       id: 'c3',
@@ -2406,7 +2406,7 @@ export default function ClientDashboard() {
       ctr: '3.15%',
       audience: 'VP Marketing / CMOs - Tech & Retail',
       trend: '+24%',
-      color: '#9333ea'
+      color: '#D99B00'
     },
     {
       id: 'c5',
@@ -2540,7 +2540,7 @@ export default function ClientDashboard() {
       ctr: '0.0%',
       audience: newCampaignForm.audience || 'Targeting Active',
       trend: '+100%',
-      color: '#7c3aed'
+      color: '#1E3A2B'
     };
 
     setCampaignsList((prev) => [createdItem, ...prev]);
@@ -3526,9 +3526,9 @@ export default function ClientDashboard() {
 
                     <div className="platform-spend-list">
                       {[
-                        { name: 'Meta Ads (FB & IG)', percent: 55, spend: '₹7,854', color: '#2563eb' },
-                        { name: 'Google Search & Display', percent: 32, spend: '₹4,569', color: '#ea580c' },
-                        { name: 'TikTok Influencer Ads', percent: 13, spend: '₹1,857', color: '#06b6d4' }
+                        { name: 'Meta Ads (FB & IG)', percent: 55, spend: '₹7,854', color: '#1E3A2B' },
+                        { name: 'Google Search & Display', percent: 32, spend: '₹4,569', color: '#D99B00' },
+                        { name: 'TikTok Influencer Ads', percent: 13, spend: '₹1,857', color: '#5A5A55' }
                       ].map((p, idx) => (
                         <div key={idx} className="pspend-item">
                           <div className="pspend-row-top">
@@ -4278,7 +4278,7 @@ export default function ClientDashboard() {
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '8px',
-                      background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+                      background: 'linear-gradient(135deg, #1E3A2B 0%, #152B20 100%)',
                       color: '#ffffff',
                       padding: '0.65rem 1.25rem',
                       borderRadius: '12px',
@@ -4286,7 +4286,7 @@ export default function ClientDashboard() {
                       fontSize: '0.9rem',
                       border: 'none',
                       cursor: 'pointer',
-                      boxShadow: '0 4px 14px rgba(124, 58, 237, 0.35)',
+                      boxShadow: '0 4px 14px rgba(30, 58, 43, 0.35)',
                       transition: 'transform 0.2s ease, boxShadow 0.2s ease'
                     }}
                   >
@@ -4299,47 +4299,47 @@ export default function ClientDashboard() {
               {/* 2. QUICK STATS (4 Cards) */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
                 {/* Stat 1: Total Campaigns */}
-                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E0DDD2', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Campaigns</span>
-                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#5A5A55', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Campaigns</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#EAE6D6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1E3A2B' }}>
                       <Target style={{ width: 20, height: 20 }} />
                     </div>
                   </div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>{campaignsList.length}</div>
-                  <div style={{ fontSize: '0.8rem', color: '#10b981', marginTop: '4px', fontWeight: 600 }}>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1A1A1A' }}>{campaignsList.length}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#1E3A2B', marginTop: '4px', fontWeight: 600 }}>
                     {campaignsList.filter(c => c.status === 'Active' || c.status === 'Scaling').length} Active · {campaignsList.filter(c => c.status === 'Paused').length} Paused
                   </div>
                 </div>
 
                 {/* Stat 2: Active Campaigns */}
-                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E0DDD2', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Campaigns</span>
-                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#5A5A55', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Campaigns</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#FAF8F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1E3A2B' }}>
                       <Zap style={{ width: 20, height: 20 }} />
                     </div>
                   </div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1A1A1A' }}>
                     {campaignsList.filter(c => c.status === 'Active' || c.status === 'Scaling').length} Live
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
+                  <div style={{ fontSize: '0.8rem', color: '#5A5A55', marginTop: '4px', fontWeight: 600 }}>
                     Across Meta, Google & TikTok
                   </div>
                 </div>
 
                 {/* Stat 3: Total Spend */}
-                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #E0DDD2', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Spend</span>
-                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#5A5A55', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Spend</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#EAE6D6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D99B00' }}>
                       <DollarSign style={{ width: 20, height: 20 }} />
                     </div>
                   </div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1A1A1A' }}>
                     ₹{campaignsList.reduce((acc, c) => acc + (Number(c.spent) || 0), 0).toLocaleString()}
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: '#7c3aed', marginTop: '4px', fontWeight: 600 }}>
+                  <div style={{ fontSize: '0.8rem', color: '#D99B00', marginTop: '4px', fontWeight: 600 }}>
                     Daily Budget Cap: ₹{campaignsList.reduce((acc, c) => acc + (Number(c.budget) || 0), 0).toLocaleString()}/day
                   </div>
                 </div>
@@ -4382,7 +4382,7 @@ export default function ClientDashboard() {
                         border: 'none',
                         cursor: 'pointer',
                         background: campaignChartTimeframe === '7D' ? '#ffffff' : 'transparent',
-                        color: campaignChartTimeframe === '7D' ? '#7c3aed' : '#64748b',
+                        color: campaignChartTimeframe === '7D' ? '#1E3A2B' : '#5A5A55',
                         boxShadow: campaignChartTimeframe === '7D' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
                         transition: 'all 0.2s ease'
                       }}
@@ -4399,7 +4399,7 @@ export default function ClientDashboard() {
                         border: 'none',
                         cursor: 'pointer',
                         background: campaignChartTimeframe === '30D' ? '#ffffff' : 'transparent',
-                        color: campaignChartTimeframe === '30D' ? '#7c3aed' : '#64748b',
+                        color: campaignChartTimeframe === '30D' ? '#1E3A2B' : '#5A5A55',
                         boxShadow: campaignChartTimeframe === '30D' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
                         transition: 'all 0.2s ease'
                       }}
@@ -4438,7 +4438,7 @@ export default function ClientDashboard() {
                           style={{
                             width: '35%',
                             height: `${item.spend}%`,
-                            background: 'linear-gradient(180deg, #a7f3d0 0%, #10b981 100%)',
+                            background: 'linear-gradient(180deg, #2d553f 0%, #1E3A2B 100%)',
                             borderRadius: '4px 4px 0 0',
                             transition: 'height 0.4s ease'
                           }}
@@ -4448,7 +4448,7 @@ export default function ClientDashboard() {
                           style={{
                             width: '35%',
                             height: `${item.rev * 0.75}%`,
-                            background: 'linear-gradient(180deg, #c084fc 0%, #7c3aed 100%)',
+                            background: 'linear-gradient(180deg, #D99B00 0%, #b88300 100%)',
                             borderRadius: '4px 4px 0 0',
                             transition: 'height 0.4s ease'
                           }}
@@ -4461,11 +4461,11 @@ export default function ClientDashboard() {
 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ width: 12, height: 12, borderRadius: 3, background: '#10b981' }} />
+                    <span style={{ width: 12, height: 12, borderRadius: 3, background: '#1E3A2B' }} />
                     <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#475569' }}>Ad Spend (₹)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ width: 12, height: 12, borderRadius: 3, background: '#7c3aed' }} />
+                    <span style={{ width: 12, height: 12, borderRadius: 3, background: '#D99B00' }} />
                     <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#475569' }}>Attributed Revenue (₹)</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -4857,7 +4857,7 @@ export default function ClientDashboard() {
                       </button>
                       <button
                         onClick={handleCreateCampaignSubmit}
-                        style={{ padding: '0.6rem 1.25rem', borderRadius: '10px', border: 'none', background: '#7c3aed', color: '#fff', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.3)' }}
+                        style={{ padding: '0.6rem 1.25rem', borderRadius: '10px', border: 'none', background: '#1E3A2B', color: '#fff', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(30,58,43,0.3)' }}
                       >
                         Launch Campaign
                       </button>
@@ -4868,20 +4868,20 @@ export default function ClientDashboard() {
             </div>
           )}
           {(currentView === 'analytics' || currentView === 'analysis') && (
-            <div className="analytics-master-container animate-fade-in" style={{ paddingBottom: '3rem', background: '#f8fafc', minHeight: '100vh', margin: '-1.5rem', padding: '1.5rem' }}>
+            <div className="analytics-master-container animate-fade-in" style={{ paddingBottom: '3rem', background: '#FAF8F2', minHeight: '100vh', margin: '-1.5rem', padding: '1.5rem' }}>
               
               {/* 1. TOP TITLE & ACTION HEADER */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.2rem' }}>
-                    <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                    <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.02em' }}>
                       Marketing Intelligence & ROAS Analytics
                     </h1>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '0.15rem 0.55rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} /> Live
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#EAE6D6', color: '#1E3A2B', border: '1px solid #E0DDD2', padding: '0.15rem 0.55rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1E3A2B', display: 'inline-block' }} /> Live
                     </span>
                   </div>
-                  <p style={{ margin: 0, color: '#64748b', fontSize: '0.88rem' }}>
+                  <p style={{ margin: 0, color: '#5A5A55', fontSize: '0.88rem' }}>
                     Collecting data from Google Ads, Meta, Linkedin, TikTok, GA4 & more. AI-powered insights for better ROAS.
                   </p>
                 </div>
@@ -4889,16 +4889,16 @@ export default function ClientDashboard() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                   <button
                     onClick={() => setShowAlertCenterModal(true)}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#334155', border: '1px solid #cbd5e1', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#1A1A1A', border: '1px solid #E0DDD2', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
                   >
-                    <Bell style={{ width: 15, height: 15, color: '#ef4444' }} />
+                    <Bell style={{ width: 15, height: 15, color: '#D99B00' }} />
                     <span>Alerts</span>
-                    <span style={{ background: '#ef4444', color: '#fff', fontSize: '0.7rem', fontWeight: 800, width: 18, height: 18, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
+                    <span style={{ background: '#D99B00', color: '#fff', fontSize: '0.7rem', fontWeight: 800, width: 18, height: 18, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
                   </button>
 
                   <button
                     onClick={handleExportBIPdf}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#7c3aed', border: '1px solid #ddd6fe', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#1E3A2B', border: '1px solid #E0DDD2', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
                   >
                     <Download style={{ width: 15, height: 15 }} />
                     <span>Export Report</span>
@@ -4906,7 +4906,7 @@ export default function ClientDashboard() {
 
                   <button
                     onClick={handleRunAIAudit}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)', color: '#ffffff', border: 'none', padding: '0.55rem 1.1rem', borderRadius: '10px', fontSize: '0.84rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.3)' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #1E3A2B 0%, #152B20 100%)', color: '#ffffff', border: 'none', padding: '0.55rem 1.1rem', borderRadius: '10px', fontSize: '0.84rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(30, 58, 43, 0.3)' }}
                   >
                     <Sparkles style={{ width: 16, height: 16 }} />
                     <span>Run AI Audit</span>
@@ -4915,10 +4915,10 @@ export default function ClientDashboard() {
               </div>
 
               {/* 2. TIMEFRAME & CHANNEL CONTROL BAR */}
-              <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.75rem 1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+              <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.75rem 1.25rem', border: '1px solid #E0DDD2', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
                 {/* Timeframe selector */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Timeframe:</span>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5A5A55', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Timeframe:</span>
                   {[
                     { key: 'today', label: 'Today' },
                     { key: '7d', label: 'Last 7 Days' },
@@ -4936,9 +4936,9 @@ export default function ClientDashboard() {
                         fontWeight: 700,
                         border: 'none',
                         cursor: 'pointer',
-                        background: biDateRange === tf.key ? '#7c3aed' : 'transparent',
-                        color: biDateRange === tf.key ? '#ffffff' : '#64748b',
-                        boxShadow: biDateRange === tf.key ? '0 2px 6px rgba(124,58,237,0.3)' : 'none',
+                        background: biDateRange === tf.key ? '#1E3A2B' : 'transparent',
+                        color: biDateRange === tf.key ? '#ffffff' : '#5A5A55',
+                        boxShadow: biDateRange === tf.key ? '0 2px 6px rgba(30,58,43,0.3)' : 'none',
                         transition: 'all 0.15s ease'
                       }}
                     >
@@ -5352,14 +5352,14 @@ export default function ClientDashboard() {
                     </div>
 
                     {/* Conversions Trend */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#FAF8F2', border: '1px solid #E0DDD2' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>Conversions Trend</span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#7c3aed' }}>↑ 19.8%</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#5A5A55' }}>Conversions Trend</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#D99B00' }}>↑ 19.8%</span>
                       </div>
                       <div style={{ height: 45, width: '100%' }}>
                         <svg width="100%" height="45" viewBox="0 0 100 45" preserveAspectRatio="none">
-                          <path d="M 0,38 Q 30,22 60,18 T 100,10" fill="none" stroke="#7c3aed" strokeWidth="2.5" />
+                          <path d="M 0,38 Q 30,22 60,18 T 100,10" fill="none" stroke="#D99B00" strokeWidth="2.5" />
                         </svg>
                       </div>
                     </div>
@@ -6699,17 +6699,17 @@ export default function ClientDashboard() {
                   <span style={{ fontSize: '0.78rem', color: '#16a34a', fontWeight: 600 }}>Ready for execution / active sprint</span>
                 </div>
 
-                <div style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                <div style={{ background: 'linear-gradient(135deg, #ffffff 0%, #FAF8F2 100%)', border: '1px solid #E0DDD2', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>In Active Sprint</span>
-                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5A5A55', textTransform: 'uppercase' }}>In Active Sprint</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#EAE6D6', color: '#1E3A2B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Zap style={{ width: 20, height: 20 }} />
                     </div>
                   </div>
-                  <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a' }}>
+                  <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1A1A1A' }}>
                     {taskItems.filter(t => t.status === 'In Progress').length}
                   </h3>
-                  <span style={{ fontSize: '0.78rem', color: '#7c3aed', fontWeight: 600 }}>Development in progress</span>
+                  <span style={{ fontSize: '0.78rem', color: '#1E3A2B', fontWeight: 600 }}>Development in progress</span>
                 </div>
 
                 <div style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>

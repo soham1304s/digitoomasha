@@ -129,6 +129,7 @@ class ErrorBoundary extends Component {
 function AppLayout() {
   const location = useLocation();
   const isDashboardRoute = location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/admin');
+  const isHomePage = location.pathname === '/';
 
   if (isDashboardRoute) {
     return (
@@ -142,11 +143,18 @@ function AppLayout() {
     );
   }
 
+  if (isHomePage) {
+    return (
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    );
+  }
+
   return (
     <div className="landing-container">
       <Navbar />
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/work" element={<PortfolioPage />} />
         <Route path="/about" element={<AboutPage />} />
