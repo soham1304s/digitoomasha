@@ -4654,10 +4654,25 @@ html.lenis, html.lenis body {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 0;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   height: 100vh;
   z-index: 50;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dash-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.dash-sidebar.expanded ~ .dash-main-area {
+  margin-left: 220px;
 }
 
 .dash-sidebar-top {
@@ -4763,6 +4778,8 @@ html.lenis, html.lenis body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  margin-left: 72px;
+  transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Header Bar */
@@ -11870,10 +11887,20 @@ html.lenis, html.lenis body {
   flex-shrink: 0;
   border-right: 1px solid #E0DDD2;
   box-shadow: 4px 0 24px rgba(30, 58, 43, 0.04);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   height: 100vh;
-  z-index: 20;
+  z-index: 50;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 .admin-sidebar-header {
@@ -12123,6 +12150,7 @@ html.lenis, html.lenis body {
   overflow-y: auto;
   min-width: 0;
   box-sizing: border-box;
+  margin-left: 270px;
 }
 
 @media (max-width: 992px) {
@@ -12139,6 +12167,7 @@ html.lenis, html.lenis body {
 
   .admin-main-stage {
     max-width: 100%;
+    margin-left: 0;
     padding: 1.5rem;
   }
 }
