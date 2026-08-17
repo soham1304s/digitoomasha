@@ -295,7 +295,11 @@ export default function ContactPage() {
                 <Mail className="info-icon" />
                 <div>
                   <strong>Direct Email</strong>
-                  <p>hello@digitoomasha.com</p>
+                  <p>
+                    <a href="mailto:digitoomasha@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>
+                      digitoomasha@gmail.com
+                    </a>
+                  </p>
                 </div>
               </div>
 
