@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 export default function VideoShowcase() {
   const sectionRef = useRef(null);
   const [shouldPlay, setShouldPlay] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,7 +30,7 @@ export default function VideoShowcase() {
   }, []);
 
   const videoId = "QsY8fnvMn6c";
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${shouldPlay ? 1 : 0}&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&disablekb=1&playsinline=1`;
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=${shouldPlay ? 1 : 0}&mute=${isMuted ? 1 : 0}&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&disablekb=1&playsinline=1`;
 
   return (
     <section className="video-showcase-section" ref={sectionRef}>
@@ -52,6 +54,25 @@ export default function VideoShowcase() {
             allowFullScreen
           />
         </div>
+
+        {/* Floating Premium Mute / Unmute Button */}
+        <button
+          className="cinematic-mute-btn"
+          onClick={() => setIsMuted(!isMuted)}
+          aria-label={isMuted ? "Unmute Audio" : "Mute Audio"}
+        >
+          {isMuted ? (
+            <>
+              <VolumeX className="mute-ic" />
+              <span>Unmute</span>
+            </>
+          ) : (
+            <>
+              <Volume2 className="mute-ic text-green" />
+              <span>Sound On</span>
+            </>
+          )}
+        </button>
       </div>
     </section>
   );
