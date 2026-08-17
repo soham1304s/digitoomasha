@@ -15156,6 +15156,8 @@ textarea.pdc-input {
     height: 56px !important;
     position: sticky !important;
     top: 0;
+    left: 0 !important;
+    right: 0 !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between !important;
@@ -15236,10 +15238,13 @@ textarea.pdc-input {
   }
 
   .dash-main-area,
-  .admin-main-wrapper {
+  .admin-main-wrapper,
+  .admin-main-stage,
+  .dash-sidebar.expanded ~ .dash-main-area {
     width: 100% !important;
     max-width: 100vw !important;
     min-width: 0 !important;
+    margin-left: 0 !important;
     flex: 1;
     overflow-x: hidden !important;
     box-sizing: border-box !important;
