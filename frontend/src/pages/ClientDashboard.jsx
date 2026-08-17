@@ -3262,69 +3262,6 @@ export default function ClientDashboard() {
                     </div>
                   </div>
 
-                  {/* Top Performing Creatives & Content Hub */}
-                  <div className="intel-card-box margin-top-md">
-                    <div className="icard-header">
-                      <div>
-                        <h3 className="icard-title">Top Performing Ad Creatives</h3>
-                        <p className="icard-sub">Highest converting visual assets and copy across ad accounts.</p>
-                      </div>
-
-                      <button className="btn-outline-purple sm-btn" onClick={() => setCurrentView('posts-grid')}>
-                        <span>View Creative Library</span>
-                      </button>
-                    </div>
-
-                    <div className="top-creatives-grid">
-                      {[
-                        {
-                          id: 1,
-                          title: 'Hydrating Glow Serum Reel Ad',
-                          platform: 'Instagram Reel',
-                          ctr: '4.32%',
-                          conversions: 412,
-                          image: 'https://images.unsplash.com/photo-1608248597263-00079996576f?auto=format&fit=crop&w=400&q=80'
-                        },
-                        {
-                          id: 2,
-                          title: 'Summer Skincare Routine Carousel',
-                          platform: 'Meta Feed',
-                          ctr: '4.47%',
-                          conversions: 285,
-                          image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80'
-                        },
-                        {
-                          id: 3,
-                          title: 'Dermatologist Recommended Article',
-                          platform: 'Google Search',
-                          ctr: '6.54%',
-                          conversions: 310,
-                          image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=400&q=80'
-                        }
-                      ].map((creative) => (
-                        <div key={creative.id} className="creative-card-item">
-                          <div className="creative-img-wrap">
-                            <img src={creative.image} alt={creative.title} className="creative-img" />
-                            <span className="creative-platform-badge">{creative.platform}</span>
-                          </div>
-                          <div className="creative-info-body">
-                            <h4 className="creative-item-title">{creative.title}</h4>
-                            <div className="creative-stats-row">
-                              <div>
-                                <span className="cstat-lbl">CTR</span>
-                                <strong className="cstat-val text-green">{creative.ctr}</strong>
-                              </div>
-                              <div>
-                                <span className="cstat-lbl">Conversions</span>
-                                <strong className="cstat-val">{creative.conversions}</strong>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
                 </div>
 
                 {/* RIGHT COLUMN: AI Recommendations, Tasks, Platform Split, Live Feed */}
