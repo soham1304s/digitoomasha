@@ -2338,57 +2338,230 @@ export default function ClientDashboard() {
   const [campaignsList, setCampaignsList] = useState([
     {
       id: 'c1',
-      name: 'Q3 E-Commerce Scaling Engine',
-      platform: 'Meta Ads',
-      status: 'Active',
-      budget: 8500,
-      spent: 5420,
-      leads: 1140,
-      roas: '5.2x',
-      cpa: '₹4.75',
-      trend: '+32%',
-      color: '#2563eb'
-    },
-    {
-      id: 'c2',
-      name: 'Summer Skincare High-Intent Search',
+      name: 'Google Search - High-Intent SaaS Keywords',
       platform: 'Google Ads',
+      objective: 'Conversions / Sales',
       status: 'Active',
-      budget: 6000,
-      spent: 4180,
-      leads: 680,
-      roas: '4.4x',
-      cpa: '₹6.15',
-      trend: '+18%',
+      budget: 25000,
+      spent: 124500,
+      leads: 342,
+      conversions: 342,
+      revenue: 647400,
+      roas: '5.2x',
+      cpa: '₹364',
+      ctr: '4.85%',
+      audience: 'US/CA 25-45 B2B Decision Makers',
+      trend: '+32%',
       color: '#ea580c'
     },
     {
+      id: 'c2',
+      name: 'Meta IG Reels - Hydrating Glow Serum Push',
+      platform: 'Meta Ads',
+      objective: 'E-Commerce Sales',
+      status: 'Active',
+      budget: 18000,
+      spent: 94200,
+      leads: 412,
+      conversions: 412,
+      revenue: 489840,
+      roas: '5.2x',
+      cpa: '₹228',
+      ctr: '5.12%',
+      audience: 'Urban Females 18-34 Beauty & Skincare',
+      trend: '+28%',
+      color: '#2563eb'
+    },
+    {
       id: 'c3',
-      name: 'TikTok Viral UGC Influencer Funnel',
+      name: 'TikTok Viral Creative - Summer Skincare Routine',
       platform: 'TikTok Ads',
+      objective: 'Conversions / Sales',
       status: 'Scaling',
-      budget: 4500,
-      spent: 3100,
-      leads: 325,
-      roas: '3.9x',
-      cpa: '₹9.53',
+      budget: 15000,
+      spent: 68500,
+      leads: 285,
+      conversions: 285,
+      revenue: 328800,
+      roas: '4.8x',
+      cpa: '₹240',
+      ctr: '6.45%',
+      audience: 'Gen Z / Millennial Skincare Enthusiasts',
       trend: '+45%',
       color: '#06b6d4'
     },
     {
       id: 'c4',
-      name: 'Omnichannel Retargeting & Cart Recovery',
-      platform: 'Multi-Platform',
+      name: 'LinkedIn B2B Retargeting - Enterprise Agency Leads',
+      platform: 'LinkedIn',
+      objective: 'Lead Generation',
       status: 'Active',
-      budget: 3500,
-      spent: 1580,
-      leads: 100,
-      roas: '6.8x',
-      cpa: '₹15.80',
+      budget: 30000,
+      spent: 142000,
+      leads: 84,
+      conversions: 84,
+      revenue: 624800,
+      roas: '4.4x',
+      cpa: '₹1,690',
+      ctr: '3.15%',
+      audience: 'VP Marketing / CMOs - Tech & Retail',
       trend: '+24%',
       color: '#9333ea'
+    },
+    {
+      id: 'c5',
+      name: 'Google Performance Max - Shopping Feed Scale',
+      platform: 'Google Ads',
+      objective: 'Catalog Sales',
+      status: 'Active',
+      budget: 20000,
+      spent: 88000,
+      leads: 260,
+      conversions: 260,
+      revenue: 396000,
+      roas: '4.5x',
+      cpa: '₹338',
+      ctr: '4.10%',
+      audience: 'High-Intent Shopping Buyers',
+      trend: '+19%',
+      color: '#ea580c'
+    },
+    {
+      id: 'c6',
+      name: 'YouTube Pre-Roll - Agency Founder Case Study',
+      platform: 'YouTube',
+      objective: 'Brand Consideration',
+      status: 'Paused',
+      budget: 10000,
+      spent: 32000,
+      leads: 45,
+      conversions: 45,
+      revenue: 70400,
+      roas: '2.2x',
+      cpa: '₹711',
+      ctr: '1.85%',
+      audience: 'Entrepreneurs & Founders 25-50',
+      trend: '-12%',
+      color: '#ff0000'
+    },
+    {
+      id: 'c7',
+      name: 'Meta FB Feed - Broad Prospecting Campaign',
+      platform: 'Meta Ads',
+      objective: 'Traffic & Leads',
+      status: 'Completed',
+      budget: 12000,
+      spent: 45000,
+      leads: 110,
+      conversions: 110,
+      revenue: 162000,
+      roas: '3.6x',
+      cpa: '₹409',
+      ctr: '3.40%',
+      audience: 'Broad Interest India & US',
+      trend: '+8%',
+      color: '#2563eb'
     }
   ]);
+
+  // Campaigns Master Search & Filter State
+  const [campaignSearchQuery, setCampaignSearchQuery] = useState('');
+  const [campaignPlatformFilter, setCampaignPlatformFilter] = useState('All');
+  const [campaignStatusFilter, setCampaignStatusFilter] = useState('All');
+  const [campaignSortOption, setCampaignSortOption] = useState('Highest ROAS');
+  const [campaignChartTimeframe, setCampaignChartTimeframe] = useState('30D');
+  const [isCreateCampaignModalOpen, setIsCreateCampaignModalOpen] = useState(false);
+
+  const [newCampaignForm, setNewCampaignForm] = useState({
+    name: '',
+    platform: 'Meta Ads',
+    objective: 'Conversions / Sales',
+    audience: '',
+    budget: 15000,
+    startDate: new Date().toISOString().split('T')[0],
+    creative: ''
+  });
+
+  // Filtered & Sorted Campaigns List
+  const filteredCampaignsList = campaignsList.filter((c) => {
+    const matchesSearch =
+      !campaignSearchQuery.trim() ||
+      (c.name || '').toLowerCase().includes(campaignSearchQuery.toLowerCase()) ||
+      (c.platform || '').toLowerCase().includes(campaignSearchQuery.toLowerCase()) ||
+      (c.audience || '').toLowerCase().includes(campaignSearchQuery.toLowerCase());
+
+    const matchesPlatform =
+      campaignPlatformFilter === 'All' ||
+      (c.platform || '').toLowerCase().includes(campaignPlatformFilter.toLowerCase());
+
+    const matchesStatus =
+      campaignStatusFilter === 'All' ||
+      (c.status || '').toLowerCase() === campaignStatusFilter.toLowerCase();
+
+    return matchesSearch && matchesPlatform && matchesStatus;
+  }).sort((a, b) => {
+    if (campaignSortOption === 'Highest ROAS') {
+      const roasA = parseFloat(a.roas) || 0;
+      const roasB = parseFloat(b.roas) || 0;
+      return roasB - roasA;
+    }
+    if (campaignSortOption === 'Highest Spend') {
+      const spendA = Number(a.spent) || Number(a.spend) || 0;
+      const spendB = Number(b.spent) || Number(b.spend) || 0;
+      return spendB - spendA;
+    }
+    if (campaignSortOption === 'Most Conversions') {
+      const convA = Number(a.conversions) || Number(a.leads) || 0;
+      const convB = Number(b.conversions) || Number(b.leads) || 0;
+      return convB - convA;
+    }
+    return 0;
+  });
+
+  const handleCreateCampaignSubmit = () => {
+    if (!newCampaignForm.name.trim()) {
+      alert('Please enter a campaign name.');
+      return;
+    }
+
+    const createdItem = {
+      id: `cmp-${Date.now()}`,
+      name: newCampaignForm.name,
+      platform: newCampaignForm.platform,
+      objective: newCampaignForm.objective,
+      status: 'Active',
+      budget: Number(newCampaignForm.budget) || 15000,
+      spent: 0,
+      leads: 0,
+      conversions: 0,
+      revenue: 0,
+      roas: '0.0x',
+      cpa: '₹0',
+      ctr: '0.0%',
+      audience: newCampaignForm.audience || 'Targeting Active',
+      trend: '+100%',
+      color: '#7c3aed'
+    };
+
+    setCampaignsList((prev) => [createdItem, ...prev]);
+    setIsCreateCampaignModalOpen(false);
+    setNewCampaignForm({
+      name: '',
+      platform: 'Meta Ads',
+      objective: 'Conversions / Sales',
+      audience: '',
+      budget: 15000,
+      startDate: new Date().toISOString().split('T')[0],
+      creative: ''
+    });
+    alert('🚀 New Campaign Launched Successfully! Real-time telemetry monitoring activated.');
+  };
+
+  const handleDeleteCampaignMaster = (id) => {
+    if (window.confirm('Are you sure you want to delete this campaign?')) {
+      setCampaignsList((prev) => prev.filter((c) => c.id !== id));
+    }
+  };
 
   // Toggle Task Completion
   const handleTaskToggle = (id) => {
@@ -2404,7 +2577,7 @@ export default function ClientDashboard() {
   const handleToggleCampaignStatus = (id) => {
     setCampaignsList(prev => prev.map(c => {
       if (c.id === id) {
-        const nextStatus = c.status === 'Active' ? 'Paused' : 'Active';
+        const nextStatus = c.status === 'Active' || c.status === 'Scaling' ? 'Paused' : 'Active';
         return { ...c, status: nextStatus };
       }
       return c;
@@ -4072,8 +4245,628 @@ export default function ClientDashboard() {
               })()}
             </div>
           )}
-          {currentView === 'create-campaign' && <div className="create-campaign-view"><h1 className="dash-page-title">Create Campaign</h1></div>}
-          {currentView === 'campaigns-master' && <div className="campaigns-master-view"><h1 className="dash-page-title">Campaigns</h1></div>}
+          {/* ========================================================= */}
+          {/* RECOMMENDED CAMPAIGNS PAGE (CAMPAIGNS MASTER VIEW)         */}
+          {/* ========================================================= */}
+          {(currentView === 'campaigns-master' || currentView === 'campaigns' || currentView === 'create-campaign') && (
+            <div className="campaigns-master-container animate-fade-in" style={{ paddingBottom: '3rem' }}>
+              {/* 1. HEADER ROW */}
+              <div className="dash-breadcrumbs" style={{ marginBottom: '0.75rem' }}>
+                <span>Dashboard</span>
+                <ChevronRight className="bc-sep" />
+                <span className="bc-current">Campaigns Hub</span>
+              </div>
+
+              <div className="dash-title-row" style={{ marginBottom: '1.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+                    <h1 className="dash-page-title" style={{ margin: 0, fontSize: '1.85rem', fontWeight: 800, color: '#0f172a' }}>Campaigns</h1>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '0.25rem 0.65rem', borderRadius: '9999px', fontSize: '0.78rem', fontWeight: 700 }}>
+                      <span className="green-pulse-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                      {campaignsList.filter(c => c.status === 'Active' || c.status === 'Scaling').length} Active Live
+                    </span>
+                  </div>
+                  <p className="dash-page-subtitle" style={{ margin: 0, color: '#64748b', fontSize: '0.92rem' }}>
+                    Manage, scale, and analyze multi-channel advertising campaigns across Meta, Google, TikTok, LinkedIn, and YouTube.
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <button
+                    onClick={() => setIsCreateCampaignModalOpen(true)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+                      color: '#ffffff',
+                      padding: '0.65rem 1.25rem',
+                      borderRadius: '12px',
+                      fontWeight: 700,
+                      fontSize: '0.9rem',
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 14px rgba(124, 58, 237, 0.35)',
+                      transition: 'transform 0.2s ease, boxShadow 0.2s ease'
+                    }}
+                  >
+                    <Plus style={{ width: 18, height: 18 }} />
+                    <span>Create Campaign</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. QUICK STATS (4 Cards) */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
+                {/* Stat 1: Total Campaigns */}
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Campaigns</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                      <Target style={{ width: 20, height: 20 }} />
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>{campaignsList.length}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#10b981', marginTop: '4px', fontWeight: 600 }}>
+                    {campaignsList.filter(c => c.status === 'Active' || c.status === 'Scaling').length} Active · {campaignsList.filter(c => c.status === 'Paused').length} Paused
+                  </div>
+                </div>
+
+                {/* Stat 2: Active Campaigns */}
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Campaigns</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                      <Zap style={{ width: 20, height: 20 }} />
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>
+                    {campaignsList.filter(c => c.status === 'Active' || c.status === 'Scaling').length} Live
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
+                    Across Meta, Google & TikTok
+                  </div>
+                </div>
+
+                {/* Stat 3: Total Spend */}
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Spend</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' }}>
+                      <DollarSign style={{ width: 20, height: 20 }} />
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>
+                    ₹{campaignsList.reduce((acc, c) => acc + (Number(c.spent) || 0), 0).toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: '#7c3aed', marginTop: '4px', fontWeight: 600 }}>
+                    Daily Budget Cap: ₹{campaignsList.reduce((acc, c) => acc + (Number(c.budget) || 0), 0).toLocaleString()}/day
+                  </div>
+                </div>
+
+                {/* Stat 4: Conversions / ROAS */}
+                <div className="icard" style={{ background: '#ffffff', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Conversions / ROAS</span>
+                    <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#fff7ed', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ea580c' }}>
+                      <TrendingUp style={{ width: 20, height: 20 }} />
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <span>{campaignsList.reduce((acc, c) => acc + (Number(c.conversions || c.leads) || 0), 0).toLocaleString()}</span>
+                    <span style={{ fontSize: '1rem', color: '#16a34a', fontWeight: 700 }}>4.8x ROAS</span>
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: '#16a34a', marginTop: '4px', fontWeight: 600 }}>
+                    Est. Revenue: ₹{campaignsList.reduce((acc, c) => acc + (Number(c.revenue) || (Number(c.spent) || 0) * 4.8), 0).toLocaleString()}
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. CAMPAIGN PERFORMANCE CHART CARD */}
+              <div className="icard" style={{ background: '#ffffff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: '#0f172a' }}>Campaign Performance Trend</h3>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.84rem', color: '#64748b' }}>Real-time cross-channel spend vs projected revenue pacing.</p>
+                  </div>
+
+                  {/* 7D / 30D Filter Buttons */}
+                  <div style={{ display: 'flex', background: '#f1f5f9', padding: '4px', borderRadius: '10px', gap: '4px' }}>
+                    <button
+                      onClick={() => setCampaignChartTimeframe('7D')}
+                      style={{
+                        padding: '0.35rem 0.9rem',
+                        borderRadius: '7px',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        border: 'none',
+                        cursor: 'pointer',
+                        background: campaignChartTimeframe === '7D' ? '#ffffff' : 'transparent',
+                        color: campaignChartTimeframe === '7D' ? '#7c3aed' : '#64748b',
+                        boxShadow: campaignChartTimeframe === '7D' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      Last 7 Days
+                    </button>
+                    <button
+                      onClick={() => setCampaignChartTimeframe('30D')}
+                      style={{
+                        padding: '0.35rem 0.9rem',
+                        borderRadius: '7px',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        border: 'none',
+                        cursor: 'pointer',
+                        background: campaignChartTimeframe === '30D' ? '#ffffff' : 'transparent',
+                        color: campaignChartTimeframe === '30D' ? '#7c3aed' : '#64748b',
+                        boxShadow: campaignChartTimeframe === '30D' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      Last 30 Days
+                    </button>
+                  </div>
+                </div>
+
+                {/* Chart Visual Simulation */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px', alignItems: 'flex-end', height: '180px', paddingTop: '1.5rem', paddingBottom: '0.5rem', borderBottom: '1px solid #f1f5f9' }}>
+                  {(campaignChartTimeframe === '7D'
+                    ? [
+                        { day: 'Mon', spend: 40, rev: 85, conv: 42 },
+                        { day: 'Tue', spend: 55, rev: 92, conv: 58 },
+                        { day: 'Wed', spend: 60, rev: 110, conv: 64 },
+                        { day: 'Thu', spend: 75, rev: 135, conv: 78 },
+                        { day: 'Fri', spend: 90, rev: 160, conv: 92 },
+                        { day: 'Sat', spend: 100, rev: 180, conv: 105 },
+                        { day: 'Sun', spend: 85, rev: 150, conv: 88 }
+                      ]
+                    : [
+                        { day: 'W1', spend: 45, rev: 90, conv: 110 },
+                        { day: 'W2', spend: 65, rev: 125, conv: 145 },
+                        { day: 'W3', spend: 80, rev: 155, conv: 175 },
+                        { day: 'W4', spend: 95, rev: 175, conv: 195 },
+                        { day: 'W5', spend: 70, rev: 140, conv: 150 },
+                        { day: 'W6', spend: 85, rev: 165, conv: 180 },
+                        { day: 'W7', spend: 90, rev: 170, conv: 185 }
+                      ]
+                  ).map((item, i) => (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', height: '100%', justifyContent: 'flex-end' }}>
+                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', width: '100%', justifyContent: 'center', height: '140px' }}>
+                        <div
+                          title={`Spend: ${item.spend}%`}
+                          style={{
+                            width: '35%',
+                            height: `${item.spend}%`,
+                            background: 'linear-gradient(180deg, #a7f3d0 0%, #10b981 100%)',
+                            borderRadius: '4px 4px 0 0',
+                            transition: 'height 0.4s ease'
+                          }}
+                        />
+                        <div
+                          title={`Revenue: ${item.rev}%`}
+                          style={{
+                            width: '35%',
+                            height: `${item.rev * 0.75}%`,
+                            background: 'linear-gradient(180deg, #c084fc 0%, #7c3aed 100%)',
+                            borderRadius: '4px 4px 0 0',
+                            transition: 'height 0.4s ease'
+                          }}
+                        />
+                      </div>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>{item.day}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: 12, height: 12, borderRadius: 3, background: '#10b981' }} />
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#475569' }}>Ad Spend (₹)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: 12, height: 12, borderRadius: 3, background: '#7c3aed' }} />
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#475569' }}>Attributed Revenue (₹)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#16a34a' }}>⚡ Peak ROAS: 5.5x</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. SEARCH & FILTERS BAR */}
+              <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                  {/* Search box */}
+                  <div style={{ flex: '1 1 260px', position: 'relative' }}>
+                    <Search style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 16, height: 16, color: '#94a3b8' }} />
+                    <input
+                      type="text"
+                      placeholder="Search campaign name, platform, audience..."
+                      value={campaignSearchQuery}
+                      onChange={(e) => setCampaignSearchQuery(e.target.value)}
+                      style={{
+                        width: '100%',
+                        paddingLeft: '38px',
+                        paddingRight: '12px',
+                        paddingTop: '0.55rem',
+                        paddingBottom: '0.55rem',
+                        borderRadius: '10px',
+                        border: '1px solid #cbd5e1',
+                        fontSize: '0.85rem',
+                        outline: 'none',
+                        transition: 'border-color 0.2s'
+                      }}
+                    />
+                  </div>
+
+                  {/* Platform filter */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b' }}>Platform:</span>
+                    <select
+                      value={campaignPlatformFilter}
+                      onChange={(e) => setCampaignPlatformFilter(e.target.value)}
+                      style={{ padding: '0.5rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 600, background: '#fff', color: '#1e293b', cursor: 'pointer' }}
+                    >
+                      <option value="All">All Platforms</option>
+                      <option value="Meta Ads">Meta Ads (FB/IG)</option>
+                      <option value="Google Ads">Google Ads</option>
+                      <option value="TikTok">TikTok Ads</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="YouTube">YouTube</option>
+                    </select>
+                  </div>
+
+                  {/* Status filter */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b' }}>Status:</span>
+                    <select
+                      value={campaignStatusFilter}
+                      onChange={(e) => setCampaignStatusFilter(e.target.value)}
+                      style={{ padding: '0.5rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 600, background: '#fff', color: '#1e293b', cursor: 'pointer' }}
+                    >
+                      <option value="All">All Statuses</option>
+                      <option value="Active">Active</option>
+                      <option value="Scaling">Scaling</option>
+                      <option value="Paused">Paused</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+
+                  {/* Sort filter */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#64748b' }}>Sort By:</span>
+                    <select
+                      value={campaignSortOption}
+                      onChange={(e) => setCampaignSortOption(e.target.value)}
+                      style={{ padding: '0.5rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 600, background: '#fff', color: '#1e293b', cursor: 'pointer' }}
+                    >
+                      <option value="Highest ROAS">Highest ROAS</option>
+                      <option value="Highest Spend">Highest Spend</option>
+                      <option value="Most Conversions">Most Conversions</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* 5. CAMPAIGN LIST TABLE */}
+              <div className="icard" style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: '2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>Campaign Performance Directory</h3>
+                  <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Showing {filteredCampaignsList.length} campaigns</span>
+                </div>
+
+                <div className="table-responsive-box">
+                  <table className="admin-users-table" style={{ width: '100%' }}>
+                    <thead>
+                      <tr>
+                        <th>CAMPAIGN NAME</th>
+                        <th>PLATFORM</th>
+                        <th>STATUS</th>
+                        <th>DAILY BUDGET</th>
+                        <th>SPEND</th>
+                        <th>CONVERSIONS</th>
+                        <th>ROAS</th>
+                        <th>ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredCampaignsList.length === 0 ? (
+                        <tr>
+                          <td colSpan="8" style={{ textAlign: 'center', padding: '2.5rem', color: '#64748b' }}>
+                            No campaigns match the selected filters.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredCampaignsList.map((c) => {
+                          const isLive = c.status === 'Active' || c.status === 'Scaling';
+                          const roasVal = parseFloat(c.roas) || 4.5;
+                          const spendVal = Number(c.spent) || Number(c.spend) || 0;
+                          const convVal = Number(c.conversions) || Number(c.leads) || 0;
+                          const budgetVal = Number(c.budget) || 10000;
+
+                          return (
+                            <tr key={c.id}>
+                              <td>
+                                <div>
+                                  <strong style={{ fontSize: '0.88rem', color: '#0f172a', display: 'block' }}>{c.name}</strong>
+                                  <span style={{ fontSize: '0.76rem', color: '#64748b' }}>{c.audience || c.objective || 'Targeting Active'}</span>
+                                </div>
+                              </td>
+                              <td>
+                                <span style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  padding: '0.25rem 0.6rem',
+                                  borderRadius: '8px',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 700,
+                                  background: c.platform.includes('Meta') ? '#eff6ff' : c.platform.includes('Google') ? '#fff7ed' : c.platform.includes('TikTok') ? '#ecfeff' : c.platform.includes('LinkedIn') ? '#f0f9ff' : '#fef2f2',
+                                  color: c.platform.includes('Meta') ? '#1d4ed8' : c.platform.includes('Google') ? '#c2410c' : c.platform.includes('TikTok') ? '#0891b2' : c.platform.includes('LinkedIn') ? '#0369a1' : '#b91c1c'
+                                }}>
+                                  {c.platform}
+                                </span>
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() => handleToggleCampaignStatus(c.id)}
+                                  title="Click to toggle status"
+                                  style={{
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
+                                    padding: '0.25rem 0.6rem',
+                                    borderRadius: '9999px',
+                                    fontSize: '0.76rem',
+                                    fontWeight: 700,
+                                    background: isLive ? '#dcfce7' : '#fef3c7',
+                                    color: isLive ? '#15803d' : '#b45309'
+                                  }}
+                                >
+                                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: isLive ? '#16a34a' : '#d97706' }} />
+                                  {c.status}
+                                </button>
+                              </td>
+                              <td><strong style={{ fontSize: '0.85rem', color: '#334155' }}>₹{budgetVal.toLocaleString()}/d</strong></td>
+                              <td><span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#475569' }}>₹{spendVal.toLocaleString()}</span></td>
+                              <td><span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>{convVal}</span></td>
+                              <td>
+                                <span style={{
+                                  padding: '0.2rem 0.55rem',
+                                  borderRadius: '6px',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 800,
+                                  background: roasVal >= 4.5 ? '#dcfce7' : roasVal >= 3.0 ? '#fef3c7' : '#fee2e2',
+                                  color: roasVal >= 4.5 ? '#15803d' : roasVal >= 3.0 ? '#b45309' : '#b91c1c'
+                                }}>
+                                  {typeof c.roas === 'number' ? `${c.roas}x` : c.roas}
+                                </span>
+                              </td>
+                              <td>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <button
+                                    onClick={() => handleToggleCampaignStatus(c.id)}
+                                    style={{ padding: '0.3rem 0.55rem', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', fontSize: '0.76rem', fontWeight: 600, cursor: 'pointer' }}
+                                  >
+                                    {isLive ? <PauseCircle style={{ width: 14, height: 14, color: '#d97706' }} /> : <PlayCircle style={{ width: 14, height: 14, color: '#16a34a' }} />}
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteCampaignMaster(c.id)}
+                                    style={{ padding: '0.3rem 0.55rem', borderRadius: '6px', border: '1px solid #fecaca', background: '#fef2f2', color: '#dc2626', fontSize: '0.76rem', fontWeight: 600, cursor: 'pointer' }}
+                                    title="Delete Campaign"
+                                  >
+                                    <Trash2 style={{ width: 14, height: 14 }} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* 6. TOP & UNDERPERFORMING CAMPAIGNS BREAKDOWN */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                {/* Top Performing Campaigns */}
+                <div className="icard" style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                    <div style={{ width: 32, height: 32, borderRadius: '8px', background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
+                      <Award style={{ width: 18, height: 18 }} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>🏆 Best Performing Campaigns</h4>
+                      <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Highest Return on Ad Spend (ROAS &gt; 4.5x)</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {campaignsList
+                      .filter(c => (parseFloat(c.roas) || 0) >= 4.5)
+                      .slice(0, 3)
+                      .map((topC) => (
+                        <div key={topC.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                          <div>
+                            <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block' }}>{topC.name}</strong>
+                            <span style={{ fontSize: '0.76rem', color: '#64748b' }}>{topC.platform} · {topC.conversions || topC.leads || 300} Conv.</span>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#16a34a', display: 'block' }}>
+                              {typeof topC.roas === 'number' ? `${topC.roas}x` : topC.roas} ROAS
+                            </span>
+                            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>₹{(topC.spent || 50000).toLocaleString()} spent</span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                {/* Underperforming Campaigns */}
+                <div className="icard" style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+                    <div style={{ width: 32, height: 32, borderRadius: '8px', background: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
+                      <AlertTriangle style={{ width: 18, height: 18 }} />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>⚠️ Needs Optimization / Attention</h4>
+                      <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Campaigns with ROAS &lt; 4.0x or Paused status</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {campaignsList
+                      .filter(c => (parseFloat(c.roas) || 0) < 4.0 || c.status === 'Paused')
+                      .slice(0, 3)
+                      .map((lowC) => (
+                        <div key={lowC.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', borderRadius: '12px', background: '#fff1f2', border: '1px solid #ffe4e6' }}>
+                          <div>
+                            <strong style={{ fontSize: '0.85rem', color: '#0f172a', display: 'block' }}>{lowC.name}</strong>
+                            <span style={{ fontSize: '0.76rem', color: '#9f1239' }}>{lowC.platform} · Action: Refresh creative assets</span>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#dc2626', display: 'block' }}>
+                              {typeof lowC.roas === 'number' ? `${lowC.roas}x` : lowC.roas} ROAS
+                            </span>
+                            <button
+                              onClick={() => handleApplyAiTip(lowC.id)}
+                              style={{ fontSize: '0.72rem', color: '#7c3aed', fontWeight: 700, background: 'transparent', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+                            >
+                              Apply AI Fix
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 7. CREATE CAMPAIGN MODAL OVERLAY */}
+              {isCreateCampaignModalOpen && (
+                <div className="social-composer-modal-overlay">
+                  <div className="social-composer-modal-card animate-scale-up" style={{ maxWidth: 580, padding: '1.75rem' }}>
+                    <div className="composer-modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                      <div>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>Create New Advertising Campaign</h2>
+                        <p style={{ fontSize: '0.84rem', color: '#64748b', margin: '4px 0 0' }}>Deploy multi-platform paid ads with automated AI ROAS tracking.</p>
+                      </div>
+                      <button onClick={() => setIsCreateCampaignModalOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b' }}>
+                        <X style={{ width: 20, height: 20 }} />
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      <div>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Campaign Name *</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Meta IG Reels - Q3 Flash Sale Push"
+                          value={newCampaignForm.name}
+                          onChange={(e) => setNewCampaignForm(prev => ({ ...prev, name: e.target.value }))}
+                          style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div>
+                          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Platform *</label>
+                          <select
+                            value={newCampaignForm.platform}
+                            onChange={(e) => setNewCampaignForm(prev => ({ ...prev, platform: e.target.value }))}
+                            style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem', background: '#fff' }}
+                          >
+                            <option value="Meta Ads">Meta Ads (FB / IG)</option>
+                            <option value="Google Ads">Google Ads (Search/Shopping)</option>
+                            <option value="TikTok Ads">TikTok Ads</option>
+                            <option value="LinkedIn">LinkedIn Ads</option>
+                            <option value="YouTube">YouTube Video Ads</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Objective *</label>
+                          <select
+                            value={newCampaignForm.objective}
+                            onChange={(e) => setNewCampaignForm(prev => ({ ...prev, objective: e.target.value }))}
+                            style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem', background: '#fff' }}
+                          >
+                            <option value="Conversions / Sales">Conversions / Sales</option>
+                            <option value="Lead Generation">Lead Generation</option>
+                            <option value="Traffic / Clicks">Traffic / Clicks</option>
+                            <option value="Brand Awareness">Brand Awareness</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div>
+                          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Daily Budget (₹) *</label>
+                          <input
+                            type="number"
+                            placeholder="15000"
+                            value={newCampaignForm.budget}
+                            onChange={(e) => setNewCampaignForm(prev => ({ ...prev, budget: Number(e.target.value) }))}
+                            style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem' }}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Start Schedule</label>
+                          <input
+                            type="date"
+                            value={newCampaignForm.startDate}
+                            onChange={(e) => setNewCampaignForm(prev => ({ ...prev, startDate: e.target.value }))}
+                            style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Target Audience</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Females 18-35 Beauty & Wellness in India"
+                          value={newCampaignForm.audience}
+                          onChange={(e) => setNewCampaignForm(prev => ({ ...prev, audience: e.target.value }))}
+                          style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem' }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>Ad Creative Asset / Title</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. UGC Video Reel #3 - Autumn Routine"
+                          value={newCampaignForm.creative}
+                          onChange={(e) => setNewCampaignForm(prev => ({ ...prev, creative: e.target.value }))}
+                          style={{ width: '100%', padding: '0.6rem 0.8rem', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '0.88rem' }}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
+                      <button
+                        onClick={() => setIsCreateCampaignModalOpen(false)}
+                        style={{ padding: '0.6rem 1.1rem', borderRadius: '10px', border: '1px solid #cbd5e1', background: '#fff', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleCreateCampaignSubmit}
+                        style={{ padding: '0.6rem 1.25rem', borderRadius: '10px', border: 'none', background: '#7c3aed', color: '#fff', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(124,58,237,0.3)' }}
+                      >
+                        Launch Campaign
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           {/* ========================================================= */}
           {/* MASTER MARKETING INTELLIGENCE & ROAS ANALYTICS MODULE     */}
           {/* ========================================================= */}
