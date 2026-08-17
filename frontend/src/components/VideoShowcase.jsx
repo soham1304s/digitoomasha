@@ -18,7 +18,7 @@ export default function VideoShowcase() {
       </div>
 
       {/* Center Woman Portrait */}
-      <div className="showcase-portrait-wrapper">
+      <div className="showcase-portrait-wrapper" onClick={() => setIsVideoOpen(true)} style={{ cursor: 'pointer' }}>
         <img
           src={portraitImg}
           alt="Digital Marketing Specialist Showcase"
@@ -28,7 +28,10 @@ export default function VideoShowcase() {
         {/* Centered Glassmorphic Play Button */}
         <button
           className="play-btn-glass"
-          onClick={() => setIsVideoOpen(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsVideoOpen(true);
+          }}
           aria-label="Play Feature Video"
         >
           <Play className="play-icon" />
@@ -48,7 +51,7 @@ export default function VideoShowcase() {
             </button>
             <div className="responsive-video-container">
               <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                src="https://www.youtube.com/embed/QsY8fnvMn6c?autoplay=1"
                 title="Digital Marketing Success Story"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
