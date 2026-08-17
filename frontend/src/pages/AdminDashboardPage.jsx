@@ -191,12 +191,6 @@ export default function AdminDashboardPage({ initialView }) {
     setShowAuthSection(false);
   };
 
-  const handleAutoFillAdminDemo = () => {
-    setAdminEmail('admin@digitoomasha.com');
-    setAdminPassword('admin123456');
-    setAuthError('');
-  };
-
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -853,21 +847,6 @@ export default function AdminDashboardPage({ initialView }) {
                     className="admin-input-field"
                   />
                 </div>
-              </div>
-
-              <div className="admin-demo-autofill-box">
-                <div className="demo-info-text">
-                  <KeyRound className="key-icon" />
-                  <span>Demo Admin Account: <code>admin@digitoomasha.com</code></span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleAutoFillAdminDemo}
-                  className="admin-autofill-btn"
-                >
-                  <Sparkles className="sparkle-icon" />
-                  <span>Auto-fill Credentials</span>
-                </button>
               </div>
 
               <button

@@ -26,7 +26,7 @@ const FALLBACK_FILE = isVercel
 function seedInitialStore() {
   const salt = bcrypt.genSaltSync(10);
   const alexHash = bcrypt.hashSync('demo123456', salt);
-  const adminHash = bcrypt.hashSync('admin123456', salt);
+  const adminHash = bcrypt.hashSync('123456', salt);
 
   return {
     users: [
@@ -68,7 +68,7 @@ function seedInitialStore() {
         employees_count: '200+ employees',
         monthly_budget: '₹2,50,000+/mo',
         business_goals: ['Platform Control', 'Client Growth'],
-        password_hash: '$2a$10$C6Fofg.Yic6GMNJjFCbOZOvFkYztsOPKxeioMuKNDtJhZy8FWQvxe',
+        password_hash: adminHash,
         role: 'admin',
         avatar: '',
         created_at: new Date().toISOString(),
