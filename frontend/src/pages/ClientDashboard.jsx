@@ -4867,67 +4867,58 @@ export default function ClientDashboard() {
               )}
             </div>
           )}
-          {/* ========================================================= */}
-          {/* MASTER MARKETING INTELLIGENCE & ROAS ANALYTICS MODULE     */}
-          {/* ========================================================= */}
           {(currentView === 'analytics' || currentView === 'analysis') && (
-            <div className="analytics-hub-container animate-fade-in">
-              {/* Breadcrumbs Row */}
-              <div className="dash-breadcrumbs">
-                <span>Dashboard</span>
-                <ChevronRight className="bc-sep" />
-                <span>Business Intelligence</span>
-                <ChevronRight className="bc-sep" />
-                <span className="bc-current">Marketing Intelligence & ROAS Analytics</span>
-              </div>
-
-              {/* Title & Top Action Bar */}
-              <div className="dash-title-row">
+            <div className="analytics-master-container animate-fade-in" style={{ paddingBottom: '3rem', background: '#f8fafc', minHeight: '100vh', margin: '-1.5rem', padding: '1.5rem' }}>
+              
+              {/* 1. TOP TITLE & ACTION HEADER */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
                 <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <h1 className="dash-page-title margin-none">Marketing Intelligence & ROAS Analytics</h1>
-                    <span className="live-socket-pulse-badge">
-                      <span className="pulse-dot" /> Live Socket Stream Connected
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.2rem' }}>
+                    <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                      Marketing Intelligence & ROAS Analytics
+                    </h1>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '0.15rem 0.55rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} /> Live
                     </span>
                   </div>
-                  <p className="dash-page-subtitle">
-                    Collecting & processing marketing data across Google Ads, Meta, LinkedIn, TikTok, X, Pinterest, GA4 & PostgreSQL Database with AI ROAS Optimization.
+                  <p style={{ margin: 0, color: '#64748b', fontSize: '0.88rem' }}>
+                    Collecting data from Google Ads, Meta, Linkedin, TikTok, GA4 & more. AI-powered insights for better ROAS.
                   </p>
                 </div>
 
-                <div className="bi-top-actions">
-                  <button className="btn-outline-purple sm-btn" onClick={() => setShowAlertCenterModal(true)}>
-                    <Bell className="btn-icon text-amber-500" />
-                    <span>Alert Center (3)</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <button
+                    onClick={() => setShowAlertCenterModal(true)}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#334155', border: '1px solid #cbd5e1', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                  >
+                    <Bell style={{ width: 15, height: 15, color: '#ef4444' }} />
+                    <span>Alerts</span>
+                    <span style={{ background: '#ef4444', color: '#fff', fontSize: '0.7rem', fontWeight: 800, width: 18, height: 18, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
                   </button>
-                  <button className="btn-outline-purple sm-btn" onClick={() => setShowReportBuilderModal(true)}>
-                    <Download className="btn-icon text-purple" />
-                    <span>Export BI PDF Report</span>
+
+                  <button
+                    onClick={handleExportBIPdf}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#7c3aed', border: '1px solid #ddd6fe', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+                  >
+                    <Download style={{ width: 15, height: 15 }} />
+                    <span>Export Report</span>
                   </button>
-                  <button className="btn-primary-purple" onClick={handleRunAIAudit}>
-                    <Sparkles className="btn-icon" />
+
+                  <button
+                    onClick={handleRunAIAudit}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)', color: '#ffffff', border: 'none', padding: '0.55rem 1.1rem', borderRadius: '10px', fontSize: '0.84rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.3)' }}
+                  >
+                    <Sparkles style={{ width: 16, height: 16 }} />
                     <span>Run AI Audit</span>
                   </button>
                 </div>
               </div>
 
-              {/* Control Filters & Global Search Bar */}
-              <div className="bi-controls-toolbar margin-top-xs">
-                {/* Global Intelligent Search */}
-                <div className="relative flex-1 min-w-[220px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input
-                    type="text"
-                    placeholder="Global search campaigns, keywords, platforms, locations..."
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs font-sans text-slate-800 focus:outline-none focus:border-purple-500"
-                    value={analyticsSearchQuery}
-                    onChange={(e) => setAnalyticsSearchQuery(e.target.value)}
-                  />
-                </div>
-
-                {/* Timeframe Selector */}
-                <div className="bi-timeframe-group">
-                  <span className="bi-filter-label">Timeframe:</span>
+              {/* 2. TIMEFRAME & CHANNEL CONTROL BAR */}
+              <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.75rem 1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                {/* Timeframe selector */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Timeframe:</span>
                   {[
                     { key: 'today', label: 'Today' },
                     { key: '7d', label: 'Last 7 Days' },
@@ -4937,929 +4928,530 @@ export default function ClientDashboard() {
                   ].map((tf) => (
                     <button
                       key={tf.key}
-                      className={`bi-tf-btn ${biDateRange === tf.key ? 'active' : ''}`}
                       onClick={() => setBiDateRange(tf.key)}
+                      style={{
+                        padding: '0.4rem 0.85rem',
+                        borderRadius: '8px',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        border: 'none',
+                        cursor: 'pointer',
+                        background: biDateRange === tf.key ? '#7c3aed' : 'transparent',
+                        color: biDateRange === tf.key ? '#ffffff' : '#64748b',
+                        boxShadow: biDateRange === tf.key ? '0 2px 6px rgba(124,58,237,0.3)' : 'none',
+                        transition: 'all 0.15s ease'
+                      }}
                     >
                       {tf.label}
                     </button>
                   ))}
                 </div>
 
-                {/* Channel Filter Pills */}
-                <div className="bi-channel-pills">
-                  <span className="bi-filter-label">Channel:</span>
-                  {['All', 'Google Ads', 'Meta Ads', 'LinkedIn', 'TikTok Ads', 'Pinterest Ads', 'YouTube Ads', 'X Ads'].map((ch) => (
+                {/* Channel selector */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Channel:</span>
+                  {[
+                    { key: 'All', label: '🌐 All Channels' },
+                    { key: 'Google Ads', label: 'Google Ads' },
+                    { key: 'Meta Ads', label: 'Meta Ads' },
+                    { key: 'LinkedIn', label: 'LinkedIn' },
+                    { key: 'TikTok Ads', label: 'TikTok Ads' },
+                    { key: 'YouTube Ads', label: 'YouTube Ads' }
+                  ].map((ch) => (
                     <button
-                      key={ch}
-                      className={`bi-ch-pill ${biChannelFilter === ch ? 'active' : ''}`}
-                      onClick={() => setBiChannelFilter(ch)}
+                      key={ch.key}
+                      onClick={() => setBiChannelFilter(ch.key)}
+                      style={{
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '8px',
+                        fontSize: '0.8rem',
+                        fontWeight: 600,
+                        border: '1px solid',
+                        borderColor: biChannelFilter === ch.key ? '#ddd6fe' : '#e2e8f0',
+                        cursor: 'pointer',
+                        background: biChannelFilter === ch.key ? '#f5f3ff' : '#ffffff',
+                        color: biChannelFilter === ch.key ? '#7c3aed' : '#475569',
+                        transition: 'all 0.15s ease'
+                      }}
                     >
-                      {ch === 'All' ? '🌐 All Channels' : ch}
+                      {ch.label}
                     </button>
                   ))}
+                  <button style={{ padding: '0.35rem 0.6rem', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', color: '#64748b', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>
+                    ✕ More
+                  </button>
                 </div>
               </div>
 
-              {/* Module Sub-Navigation Bar */}
-              <div className="analytics-subnav-container">
-                {[
-                  { id: 'overview', label: '📊 Overview & Live KPIs', icon: BarChart2 },
-                  { id: 'revenue-roas', label: '💰 Revenue & ROAS Deep-Dive', icon: DollarSign },
-                  { id: 'campaigns-platforms', label: '🚀 Campaigns & Platform Matrix', icon: Target },
-                  { id: 'funnel-attribution', label: '🎯 Funnel & Touch Attribution', icon: TrendingUp },
-                  { id: 'audience-geo-device', label: '🌍 Audience, Geo & Device Map', icon: Globe },
-                  { id: 'keywords-creatives', label: '🔑 Keywords & Creative Performance', icon: Sparkles },
-                  { id: 'ai-forecasting', label: '🤖 AI Optimization & 90-Day Forecast', icon: Zap },
-                  { id: 'reports-alerts', label: '🔔 Alert Center & Report Builder', icon: Bell }
-                ].map((tab) => {
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      className={`astab-btn ${activeAnalyticsTab === tab.id ? 'active' : ''}`}
-                      onClick={() => setActiveAnalyticsTab(tab.id)}
-                    >
-                      <Icon style={{ width: 15, height: 15 }} />
-                      <span>{tab.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Real-Time WebSocket Telemetry Bar */}
-              <div className="realtime-live-bar animate-fade-in">
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Live Active Visitors</span>
-                  <span className="rt-stat-val text-green-400">342 active</span>
-                </div>
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Live Clicks / Hr</span>
-                  <span className="rt-stat-val">1,842 clicks</span>
-                </div>
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Live Purchases Today</span>
-                  <span className="rt-stat-val text-emerald-300">28 orders</span>
-                </div>
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Today's Revenue</span>
-                  <span className="rt-stat-val text-green-400">₹8,420.00</span>
-                </div>
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Today's Ad Spend</span>
-                  <span className="rt-stat-val text-purple-300">₹1,694.00</span>
-                </div>
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Current Real-Time ROAS</span>
-                  <span className="rt-stat-val text-amber-300 font-extrabold">4.97x ROAS</span>
-                </div>
-                <div className="rt-stat-item">
-                  <span className="rt-stat-lbl">Bounce Rate</span>
-                  <span className="rt-stat-val text-slate-300">28.4%</span>
-                </div>
-              </div>
-
-              {/* ========================================================= */}
-              {/* TAB 1: OVERVIEW & 26+ KPI SCORECARDS                      */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'overview' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  {/* 26 Master KPI Scorecards Grid */}
+              {/* 3. TOP STRIP METRIC CARDS (7 Stat Tiles) */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.85rem', marginBottom: '1.25rem' }}>
+                {/* Tile 1: Live Active Visitors */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Users style={{ width: 18, height: 18 }} />
+                  </div>
                   <div>
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Executive KPI Scorecard Matrix (26 Live Data Streams)</h3>
-                    <div className="analytics-26-kpi-grid">
-                      {/* 1. Total Revenue */}
-                      <div className="kpi-26-card card-highlight-green">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Total Revenue</span>
-                          <div className="kpi-26-icon-box bg-green-100 text-green-700"><DollarSign style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹238,600.00</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+28.6%</span>
-                          <span className="text-slate-500 font-mono">vs last period</span>
-                        </div>
-                      </div>
-
-                      {/* 2. Total Ad Spend */}
-                      <div className="kpi-26-card card-highlight-purple">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Total Ad Spend</span>
-                          <div className="kpi-26-icon-box bg-purple-100 text-purple-700"><BarChart2 style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹48,250.00</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-purple-600 font-semibold font-mono">94.2% Budget Pacing</span>
-                        </div>
-                      </div>
-
-                      {/* 3. ROAS */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Blended ROAS</span>
-                          <div className="kpi-26-icon-box bg-emerald-100 text-emerald-700"><Zap style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-emerald-600">4.94x</span>
-                        <div className="kpi-26-sub">
-                          <span className="roas-pill-large roas-excellent">Excellent</span>
-                          <span className="text-slate-400 font-mono">Target: 3.5x</span>
-                        </div>
-                      </div>
-
-                      {/* 4. ROI */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Total ROI</span>
-                          <div className="kpi-26-icon-box bg-blue-100 text-blue-700"><TrendingUp style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-blue-600">394.5%</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+42.1% Net Margin</span>
-                        </div>
-                      </div>
-
-                      {/* 5. Net Profit */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Net Profit</span>
-                          <div className="kpi-26-icon-box bg-green-100 text-green-700"><DollarSign style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹190,350.00</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+32.4% Profit</span>
-                        </div>
-                      </div>
-
-                      {/* 6. Total Conversions */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Total Conversions</span>
-                          <div className="kpi-26-icon-box bg-orange-100 text-orange-700"><Users style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">1,140 SQLs</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+19.8%</span>
-                          <span className="text-slate-400 font-mono">284 Deals</span>
-                        </div>
-                      </div>
-
-                      {/* 7. Conversion Rate */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Conversion Rate</span>
-                          <div className="kpi-26-icon-box bg-indigo-100 text-indigo-700"><Target style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">3.85%</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+0.65%</span>
-                          <span className="text-slate-400 font-mono">Industry: 2.4%</span>
-                        </div>
-                      </div>
-
-                      {/* 8. Total Clicks */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Total Clicks</span>
-                          <div className="kpi-26-icon-box bg-sky-100 text-sky-700"><MousePointer style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">42,850</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+14.2%</span>
-                        </div>
-                      </div>
-
-                      {/* 9. Total Impressions */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Impressions</span>
-                          <div className="kpi-26-icon-box bg-violet-100 text-violet-700"><Eye style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">890,500</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+18.5% Reach</span>
-                        </div>
-                      </div>
-
-                      {/* 10. CTR */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Click-Through Rate</span>
-                          <div className="kpi-26-icon-box bg-pink-100 text-pink-700"><Percent style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">4.81%</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">1.4x Benchmark</span>
-                        </div>
-                      </div>
-
-                      {/* 11. Average CPC */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Average CPC</span>
-                          <div className="kpi-26-icon-box bg-amber-100 text-amber-700"><DollarSign style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹1.13</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">-8.4% Cost</span>
-                        </div>
-                      </div>
-
-                      {/* 12. CPM */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Average CPM</span>
-                          <div className="kpi-26-icon-box bg-slate-100 text-slate-700"><BarChart2 style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹54.18</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">-5.2% Cost</span>
-                        </div>
-                      </div>
-
-                      {/* 13. CPA */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Cost per Acq (CPA)</span>
-                          <div className="kpi-26-icon-box bg-teal-100 text-teal-700"><Target style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹42.30</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">-₹12.70 Savings</span>
-                        </div>
-                      </div>
-
-                      {/* 14. Average Order Value (AOV) */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Average Order Val</span>
-                          <div className="kpi-26-icon-box bg-emerald-100 text-emerald-700"><ShoppingBag style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹209.30</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+12.4% Upsell</span>
-                        </div>
-                      </div>
-
-                      {/* 15. Customer Lifetime Value (LTV) */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Customer LTV</span>
-                          <div className="kpi-26-icon-box bg-purple-100 text-purple-700"><Award style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹1,850.00</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">8.8x LTV:CAC</span>
-                        </div>
-                      </div>
-
-                      {/* 16. Returning Customers */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Returning Customers</span>
-                          <div className="kpi-26-icon-box bg-cyan-100 text-cyan-700"><RefreshCw style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">64.2%</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+5.1% Retention</span>
-                        </div>
-                      </div>
-
-                      {/* 17. New Customers */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">New Customers</span>
-                          <div className="kpi-26-icon-box bg-blue-100 text-blue-700"><UserPlus style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">35.8%</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">408 Accounts</span>
-                        </div>
-                      </div>
-
-                      {/* 18. Active Campaigns */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Active Campaigns</span>
-                          <div className="kpi-26-icon-box bg-indigo-100 text-indigo-700"><Layers style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">14 Active</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">8 Scaling • 6 Sustaining</span>
-                        </div>
-                      </div>
-
-                      {/* 19. Running Ads */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Running Ads</span>
-                          <div className="kpi-26-icon-box bg-fuchsia-100 text-fuchsia-700"><PlayCircle style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">86 Ads</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">72 High ROAS</span>
-                        </div>
-                      </div>
-
-                      {/* 20. Scheduled Campaigns */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Scheduled Campaigns</span>
-                          <div className="kpi-26-icon-box bg-slate-100 text-slate-700"><Calendar style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">4 Scheduled</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">Launching Q4</span>
-                        </div>
-                      </div>
-
-                      {/* 21. Today's Revenue */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Today's Revenue</span>
-                          <div className="kpi-26-icon-box bg-green-100 text-green-700"><DollarSign style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-green-600">₹8,420.00</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+14.8% vs Yest</span>
-                        </div>
-                      </div>
-
-                      {/* 22. Yesterday Comparison */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Yesterday Revenue</span>
-                          <div className="kpi-26-icon-box bg-slate-100 text-slate-700"><Clock style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val">₹7,334.00</span>
-                        <div className="kpi-26-sub">
-                          <span className="kpi-trend-pill up">+18.2%</span>
-                        </div>
-                      </div>
-
-                      {/* 23. Weekly Growth */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Weekly Growth</span>
-                          <div className="kpi-26-icon-box bg-emerald-100 text-emerald-700"><TrendingUp style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-emerald-600">+22.4%</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">₹54,200/wk</span>
-                        </div>
-                      </div>
-
-                      {/* 24. Monthly Growth */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Monthly Growth</span>
-                          <div className="kpi-26-icon-box bg-purple-100 text-purple-700"><BarChart2 style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-purple-600">+28.6%</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">₹238,600/mo</span>
-                        </div>
-                      </div>
-
-                      {/* 25. Quarterly Growth */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Quarterly Growth</span>
-                          <div className="kpi-26-icon-box bg-blue-100 text-blue-700"><Award style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-blue-600">+42.1%</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">₹680,400/qtr</span>
-                        </div>
-                      </div>
-
-                      {/* 26. Yearly Growth */}
-                      <div className="kpi-26-card">
-                        <div className="kpi-26-top">
-                          <span className="kpi-26-label">Yearly Growth</span>
-                          <div className="kpi-26-icon-box bg-indigo-100 text-indigo-700"><Globe style={{ width: 16, height: 16 }} /></div>
-                        </div>
-                        <span className="kpi-26-val text-indigo-600">+112.5%</span>
-                        <div className="kpi-26-sub">
-                          <span className="text-slate-400 font-mono">₹2.45M YTD</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Multi-Channel Attribution Matrix & AI Strategic Insights */}
-                  <div className="bi-master-split-grid margin-top-sm">
-                    {/* Multi-Channel Attributed Yield */}
-                    <div className="bi-card-block">
-                      <div className="bi-card-header">
-                        <div>
-                          <h2>Multi-Channel Attribution & ROAS Matrix</h2>
-                          <p>Revenue distribution and yield performance breakdown by marketing channel.</p>
-                        </div>
-                        <span className="bi-badge-pill">Cross-Channel Synced</span>
-                      </div>
-
-                      <div className="channel-attribution-list margin-top-sm">
-                        {biChannelAttribution.map((ch) => (
-                          <div key={ch.id} className="ch-attr-row">
-                            <div className="ch-info-col">
-                              <div className="ch-icon-wrap" style={{ background: `${ch.color}15`, color: ch.color }}>
-                                {ch.iconName === 'Search' && <Search className="ch-ic" />}
-                                {ch.iconName === 'Instagram' && <Instagram className="ch-ic" />}
-                                {ch.iconName === 'Linkedin' && <Linkedin className="ch-ic" />}
-                                {ch.iconName === 'Globe' && <Globe className="ch-ic" />}
-                              </div>
-                              <div>
-                                <strong className="ch-name">{ch.name}</strong>
-                                <div className="ch-sub-meta font-mono">
-                                  <span>Spend: ${ch.spend.toLocaleString()}</span> • <span>Conversions: {ch.conversions}</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="ch-progress-col">
-                              <div className="ch-bar-bg">
-                                <div className="ch-bar-fill" style={{ width: `${ch.share}%`, background: ch.color }} />
-                              </div>
-                              <span className="ch-share-text font-mono">{ch.share}% Share</span>
-                            </div>
-
-                            <div className="ch-metrics-col text-right">
-                              <div className="ch-roas-badge" style={{ background: `${ch.color}15`, color: ch.color }}>
-                                {ch.roas}x ROAS
-                              </div>
-                              <div className="ch-revenue font-mono">₹{ch.revenue.toLocaleString()} Revenue</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* AI Strategic Intelligence Recommendations */}
-                    <div className="bi-card-block">
-                      <div className="bi-card-header">
-                        <div>
-                          <h2>✨ AI Strategic Business Intelligence</h2>
-                          <p>Automated telemetry analysis: what's working, what's underperforming, and recommended next moves.</p>
-                        </div>
-                        <span className="bi-badge-pill bg-purple-light text-purple">AI Engine v2.4</span>
-                      </div>
-
-                      <div className="bi-insights-stack margin-top-sm">
-                        {biInsights.map((insight) => (
-                          <div key={insight.id} className={`bi-insight-card insight-${insight.type} ${insight.applied ? 'applied' : ''}`}>
-                            <div className="bi-insight-header">
-                              <span className={`bi-type-badge badge-${insight.type}`}>{insight.badgeText}</span>
-                              <span className="bi-impact-chip font-mono">{insight.impact}</span>
-                            </div>
-                            <h3 className="bi-insight-title">{insight.title}</h3>
-                            <p className="bi-insight-desc">{insight.description}</p>
-                            <div className="bi-insight-footer">
-                              <span className="bi-channel-tag">Channel: {insight.channel}</span>
-                              {insight.applied ? (
-                                <span className="applied-tag text-green"><CheckCircle2 className="app-ic" /> Recommendation Applied</span>
-                              ) : (
-                                <button className="bi-action-btn" onClick={() => handleApplyBiInsight(insight.id)}>
-                                  <Sparkles className="btn-ic" /> {insight.actionLabel}
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Live Active Visitors</span>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
+                      <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>342</strong>
+                      <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 700 }}>active</span>
                     </div>
                   </div>
                 </div>
-              )}
 
-              {/* ========================================================= */}
-              {/* TAB 2: REVENUE & ROAS DEEP-DIVE                           */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'revenue-roas' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="bi-card-block">
-                    <div className="bi-card-header">
-                      <div>
-                        <h2>⚡ Automated Multi-Layer ROAS & Revenue Calculator</h2>
-                        <p>ROAS Formula: ROAS = Revenue / Advertising Spend • Automated color-coded efficiency rating.</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="roas-pill-large roas-excellent">Overall ROAS: 4.94x</span>
-                        <span className="roas-pill-large roas-excellent">Total Revenue: ₹238,600</span>
-                      </div>
+                {/* Tile 2: Live Clicks / Hr */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <MousePointer style={{ width: 18, height: 18 }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Live Clicks / Hr</span>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
+                      <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>1,842</strong>
+                      <span style={{ fontSize: '0.7rem', color: '#2563eb', fontWeight: 700 }}>clicks</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tile 3: Live Purchases Today */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#fce7f3', color: '#db2777', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <ShoppingBag style={{ width: 18, height: 18 }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Live Purchases Today</span>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
+                      <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>64</strong>
+                      <span style={{ fontSize: '0.7rem', color: '#db2777', fontWeight: 700 }}>orders</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tile 4: Today's Revenue */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f0fdf4', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <DollarSign style={{ width: 18, height: 18 }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Today's Revenue</span>
+                    <strong style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a', marginTop: '2px', display: 'block' }}>₹38,420.00</strong>
+                  </div>
+                </div>
+
+                {/* Tile 5: Today's Ad Spend */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#fff7ed', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <CreditCard style={{ width: 18, height: 18 }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Today's Ad Spend</span>
+                    <strong style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ea580c', marginTop: '2px', display: 'block' }}>₹7,730.00</strong>
+                  </div>
+                </div>
+
+                {/* Tile 6: Current Real-Time ROAS */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f0fdf4', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <TrendingUp style={{ width: 18, height: 18 }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Current Real-Time ROAS</span>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
+                      <strong style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a' }}>4.97x</strong>
+                      <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 800 }}>ROAS</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tile 7: Bounce Rate */}
+                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Activity style={{ width: 18, height: 18 }} />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Bounce Rate</span>
+                    <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginTop: '2px', display: 'block' }}>28.4%</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. MAIN 3-COLUMN EXECUTIVE GRID */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.1fr) minmax(300px, 0.95fr) minmax(280px, 0.85fr)', gap: '1.25rem', marginBottom: '1.25rem' }}>
+                
+                {/* COLUMN 1: EXECUTIVE KPI SCORECARD */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                  <h3 style={{ margin: '0 0 1rem', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Executive KPI Scorecard</h3>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+                    {/* Card 1 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Revenue</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹48,600.00</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 28.6% vs last period</span>
                     </div>
 
-                    {/* Multi-Layer ROAS Breakdown Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 margin-top-md">
-                      {[
-                        { title: 'Google Search & Shopping', roas: '5.21x', status: 'Excellent', rev: '₹98,400', spend: '₹18,908', color: 'roas-excellent' },
-                        { title: 'Meta Retargeting (IG & FB)', roas: '4.82x', status: 'Excellent', rev: '₹74,200', spend: '₹15,408', color: 'roas-excellent' },
-                        { title: 'LinkedIn B2B Lead Gen', roas: '4.42x', status: 'Excellent', rev: '₹42,000', spend: '₹9,500', color: 'roas-excellent' },
-                        { title: 'TikTok Prospecting Video', roas: '2.91x', status: 'Average', rev: '₹24,000', spend: '₹8,250', color: 'roas-average' },
-                        { title: 'High-Intent Keywords', roas: '6.45x', status: 'Excellent', rev: '₹62,500', spend: '₹9,690', color: 'roas-excellent' },
-                        { title: 'Desktop Users ROAS', roas: '5.64x', status: 'Excellent', rev: '₹138,400', spend: '₹24,530', color: 'roas-excellent' },
-                        { title: 'Lookalike Audiences ROAS', roas: '4.65x', status: 'Excellent', rev: '₹52,100', spend: '₹11,200', color: 'roas-excellent' },
-                        { title: 'India Metros Segment', roas: '5.12x', status: 'Excellent', rev: '₹112,000', spend: '₹21,875', color: 'roas-excellent' }
-                      ].map((item, idx) => (
-                        <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                    {/* Card 2 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Ad Spend</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹9,840.00</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#7c3aed', fontWeight: 700 }}>94.2% Budget Pacing</span>
+                    </div>
+
+                    {/* Card 3 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Blended ROAS</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#16a34a', display: 'block', margin: '3px 0' }}>4.94x</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>Excellent · Target: 3.5x</span>
+                    </div>
+
+                    {/* Card 4 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Conversions</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>1,140 <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b' }}>SQLs</span></strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 19.8% vs last period</span>
+                    </div>
+
+                    {/* Card 5 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Conversion Rate</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>3.85%</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 0.65% vs last period</span>
+                    </div>
+
+                    {/* Card 6 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Clicks</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>42,850</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 14.2% vs last period</span>
+                    </div>
+
+                    {/* Card 7 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Impressions</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>890,500</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 18.5% vs last period</span>
+                    </div>
+
+                    {/* Card 8 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Avg. CPC</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹1.13</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↓ 8.4% vs last period</span>
+                    </div>
+
+                    {/* Card 9 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Cost per Acq (CPA)</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹8.60</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↓ 12.7% vs last period</span>
+                    </div>
+
+                    {/* Card 10 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Average Order Val</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹42.60</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 12.4% vs last period</span>
+                    </div>
+
+                    {/* Card 11 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Customer LTV</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹376.00</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#7c3aed', fontWeight: 700 }}>8.8x LTV:CAC</span>
+                    </div>
+
+                    {/* Card 12 */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Returning Customers</span>
+                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>64.2%</strong>
+                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 5.1% vs last period</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* COLUMN 2: MULTI-CHANNEL ATTRIBUTION & ROAS MATRIX */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Multi-Channel Attribution & ROAS Matrix</h3>
+                    <p style={{ margin: '3px 0 1.25rem', fontSize: '0.8rem', color: '#64748b' }}>Revenue distribution and yield performance by channel</p>
+
+                    {/* Donut & Legend Container */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                      {/* SVG Donut Chart */}
+                      <div style={{ position: 'relative', width: 140, height: 140, flexShrink: 0, margin: '0 auto' }}>
+                        <svg width="140" height="140" viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)' }}>
+                          {/* Segment 1: Google (41.2%) - Blue */}
+                          <circle cx="50" cy="50" r="38" fill="none" stroke="#2563eb" strokeWidth="18" strokeDasharray="98 141" strokeDashoffset="0" />
+                          {/* Segment 2: Meta (31.1%) - Magenta/Purple */}
+                          <circle cx="50" cy="50" r="38" fill="none" stroke="#c084fc" strokeWidth="18" strokeDasharray="74 165" strokeDashoffset="-98" />
+                          {/* Segment 3: LinkedIn (17.6%) - Teal */}
+                          <circle cx="50" cy="50" r="38" fill="none" stroke="#0891b2" strokeWidth="18" strokeDasharray="42 197" strokeDashoffset="-172" />
+                          {/* Segment 4: SEO (10.1%) - Green */}
+                          <circle cx="50" cy="50" r="38" fill="none" stroke="#10b981" strokeWidth="18" strokeDasharray="24 215" strokeDashoffset="-214" />
+                        </svg>
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+                          <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Total Revenue</span>
+                          <strong style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a' }}>₹48,600</strong>
+                        </div>
+                      </div>
+
+                      {/* Legend List */}
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2563eb' }} />
+                            <strong style={{ color: '#1e293b' }}>Google Search & Shopping</strong>
+                          </div>
                           <div>
-                            <span className="text-xs font-semibold text-slate-500 uppercase">{item.title}</span>
-                            <div className="flex items-baseline justify-between mt-1">
-                              <span className="text-2xl font-extrabold text-slate-900">{item.roas}</span>
-                              <span className={`roas-pill-large ${item.color}`}>{item.status}</span>
-                            </div>
-                          </div>
-                          <div className="mt-3 pt-3 border-t border-slate-200 flex justify-between text-xs font-mono text-slate-600">
-                            <span>Rev: <strong>{item.rev}</strong></span>
-                            <span>Spend: <strong>{item.spend}</strong></span>
+                            <span style={{ fontWeight: 700, color: '#16a34a', marginRight: 6 }}>5.21x ROAS</span>
+                            <span style={{ color: '#64748b' }}>₹20,020</span>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
 
-              {/* ========================================================= */}
-              {/* TAB 3: CAMPAIGNS & PLATFORMS MATRIX                       */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'campaigns-platforms' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="bi-card-block">
-                    <div className="bi-card-header">
-                      <div>
-                        <h2>Full Campaign Management Leaderboard</h2>
-                        <p>Detailed performance analytics across Google, Meta, LinkedIn, TikTok & SEO campaigns.</p>
-                      </div>
-                      <span className="bi-badge-pill">14 Active Campaigns</span>
-                    </div>
-
-                    <div className="bi-table-wrap margin-top-sm">
-                      <table className="bi-leaderboard-table">
-                        <thead>
-                          <tr>
-                            <th>Campaign Name</th>
-                            <th>Platform</th>
-                            <th>Status</th>
-                            <th>Budget</th>
-                            <th>Spent</th>
-                            <th>Revenue</th>
-                            <th>Conversions</th>
-                            <th>CTR</th>
-                            <th>CPA</th>
-                            <th>ROAS</th>
-                            <th>ROI</th>
-                            <th>AI Recommendation</th>
-                            <th className="text-right">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredBiCampaigns.map((cmp) => (
-                            <tr key={cmp.id}>
-                              <td><strong className="cmp-table-name">{cmp.name}</strong></td>
-                              <td><span className={`pbadge-chip chip-${(cmp.platform || '').toLowerCase().replace(/\s+/g, '')}`}>{cmp.platform}</span></td>
-                              <td><span className={`post-status-badge status-${(cmp.status || '').toLowerCase()}`}>{cmp.status}</span></td>
-                              <td className="font-mono">₹{(cmp.spend * 1.25).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
-                              <td className="font-mono">₹{cmp.spend.toLocaleString()}</td>
-                              <td className="font-mono font-bold text-green-600">₹{cmp.revenue.toLocaleString()}</td>
-                              <td className="font-mono">{cmp.conversions || 342}</td>
-                              <td className="font-mono">4.8%</td>
-                              <td className="font-mono">₹{cmp.cpa.toFixed(2)}</td>
-                              <td><span className="cmp-roas-tag font-mono">{cmp.roas}x</span></td>
-                              <td className="font-mono font-semibold text-blue-600">{(cmp.roas * 100 - 100).toFixed(0)}%</td>
-                              <td><span className="text-xs text-purple-700 font-semibold bg-purple-50 px-2 py-1 rounded">✨ Scale Budget +20%</span></td>
-                              <td className="text-right">
-                                <button className="btn-outline-purple sm-btn" onClick={() => setSelectedCampaignDetail(cmp)}>
-                                  <TrendingUp className="btn-ic" /> Audit
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ========================================================= */}
-              {/* TAB 4: FUNNEL & ATTRIBUTION JOURNEY                       */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'funnel-attribution' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="bi-card-block">
-                    <div className="bi-card-header">
-                      <div>
-                        <h2>Full Customer Journey Conversion Funnel</h2>
-                        <p>End-to-end conversion breakdown from impressions to completed deals.</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-slate-500">Attribution Model:</span>
-                        <select
-                          className="text-xs font-sans border border-slate-300 rounded-lg px-2 py-1"
-                          value={analyticsAttributionModel}
-                          onChange={(e) => setAnalyticsAttributionModel(e.target.value)}
-                        >
-                          <option value="Data Driven">Data Driven Attribution (AI)</option>
-                          <option value="First Click">First Click</option>
-                          <option value="Last Click">Last Click</option>
-                          <option value="Linear">Linear</option>
-                          <option value="Time Decay">Time Decay</option>
-                          <option value="Position Based">Position Based (40-20-40)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="funnel-stages-row margin-top-md">
-                      {INITIAL_FUNNEL_STAGES.map((stg) => (
-                        <div key={stg.stage} className="funnel-stage-card">
-                          <div className="funnel-stage-header font-sans">
-                            <span className="funnel-stage-name">{stg.stage}</span>
-                            <div className="funnel-icon-box"><Eye className="f-ic" /></div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#c084fc' }} />
+                            <strong style={{ color: '#1e293b' }}>Meta Ads (IG & FB)</strong>
                           </div>
-                          <div className="funnel-val-row font-mono"><span className="funnel-val">{stg.value}</span></div>
-                          <div className="funnel-sub-row font-mono"><span className="funnel-cvr text-purple">{stg.CVR}</span></div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="attribution-journey-card margin-top-md">
-                      <h4 className="detail-section-label">Example Multi-Touch Customer Touchpoint Flow ({analyticsAttributionModel} Model)</h4>
-                      <div className="journey-steps-flow">
-                        <div className="j-step-node">
-                          <strong>1. Google Search Ad</strong>
-                          <span>Initial Discovery</span>
-                        </div>
-                        <ChevronRight className="j-arrow-sep" />
-                        <div className="j-step-node">
-                          <strong>2. Instagram Video Ad</strong>
-                          <span>Retargeting View</span>
-                        </div>
-                        <ChevronRight className="j-arrow-sep" />
-                        <div className="j-step-node">
-                          <strong>3. Email Nurture</strong>
-                          <span>Case Study Click</span>
-                        </div>
-                        <ChevronRight className="j-arrow-sep" />
-                        <div className="j-step-node bg-green-50 border-green-300">
-                          <strong className="text-green-800">4. Purchase Deal (₹209.30)</strong>
-                          <span className="text-green-700">Closed Conversion</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ========================================================= */}
-              {/* TAB 5: AUDIENCE, GEO & DEVICE MAP                          */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'audience-geo-device' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {/* Regional Map Breakdown */}
-                    <div className="bi-card-block">
-                      <h2>Regional Performance Matrix</h2>
-                      <p className="text-xs text-slate-500 mb-3">Top performing geographic metros by revenue yield.</p>
-                      <div className="space-y-3">
-                        {[
-                          { region: 'Mumbai Metro (India)', rev: '₹64,200', roas: '5.4x', share: '26.9%' },
-                          { region: 'Bangalore Tech Corridor (India)', rev: '₹48,100', roas: '5.2x', share: '20.1%' },
-                          { region: 'Delhi NCR Region (India)', rev: '₹39,500', roas: '4.8x', share: '16.5%' },
-                          { region: 'New York Metro (US)', rev: '₹34,000', roas: '4.9x', share: '14.2%' },
-                          { region: 'London & Southeast (UK)', rev: '₹28,800', roas: '4.4x', share: '12.0%' }
-                        ].map((geo, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                            <div>
-                              <strong className="text-xs text-slate-800 block">{geo.region}</strong>
-                              <span className="text-[11px] text-slate-500 font-mono">Revenue Share: {geo.share}</span>
-                            </div>
-                            <div className="text-right">
-                              <span className="text-xs font-bold text-green-600 font-mono block">{geo.rev}</span>
-                              <span className="text-[11px] text-purple-600 font-mono font-semibold">{geo.roas} ROAS</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Device & OS Intelligence */}
-                    <div className="bi-card-block">
-                      <h2>Device & OS Intelligence</h2>
-                      <p className="text-xs text-slate-500 mb-3">Revenue & conversion performance breakdown by device segment.</p>
-                      <div className="space-y-3">
-                        {[
-                          { device: 'Desktop Chrome / MacOS / Windows', rev: '₹138,400', cvr: '4.85%', roas: '5.64x' },
-                          { device: 'iPhone iOS Mobile (Safari)', rev: '₹66,800', cvr: '3.40%', roas: '4.20x' },
-                          { device: 'Android Mobile (Chrome)', rev: '₹28,600', cvr: '2.95%', roas: '3.80x' },
-                          { device: 'iPad & Tablet Devices', rev: '₹4,800', cvr: '3.10%', roas: '4.10x' }
-                        ].map((dev, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                            <div>
-                              <strong className="text-xs text-slate-800 block">{dev.device}</strong>
-                              <span className="text-[11px] text-slate-500 font-mono">CVR: {dev.cvr}</span>
-                            </div>
-                            <div className="text-right">
-                              <span className="text-xs font-bold text-slate-900 font-mono block">{dev.rev}</span>
-                              <span className="text-[11px] text-emerald-600 font-mono font-semibold">{dev.roas}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ========================================================= */}
-              {/* TAB 6: KEYWORDS & CREATIVES INTELLIGENCE                  */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'keywords-creatives' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="bi-card-block">
-                    <h2>Keyword Intelligence & AI Bid Optimization</h2>
-                    <p className="text-xs text-slate-500 mb-3">Quality scores, CPC rates, and AI automated bid recommendations.</p>
-                    <div className="bi-table-wrap">
-                      <table className="bi-leaderboard-table">
-                        <thead>
-                          <tr>
-                            <th>Keyword</th>
-                            <th>Search Vol</th>
-                            <th>Clicks</th>
-                            <th>Quality Score</th>
-                            <th>Avg CPC</th>
-                            <th>Revenue</th>
-                            <th>ROAS</th>
-                            <th>AI Recommendation</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {[
-                            { kw: 'digital marketing agency india', vol: '18.4k', clicks: '2,420', qs: '10/10', cpc: '₹1.42', rev: '₹42,500', roas: '6.45x', rec: '✨ Increase Bid +15%' },
-                            { kw: 'best roas optimization tool', vol: '9.8k', clicks: '1,180', qs: '9/10', cpc: '₹1.85', rev: '₹28,400', roas: '5.20x', rec: '✨ Maintain Target Bid' },
-                            { kw: 'b2b lead generation agency', vol: '14.2k', clicks: '1,890', qs: '9/10', cpc: '₹2.10', rev: '₹34,000', roas: '4.85x', rec: '✨ Scale Campaign Budget' },
-                            { kw: 'cheap marketing software', vol: '6.5k', clicks: '420', qs: '4/10', cpc: '₹0.85', rev: '₹1,200', roas: '1.40x', rec: '⚠️ Add Negative Keyword' }
-                          ].map((item, idx) => (
-                            <tr key={idx}>
-                              <td><strong className="font-mono text-slate-800">{item.kw}</strong></td>
-                              <td className="font-mono">{item.vol}</td>
-                              <td className="font-mono">{item.clicks}</td>
-                              <td><span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">{item.qs}</span></td>
-                              <td className="font-mono">{item.cpc}</td>
-                              <td className="font-mono font-bold text-green-600">{item.rev}</td>
-                              <td className="font-mono font-extrabold text-purple-700">{item.roas}</td>
-                              <td><span className="text-xs font-semibold text-purple-700 bg-purple-50 px-2 py-1 rounded">{item.rec}</span></td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ========================================================= */}
-              {/* TAB 7: AI OPTIMIZATION & FORECASTING                      */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'ai-forecasting' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="bi-card-block bg-gradient-to-r from-slate-900 to-purple-950 text-white border-none p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-bold uppercase tracking-widest text-purple-400">AI Predictive Forecast Engine</span>
-                        <h2 className="text-xl font-black text-white mt-1">90-Day Revenue & ROAS Projection</h2>
-                      </div>
-                      <span className="bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-mono font-bold px-3 py-1.5 rounded-full">
-                        94.2% Confidence Rate
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-                      <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-4">
-                        <span className="text-xs text-slate-300">Projected 30-Day Revenue</span>
-                        <span className="text-2xl font-extrabold text-green-400 block mt-1">₹285,400.00</span>
-                        <span className="text-[11px] text-slate-400 font-mono mt-1 block">+19.6% MoM Growth</span>
-                      </div>
-
-                      <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-4">
-                        <span className="text-xs text-slate-300">Projected 30-Day ROAS</span>
-                        <span className="text-2xl font-extrabold text-amber-300 block mt-1">5.12x ROAS</span>
-                        <span className="text-[11px] text-slate-400 font-mono mt-1 block">+0.18x Optimization</span>
-                      </div>
-
-                      <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-4">
-                        <span className="text-xs text-slate-300">Projected Conversions</span>
-                        <span className="text-2xl font-extrabold text-purple-300 block mt-1">1,380 SQLs</span>
-                        <span className="text-[11px] text-slate-400 font-mono mt-1 block">+240 Deals Pacing</span>
-                      </div>
-
-                      <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-4">
-                        <span className="text-xs text-slate-300">Expected Net Profit</span>
-                        <span className="text-2xl font-extrabold text-blue-300 block mt-1">₹228,900.00</span>
-                        <span className="text-[11px] text-slate-400 font-mono mt-1 block">80.2% Profit Margin</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ========================================================= */}
-              {/* TAB 8: ALERT CENTER & REPORT BUILDER                       */}
-              {/* ========================================================= */}
-              {activeAnalyticsTab === 'reports-alerts' && (
-                <div className="flex flex-col gap-5 animate-fade-in">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {/* Alert Center */}
-                    <div className="bi-card-block">
-                      <h2>🔔 Live Alert & Health Diagnostics</h2>
-                      <p className="text-xs text-slate-500 mb-3">Real-time system telemetry alerts requiring attention.</p>
-                      <div className="space-y-3">
-                        <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-                          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <strong className="text-xs text-amber-900 block">TikTok Video Variant B Fatigue Warning</strong>
-                            <p className="text-[11px] text-amber-700 mt-0.5">CTR dropped by 18% over the last 3 days. Recommend swapping creative thumbnail.</p>
+                            <span style={{ fontWeight: 700, color: '#16a34a', marginRight: 6 }}>4.82x ROAS</span>
+                            <span style={{ color: '#64748b' }}>₹15,110</span>
                           </div>
                         </div>
 
-                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
-                          <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#0891b2' }} />
+                            <strong style={{ color: '#1e293b' }}>LinkedIn B2B Lead Gen</strong>
+                          </div>
                           <div>
-                            <strong className="text-xs text-blue-900 block">Google Search Budget Capacity Reached</strong>
-                            <p className="text-[11px] text-blue-700 mt-0.5">Operating at 98% daily budget. Reallocate ₹1,500 to capture extra high-intent searches.</p>
+                            <span style={{ fontWeight: 700, color: '#16a34a', marginRight: 6 }}>4.42x ROAS</span>
+                            <span style={{ color: '#64748b' }}>₹8,550</span>
                           </div>
                         </div>
-                      </div>
-                    </div>
 
-                    {/* Report Builder */}
-                    <div className="bi-card-block">
-                      <h2>📥 Automated Report Generator</h2>
-                      <p className="text-xs text-slate-500 mb-3">Export executive performance reports in PDF, Excel, or CSV formats.</p>
-                      <div className="flex flex-col gap-2">
-                        <button className="btn-primary-purple" onClick={handleExportBIPdf}>
-                          <Download className="btn-icon" /> Export Executive BI Report (PDF)
-                        </button>
-                        <button className="btn-outline-purple" onClick={() => alert('📥 Excel ROAS Data Matrix Exported!')}>
-                          <FileText className="btn-icon text-purple" /> Download Full Campaign Data (Excel / CSV)
-                        </button>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} />
+                            <strong style={{ color: '#1e293b' }}>Organic SEO & Content</strong>
+                          </div>
+                          <div>
+                            <span style={{ fontWeight: 700, color: '#16a34a', marginRight: 6 }}>5.39x ROAS</span>
+                            <span style={{ color: '#64748b' }}>₹4,920</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <div style={{ textAlign: 'center', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #f1f5f9' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#f0fdf4', color: '#16a34a', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
+                      <CheckCircle2 style={{ width: 14, height: 14 }} /> Cross-Channel Synced
+                    </span>
+                  </div>
                 </div>
-              )}
 
-              {/* Campaign Audit Modal */}
-              {selectedCampaignDetail && (
-                <div className="social-composer-modal-overlay">
-                  <div className="social-composer-modal-card animate-scale-up max-w-3xl">
-                    <div className="composer-modal-header">
-                      <div>
-                        <h2>📊 Campaign Telemetry Audit: {selectedCampaignDetail.name}</h2>
-                        <p>Granular performance breakdown and platform attribution metrics.</p>
-                      </div>
-                      <button className="composer-close-btn" onClick={() => setSelectedCampaignDetail(null)}>
-                        <X className="close-ic" />
-                      </button>
-                    </div>
+                {/* COLUMN 3: AI STRATEGIC BUSINESS INTELLIGENCE */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>AI Strategic Business Intelligence</h3>
+                    <p style={{ margin: '3px 0 1rem', fontSize: '0.8rem', color: '#64748b' }}>Automated insights and recommended next moves.</p>
 
-                    <div className="bi-detail-modal-body p-6">
-                      <div className="bi-detail-stats-grid">
-                        <div className="detail-stat-box">
-                          <span className="stat-label">Total Spend</span>
-                          <span className="stat-val font-mono">₹{selectedCampaignDetail.spend.toLocaleString()}</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      {/* Card 1 */}
+                      <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#16a34a', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <CheckCircle2 style={{ width: 14, height: 14 }} /> High Growth Opportunity
+                          </span>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#dcfce7', color: '#15803d', padding: '0.1rem 0.4rem', borderRadius: '6px' }}>+₹3,400 Net Revenue</span>
                         </div>
-                        <div className="detail-stat-box">
-                          <span className="stat-label">Attributed Revenue</span>
-                          <span className="stat-val font-mono text-green">₹{selectedCampaignDetail.revenue.toLocaleString()}</span>
-                        </div>
-                        <div className="detail-stat-box">
-                          <span className="stat-label">ROAS Yield</span>
-                          <span className="stat-val font-mono text-purple">{selectedCampaignDetail.roas}x</span>
-                        </div>
-                        <div className="detail-stat-box">
-                          <span className="stat-label">Cost Per Acquisition (CPA)</span>
-                          <span className="stat-val font-mono">₹{selectedCampaignDetail.cpa.toFixed(2)}</span>
-                        </div>
-                      </div>
-
-                      <div className="bi-detail-audit-box margin-top-md">
-                        <h3>⚡ AI Diagnostic Audit Verdict</h3>
-                        <p>
-                          This campaign is currently operating at an elite <strong>{selectedCampaignDetail.roas}x ROAS</strong> with a highly efficient <strong>{selectedCampaignDetail.cvr} conversion rate</strong>. Audience targeting parameters and landing page conversion velocity are fully optimized.
+                        <p style={{ margin: '0 0 8px', fontSize: '0.75rem', color: '#334155', lineHeight: 1.3 }}>
+                          Reallocate ₹850 to Google Search Ads from low-performing segments to get more high-intent traffic and conversions.
                         </p>
+                        <button onClick={() => alert('✨ Budget Reallocation Applied!')} style={{ border: '1px solid #86efac', background: '#fff', color: '#15803d', padding: '0.35rem 0.75rem', borderRadius: '8px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', width: '100%' }}>
+                          Apply Budget Reallocation
+                        </button>
+                      </div>
+
+                      {/* Card 2 */}
+                      <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#fff7ed', border: '1px solid #fed7aa' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#ea580c', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <AlertTriangle style={{ width: 14, height: 14 }} /> Underperforming Alert
+                          </span>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#ffedd5', color: '#c2410c', padding: '0.1rem 0.4rem', borderRadius: '6px' }}>Save ₹450/wk</span>
+                        </div>
+                        <p style={{ margin: '0 0 8px', fontSize: '0.75rem', color: '#334155', lineHeight: 1.3 }}>
+                          LinkedIn B2B Video Variant B has shown 22% higher CPA. Pause or replace creative to reduce wasted spend.
+                        </p>
+                        <button onClick={() => alert('⏸️ Variant B Paused!')} style={{ border: '1px solid #fdba74', background: '#fff', color: '#c2410c', padding: '0.35rem 0.75rem', borderRadius: '8px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', width: '100%' }}>
+                          Pause & Swap Creative
+                        </button>
+                      </div>
+
+                      {/* Card 3 */}
+                      <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#eff6ff', border: '1px solid #bfdbfe' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#2563eb', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Sparkles style={{ width: 14, height: 14 }} /> Winning Creative Champion
+                          </span>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#dbeafe', color: '#1e40af', padding: '0.1rem 0.4rem', borderRadius: '6px' }}>5.4x Record ROAS</span>
+                        </div>
+                        <p style={{ margin: '0 0 8px', fontSize: '0.75rem', color: '#334155', lineHeight: 1.3 }}>
+                          Instagram Reels Micro-Influencers campaign is performing exceptionally well. Scale budget to maximize results.
+                        </p>
+                        <button onClick={() => alert('🚀 Campaign Scaled +25%!')} style={{ border: '1px solid #93c5fd', background: '#fff', color: '#1d4ed8', padding: '0.35rem 0.75rem', borderRadius: '8px', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', width: '100%' }}>
+                          Scale Campaign +25%
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'right', marginTop: '0.75rem' }}>
+                    <button style={{ border: 'none', background: 'transparent', color: '#7c3aed', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}>
+                      View All Insights →
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* 5. LOWER GRID: PERFORMANCE TRENDS & HEATMAP OVERVIEW */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.8fr) minmax(280px, 1.2fr)', gap: '1.25rem', marginBottom: '1.25rem' }}>
+                
+                {/* PERFORMANCE TRENDS (30 DAYS) */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                  <h3 style={{ margin: '0 0 1rem', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Performance Trends (30 Days)</h3>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.85rem' }}>
+                    {/* Revenue Trend */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>Revenue Trend</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#16a34a' }}>↑ 28.6%</span>
+                      </div>
+                      <div style={{ height: 45, width: '100%' }}>
+                        <svg width="100%" height="45" viewBox="0 0 100 45" preserveAspectRatio="none">
+                          <path d="M 0,35 Q 20,28 40,25 T 80,12 T 100,5" fill="none" stroke="#10b981" strokeWidth="2.5" />
+                        </svg>
                       </div>
                     </div>
 
-                    <div className="composer-modal-footer">
-                      <button className="btn-outline-purple sm-btn" onClick={() => setSelectedCampaignDetail(null)}>
-                        Close Audit
-                      </button>
-                      <button className="btn-primary-purple" onClick={() => { alert('⚡ Campaign Budget Scaled by +20%!'); setSelectedCampaignDetail(null); }}>
-                        <TrendingUp className="btn-icon" /> Scale Budget +20%
-                      </button>
+                    {/* ROAS Trend */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>ROAS Trend</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#2563eb' }}>↑ 18.4%</span>
+                      </div>
+                      <div style={{ height: 45, width: '100%' }}>
+                        <svg width="100%" height="45" viewBox="0 0 100 45" preserveAspectRatio="none">
+                          <path d="M 0,32 Q 25,30 50,20 T 75,15 T 100,8" fill="none" stroke="#2563eb" strokeWidth="2.5" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Conversions Trend */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>Conversions Trend</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#7c3aed' }}>↑ 19.8%</span>
+                      </div>
+                      <div style={{ height: 45, width: '100%' }}>
+                        <svg width="100%" height="45" viewBox="0 0 100 45" preserveAspectRatio="none">
+                          <path d="M 0,38 Q 30,22 60,18 T 100,10" fill="none" stroke="#7c3aed" strokeWidth="2.5" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Ad Spend Trend */}
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>Ad Spend Trend</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c' }}>↓ 5.2%</span>
+                      </div>
+                      <div style={{ height: 45, width: '100%' }}>
+                        <svg width="100%" height="45" viewBox="0 0 100 45" preserveAspectRatio="none">
+                          <path d="M 0,25 Q 30,15 60,28 T 100,20" fill="none" stroke="#ea580c" strokeWidth="2.5" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
-              )}
+
+                {/* CHANNEL PERFORMANCE OVERVIEW (HEATMAP) */}
+                <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <h3 style={{ margin: '0 0 0.75rem', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Channel Performance Overview</h3>
+                    
+                    <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '3px' }}>
+                      <thead>
+                        <tr>
+                          <th style={{ fontSize: '0.68rem', color: '#64748b', textAlign: 'left', fontWeight: 600 }}>Channel</th>
+                          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
+                            <th key={d} style={{ fontSize: '0.65rem', color: '#64748b', textAlign: 'center', fontWeight: 600 }}>{d}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          { name: 'Google Ads', row: ['#86efac', '#4ade80', '#22c55e', '#16a34a', '#86efac', '#4ade80', '#16a34a'] },
+                          { name: 'Meta Ads', row: ['#86efac', '#fde047', '#4ade80', '#22c55e', '#16a34a', '#86efac', '#4ade80'] },
+                          { name: 'LinkedIn Ads', row: ['#fca5a5', '#fde047', '#86efac', '#4ade80', '#fca5a5', '#fde047', '#86efac'] },
+                          { name: 'TikTok Ads', row: ['#fde047', '#86efac', '#4ade80', '#16a34a', '#4ade80', '#16a34a', '#fde047'] },
+                          { name: 'YouTube Ads', row: ['#fca5a5', '#fca5a5', '#fde047', '#86efac', '#fca5a5', '#fde047', '#fca5a5'] },
+                          { name: 'X Ads', row: ['#fde047', '#fca5a5', '#fde047', '#86efac', '#fde047', '#fca5a5', '#fde047'] }
+                        ].map((item, idx) => (
+                          <tr key={idx}>
+                            <td style={{ fontSize: '0.72rem', fontWeight: 600, color: '#334155', paddingRight: '4px' }}>{item.name}</td>
+                            {item.row.map((color, cIdx) => (
+                              <td key={cIdx} style={{ height: 16, background: color, borderRadius: '4px' }} />
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444' }} />
+                    <span style={{ fontSize: '0.68rem', color: '#64748b' }}>Low ROAS</span>
+                    <span style={{ width: 40, height: 4, borderRadius: 2, background: 'linear-gradient(90deg, #ef4444, #eab308, #22c55e)' }} />
+                    <span style={{ fontSize: '0.68rem', color: '#64748b' }}>High ROAS</span>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* 6. FOOTER TELEMETRY STATUS BAR */}
+              <div style={{ background: '#ffffff', borderRadius: '12px', padding: '0.65rem 1.25rem', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontSize: '0.78rem', color: '#475569' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Activity style={{ width: 14, height: 14, color: '#16a34a' }} />
+                  <span>Live Data Streams: <strong style={{ color: '#0f172a' }}>26 Active</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <RefreshCw style={{ width: 14, height: 14, color: '#7c3aed' }} />
+                  <span>Data Refresh Rate: <strong style={{ color: '#0f172a' }}>5 sec</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Database style={{ width: 14, height: 14, color: '#2563eb' }} />
+                  <span>Database: <strong style={{ color: '#0f172a' }}>PostgreSQL</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Sparkles style={{ width: 14, height: 14, color: '#7c3aed' }} />
+                  <span>AI Model: <strong style={{ color: '#0f172a' }}>ROAS Optimizer v2.4</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Clock style={{ width: 14, height: 14, color: '#64748b' }} />
+                  <span>Last Updated: <strong style={{ color: '#0f172a' }}>30 Jul 2026, 02:45 PM</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#16a34a' }} />
+                  <span>System Status: <strong style={{ color: '#16a34a' }}>All Systems Operational</strong></span>
+                </div>
+              </div>
+
             </div>
           )}
           {/* ========================================================= */}
