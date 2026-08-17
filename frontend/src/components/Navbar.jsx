@@ -36,10 +36,10 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-300 ease-in-out ${
+    <header className={`relative md:fixed top-0 left-0 right-0 z-[100] w-full transition-all duration-300 ease-in-out ${
       scrolled 
-        ? 'bg-[#FAF8F2]/95 backdrop-blur-xl shadow-md border-b border-[#E0DDD2] py-2.5 sm:py-3' 
-        : 'bg-[#FAF8F2]/90 backdrop-blur-md py-3.5 sm:py-5 border-b border-[#E0DDD2]/40'
+        ? 'bg-[#FAF8F2]/95 backdrop-blur-xl shadow-md border-b border-[#E0DDD2] py-3' 
+        : 'bg-[#FAF8F2]/90 backdrop-blur-md py-4 sm:py-5 border-b border-[#E0DDD2]/40'
     }`}>
       <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-10 flex items-center justify-between">
         
@@ -246,11 +246,11 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Toggle Button (Visible on Mobile < md) */}
+          {/* Mobile Menu Hamburger Button (Visible on Mobile Corner < md) */}
           <button
-            className="md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#EFEFEA] hover:bg-[#1E3A2B] hover:text-white flex items-center justify-center text-[#111111] transition-colors"
+            className="md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center transition-transform active:scale-95 shadow-md"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Navigation"
+            aria-label="Toggle Mobile Navigation Taskbar"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -258,9 +258,9 @@ export default function Navbar() {
 
       </div>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Mobile Navigation Taskbar Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#FAF8F2]/98 backdrop-blur-2xl border-b border-[#E0DDD2] px-6 py-6 space-y-3 animate-in slide-in-from-top duration-300 shadow-xl">
+        <div className="md:hidden bg-[#FAF8F2]/98 backdrop-blur-2xl border-b border-[#E0DDD2] px-6 py-6 space-y-3 animate-in slide-in-from-top duration-300 shadow-2xl">
           {[
             { label: 'Home', to: '/' },
             { label: 'Services', to: '/services' },
@@ -273,8 +273,8 @@ export default function Navbar() {
               key={item.label}
               to={item.to}
               className={({ isActive }) =>
-                `block text-sm font-black uppercase tracking-wider text-decoration-none transition-colors py-2 ${
-                  isActive ? 'text-[#D99B00] pl-2 border-l-2 border-[#D99B00]' : 'text-[#1A1A1A] hover:text-[#D99B00]'
+                `block text-sm font-extrabold uppercase tracking-wider text-decoration-none transition-all py-2.5 px-3 rounded-xl ${
+                  isActive ? 'bg-[#1E3A2B] text-[#D99B00] shadow-sm' : 'text-[#1A1A1A] hover:bg-[#EAE6D6]/60 hover:text-[#D99B00]'
                 }`
               }
               onClick={() => setMobileMenuOpen(false)}

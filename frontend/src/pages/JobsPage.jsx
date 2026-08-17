@@ -152,7 +152,7 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="page-wrapper min-h-screen bg-[#FAF8F2] text-[#1A1A1A] pt-24 pb-20 px-6 md:px-12">
+    <div className="page-wrapper min-h-screen bg-[#FAF8F2] text-[#1A1A1A] pt-8 md:pt-24 pb-20 px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         
         {/* Header Hero */}
