@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Briefcase, MapPin, Clock, DollarSign, ArrowUpRight, CheckCircle2, Send, Sparkles, Building2, Laptop, GraduationCap, HeartHandshake } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, ArrowUpRight, CheckCircle2, Send, Sparkles, Building2, Laptop, GraduationCap, HeartHandshake, AlertCircle, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const WEB3FORMS_ACCESS_KEY = '8be60e60-b0eb-47ca-8b5f-dbd39057f730';
 
 const JOBS_DATA = [
   {
@@ -98,6 +100,7 @@ export default function JobsPage() {
   const [applicantForm, setApplicantForm] = useState({ name: '', email: '', phone: '', portfolio: '', coverNote: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const departments = ['All', 'Engineering', 'Digital Marketing', 'Design & Creative'];
 
@@ -105,14 +108,47 @@ export default function JobsPage() {
     ? JOBS_DATA 
     : JOBS_DATA.filter((job) => job.department === selectedDept);
 
-  const handleApply = (e) => {
+  const handleApply = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
 
-    setTimeout(() => {
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: applicantForm.name,
+          email: applicantForm.email,
+          phone: applicantForm.phone || 'N/A',
+          portfolio: applicantForm.portfolio,
+          cover_note: applicantForm.coverNote || 'N/A',
+          job_title: selectedJob.title,
+          job_department: selectedJob.department,
+          job_location: selectedJob.location,
+          subject: `New Job Application: ${selectedJob.title} - ${applicantForm.name}`,
+          from_name: 'DigiToomasha Careers Portal',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setApplicantForm({ name: '', email: '', phone: '', portfolio: '', coverNote: '' });
+      } else {
+        setErrorMessage(data.message || 'Submission failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Web3Forms job application submit error:', err);
+      setErrorMessage('Network error occurred. Please check your internet connection.');
+    } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 1200);
+    }
   };
 
   return (
@@ -217,6 +253,7 @@ export default function JobsPage() {
                     onClick={() => {
                       setSelectedJob(job);
                       setSubmitted(false);
+                      setErrorMessage('');
                     }}
                     className="w-full md:w-auto px-6 py-3 rounded-full bg-[#14291E] hover:bg-[#D99B00] text-white hover:text-black font-extrabold text-xs uppercase tracking-wider transition-all duration-300 inline-flex items-center justify-center gap-2 shadow-md"
                   >
@@ -233,7 +270,10 @@ export default function JobsPage() {
           <div className="fixed inset-0 z-[150] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-10 shadow-2xl border border-black/10 relative max-h-[90vh] overflow-y-auto">
               <button
-                onClick={() => setSelectedJob(null)}
+                onClick={() => {
+                  setSelectedJob(null);
+                  setErrorMessage('');
+                }}
                 className="absolute top-6 right-6 text-gray-400 hover:text-black font-bold text-xl w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
               >
                 ✕
@@ -244,10 +284,13 @@ export default function JobsPage() {
                   <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4 animate-bounce" />
                   <h3 className="text-2xl font-black text-[#14291E] mb-2">Application Submitted!</h3>
                   <p className="text-sm text-gray-600 max-w-md mx-auto mb-6">
-                    Thank you for applying for <strong>{selectedJob.title}</strong>. Our talent acquisition team will review your profile and reach out to you via email.
+                    Thank you for applying for <strong>{selectedJob.title}</strong>. Your profile has been transmitted to Web3Forms and our recruitment team will reach out via email.
                   </p>
                   <button
-                    onClick={() => setSelectedJob(null)}
+                    onClick={() => {
+                      setSelectedJob(null);
+                      setSubmitted(false);
+                    }}
                     className="px-6 py-3 rounded-full bg-[#14291E] text-white font-extrabold text-xs uppercase tracking-wider"
                   >
                     Close Window
@@ -260,6 +303,13 @@ export default function JobsPage() {
                     <h3 className="text-2xl font-extrabold text-[#14291E] mt-1">{selectedJob.title}</h3>
                     <p className="text-xs text-gray-500">{selectedJob.department} • {selectedJob.location}</p>
                   </div>
+
+                  {errorMessage && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-semibold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                     <div>
@@ -325,9 +375,19 @@ export default function JobsPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3.5 rounded-xl bg-[#14291E] text-white hover:bg-[#D99B00] hover:text-black font-extrabold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+                      className="w-full py-3.5 rounded-xl bg-[#14291E] text-white hover:bg-[#D99B00] hover:text-black font-extrabold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
                     >
-                      {isSubmitting ? 'Submitting Application...' : 'Submit Application'} <Send className="w-4 h-4" />
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Transmitting Application...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Submit Application</span>
+                          <Send className="w-4 h-4" />
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
