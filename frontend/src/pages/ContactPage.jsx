@@ -280,34 +280,6 @@ export default function ContactPage() {
 
           {/* Right Office & Info Column */}
           <div className="contact-info-col">
-            <div className="info-card">
-              <h3 className="info-card-title">Global Headquarters</h3>
-
-              <div className="contact-item">
-                <MapPin className="info-icon" />
-                <div>
-                  <strong>New York Studio</strong>
-                  <p>350 Fifth Avenue, Floor 42, New York, NY 10118</p>
-                </div>
-              </div>
-
-              <div className="contact-item">
-                <Mail className="info-icon" />
-                <div>
-                  <strong>Direct Email</strong>
-                  <p>hello@digitoomasha.com</p>
-                </div>
-              </div>
-
-              <div className="contact-item">
-                <Phone className="info-icon" />
-                <div>
-                  <strong>Phone Support</strong>
-                  <p>+1 (800) 247-9099 (Mon - Fri, 9am - 6pm EST)</p>
-                </div>
-              </div>
-            </div>
-
             <div className="info-card highlight-card">
               <h4 className="info-card-title">Global Office Hubs</h4>
               <ul className="hubs-list">
