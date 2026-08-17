@@ -286,8 +286,8 @@ export default function ContactPage() {
               <div className="contact-item">
                 <MapPin className="info-icon" />
                 <div>
-                  <strong>New York Studio</strong>
-                  <p>350 Fifth Avenue, Floor 42, New York, NY 10118</p>
+                  <strong>Jaipur Headquarters</strong>
+                  <p>21, Mahapura, 200ft SEZ Road, Mahapura Rd, near Mahindra SEZ, Jaipur, Rajasthan 302026</p>
                 </div>
               </div>
 
