@@ -39,6 +39,7 @@ export const LandingNavigation = () => {
     { label: 'Services', href: '/services' },
     { label: 'About', href: '/about' },
     { label: 'Articles', href: '/articles' },
+    { label: 'Jobs', href: '/jobs' },
   ];
 
   return (

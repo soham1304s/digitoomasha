@@ -55,7 +55,7 @@ export default function Footer() {
             <h4 className="footer-group-title">COMPANY</h4>
             <ul className="footer-links-list">
               <li><Link to="/about">About us</Link></li>
-              <li><Link to="/about">Careers</Link></li>
+              <li><Link to="/jobs">Careers / Jobs</Link></li>
               <li><Link to="/about">Press</Link></li>
               <li><Link to="/articles">News</Link></li>
               <li><Link to="/about">Media kit</Link></li>

@@ -127,6 +127,19 @@ export default function Navbar() {
           >
             Articles
           </NavLink>
+
+          <NavLink
+            to="/jobs"
+            className={({ isActive }) => 
+              `relative text-xs font-extrabold uppercase tracking-wider text-decoration-none transition-all duration-200 py-1 ${
+                isActive 
+                  ? 'text-[#D99B00] after:absolute after:bottom-[-6px] after:left-0 after:right-0 after:h-[2.5px] after:bg-[#D99B00] after:rounded-full' 
+                  : 'text-[#1A1A1A] hover:text-[#D99B00]'
+              }`
+            }
+          >
+            Jobs
+          </NavLink>
         </nav>
 
         {/* Action Controls & Auth Section */}
@@ -280,6 +293,13 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
           >
             Articles
+          </NavLink>
+          <NavLink
+            to="/jobs"
+            className="block text-sm font-extrabold uppercase tracking-wider text-[#111111] text-decoration-none"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Jobs
           </NavLink>
 
           <div className="border-t border-gray-100 my-4" />

@@ -49,6 +49,7 @@ export const LandingFooter = () => {
                 { label: 'Services', to: '/services' },
                 { label: 'About', to: '/about' },
                 { label: 'Articles', to: '/articles' },
+                { label: 'Jobs', to: '/jobs' },
                 { label: 'Contact', to: '/contact' }
               ].map((item) => (
                 <li key={item.label}>
