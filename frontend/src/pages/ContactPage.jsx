@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, ChevronDown, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { apiFetch } from '../config/api';
 
 const FAQS = [
-
-
   {
     q: 'How quickly can we expect results from digital marketing campaigns?',
     a: 'PPC and Paid Social ad campaigns can generate lead activity within 24-48 hours. SEO and organic growth strategies typically build substantial organic traffic gains within 60 to 90 days.',
@@ -23,18 +21,22 @@ const FAQS = [
   },
 ];
 
+const WEB3FORMS_ACCESS_KEY = '8be60e60-b0eb-47ca-8b5f-dbd39057f730';
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     company: '',
-    budget: '₹5k - ₹10k/mo',
-    services: ['SEO', 'PPC Management'],
+    budget: '₹5,000 - ₹10,000/mo',
+    services: ['Search Engine Optimization (SEO)', 'PPC & Paid Search Ads'],
     message: '',
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [openFaq, setOpenFaq] = useState(0);
 
   const handleCheckboxChange = (service) => {
@@ -49,17 +51,55 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await apiFetch('/inquiries', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-      });
-    } catch (err) {
-      console.warn('Inquiry submit fallback:', err);
-    }
-    setSubmitted(true);
-  };
+    setIsSubmitting(true);
+    setErrorMessage('');
 
+    try {
+      // 1. Submit directly to Web3Forms API
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'N/A',
+          company: formData.company || 'N/A',
+          budget: formData.budget,
+          services: formData.services.length ? formData.services.join(', ') : 'None selected',
+          message: formData.message || 'No specific project message provided.',
+          subject: `New Free Proposal Request from ${formData.name}`,
+          from_name: 'DigiToomasha Website',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(data.message || 'Submission failed. Please try again.');
+      }
+
+      // 2. Also log to internal backend API in parallel for admin dashboard telemetry
+      try {
+        await apiFetch('/inquiries', {
+          method: 'POST',
+          body: JSON.stringify(formData),
+        });
+      } catch (backendErr) {
+        console.warn('Backend inquiry log fallback:', backendErr);
+      }
+    } catch (err) {
+      console.error('Web3Forms submit error:', err);
+      setErrorMessage('Network error occurred. Please check your internet connection.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -82,17 +122,46 @@ export default function ContactPage() {
                 <CheckCircle2 className="success-icon" />
                 <h3 className="success-title">Proposal Request Received!</h3>
                 <p className="success-desc">
-                  Thank you, <strong>{formData.name}</strong>. Our lead digital strategist will review your requirements and get back to you within 24 business hours.
+                  Thank you, <strong>{formData.name}</strong>. Your inquiry has been sent to our team via Web3Forms. Our lead digital strategist will review your requirements and get back to you within 24 business hours at <strong>{formData.email}</strong>.
                 </p>
                 <button
                   className="cta-get-started-btn"
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => {
+                    setSubmitted(false);
+                    setFormData({
+                      name: '',
+                      email: '',
+                      phone: '',
+                      company: '',
+                      budget: '₹5,000 - ₹10,000/mo',
+                      services: ['Search Engine Optimization (SEO)', 'PPC & Paid Search Ads'],
+                      message: '',
+                    });
+                  }}
                 >
                   Submit Another Inquiry
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="contact-form">
+                {errorMessage && (
+                  <div style={{
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    color: '#991b1b',
+                    padding: '0.85rem 1rem',
+                    borderRadius: '10px',
+                    marginBottom: '1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '0.875rem'
+                  }}>
+                    <AlertCircle style={{ width: 18, height: 18, flexShrink: 0 }} />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+
                 <div className="form-row-2">
                   <div className="form-group">
                     <label className="form-label">Full Name *</label>
@@ -187,9 +256,23 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <button type="submit" className="submit-proposal-btn">
-                  <span>Send Free Proposal Request</span>
-                  <Send className="send-icon" />
+                <button 
+                  type="submit" 
+                  className="submit-proposal-btn"
+                  disabled={isSubmitting}
+                  style={{ opacity: isSubmitting ? 0.75 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="send-icon spinner-spin" style={{ animation: 'spin 1s linear infinite' }} />
+                      <span>Sending Proposal...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Send Free Proposal Request</span>
+                      <Send className="send-icon" />
+                    </>
+                  )}
                 </button>
               </form>
             )}
