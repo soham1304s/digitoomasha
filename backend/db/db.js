@@ -12,8 +12,15 @@ const pool = new Pool({
 });
 
 
+const os = require('os');
+
 // Fallback JSON data store file path
-const FALLBACK_FILE = path.join(__dirname, 'fallback_store.json');
+const LOCAL_STORE_FILE = path.join(__dirname, 'fallback_store.json');
+const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const FALLBACK_FILE = isVercel
+  ? path.join(os.tmpdir(), 'fallback_store.json')
+  : LOCAL_STORE_FILE;
+
 
 // Initial seed data generator
 function seedInitialStore() {
@@ -295,8 +302,16 @@ function seedInitialStore() {
 // Read JSON Store
 function readStore() {
   if (!fs.existsSync(FALLBACK_FILE)) {
+    if (isVercel && fs.existsSync(LOCAL_STORE_FILE)) {
+      try {
+        const raw = fs.readFileSync(LOCAL_STORE_FILE, 'utf8');
+        const parsed = JSON.parse(raw);
+        try { fs.writeFileSync(FALLBACK_FILE, JSON.stringify(parsed, null, 2)); } catch (err) {}
+        return parsed;
+      } catch (e) {}
+    }
     const seeded = seedInitialStore();
-    fs.writeFileSync(FALLBACK_FILE, JSON.stringify(seeded, null, 2));
+    try { fs.writeFileSync(FALLBACK_FILE, JSON.stringify(seeded, null, 2)); } catch (err) {}
     return seeded;
   }
   try {
@@ -304,19 +319,19 @@ function readStore() {
     const parsed = JSON.parse(raw);
     if (!parsed.users || !parsed.inquiries) {
       const seeded = seedInitialStore();
-      fs.writeFileSync(FALLBACK_FILE, JSON.stringify(seeded, null, 2));
+      try { fs.writeFileSync(FALLBACK_FILE, JSON.stringify(seeded, null, 2)); } catch (err) {}
       return seeded;
     }
 
     if (!Array.isArray(parsed.client_templates)) {
       parsed.client_templates = [];
-      fs.writeFileSync(FALLBACK_FILE, JSON.stringify(parsed, null, 2));
+      try { fs.writeFileSync(FALLBACK_FILE, JSON.stringify(parsed, null, 2)); } catch (err) {}
     }
 
     return parsed;
   } catch (e) {
     const seeded = seedInitialStore();
-    fs.writeFileSync(FALLBACK_FILE, JSON.stringify(seeded, null, 2));
+    try { fs.writeFileSync(FALLBACK_FILE, JSON.stringify(seeded, null, 2)); } catch (err) {}
     return seeded;
   }
 }

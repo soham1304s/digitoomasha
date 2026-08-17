@@ -1,11 +1,16 @@
 // Centralized API and WebSockets Environment Configuration
 export const API_BASE_URL =
   (import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
-  'http://localhost:5000/api';
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? `${window.location.origin}/api`
+    : 'http://localhost:5000/api');
 
 export const SOCKET_SERVER_URL =
   (import.meta.env && import.meta.env.VITE_SOCKET_URL) ||
-  'http://localhost:5000';
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? window.location.origin
+    : 'http://localhost:5000');
+
 
 /**
  * Universal fetch wrapper for API endpoints with JWT token auto-injection
