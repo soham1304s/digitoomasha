@@ -1,7 +1,6 @@
 import React from 'react';
 import Hero from '../components/Hero';
 import LogosBar from '../components/LogosBar';
-import RoiCalculator from '../components/RoiCalculator';
 import VideoShowcase from '../components/VideoShowcase';
 import ExecutionRoadmap from '../components/ExecutionRoadmap';
 import CaseStudies from '../components/CaseStudies';
@@ -17,7 +16,6 @@ export default function HomePage() {
     <div className="home-page-container">
       <Hero />
       <LogosBar />
-      <RoiCalculator />
       <VideoShowcase />
       <ExecutionRoadmap />
       <CaseStudies />
