@@ -421,7 +421,7 @@ export default function DrivingGrowth() {
                 className="gm-footer-btn-primary"
                 onClick={() => {
                   setIsModalOpen(false);
-                  navigate('/login');
+                  navigate('/contact');
                 }}
               >
                 <span>Get Started</span>
