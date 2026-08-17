@@ -292,7 +292,7 @@ export default function ArticlesSection() {
                 className="gm-footer-btn-primary"
                 onClick={() => {
                   setSelectedArticle(null);
-                  navigate('/signup');
+                  navigate('/login');
                 }}
               >
                 <span>Get Started</span>

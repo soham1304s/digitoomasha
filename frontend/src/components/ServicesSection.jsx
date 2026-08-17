@@ -321,7 +321,7 @@ export default function ServicesSection() {
 
         <button 
           className="cta-get-started-btn"
-          onClick={() => navigate('/signup')}
+          onClick={() => navigate('/login')}
         >
           Get Started
         </button>
@@ -403,7 +403,7 @@ export default function ServicesSection() {
                 className="gm-footer-btn-primary"
                 onClick={() => {
                   setSelectedService(null);
-                  navigate('/signup');
+                  navigate('/login');
                 }}
               >
                 <span>Get Started</span>
