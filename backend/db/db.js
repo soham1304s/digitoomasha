@@ -1,14 +1,14 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const { Pool } = require('pg');
 const fs = require('fs');
-const path = require('path');
 const bcrypt = require('bcryptjs');
 
 // PostgreSQL Pool configuration
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgres://postgres:postgres@127.0.0.1:5432/digitoomasha_db',
   ssl: process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('127.0.0.1') && !process.env.DATABASE_URL.includes('localhost') ? { rejectUnauthorized: false } : false,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 10000,
 });
 
 
