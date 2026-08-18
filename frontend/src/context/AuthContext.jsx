@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
       console.error('Production Auth Connection Error:', err);
       return {
         success: false,
-        message: 'Unable to communicate with the authentication database. Please ensure the backend service is running on port 5000.',
+        message: 'Unable to communicate with the authentication server. Please refresh your browser (Ctrl + Shift + R) to load the latest deployment.',
       };
     }
   };
