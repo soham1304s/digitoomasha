@@ -2286,18 +2286,27 @@ export default function AdminDashboardPage({ initialView }) {
       {/* User Detail Modal */}
       {selectedUserModal && (
         <div className="auth-modal-overlay" onClick={() => setSelectedUserModal(null)}>
-          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 640 }}>
             <div className="modal-header-row">
               <h2>Client Onboarding Profile</h2>
               <button className="auth-modal-close" onClick={() => setSelectedUserModal(null)}>×</button>
             </div>
             <div className="modal-body-content">
               <div className="detail-grid-2">
-                <div><label className="dlabel">Full Name</label><p className="dval">{selectedUserModal.full_name}</p></div>
+                <div><label className="dlabel">Full Name</label><p className="dval">{selectedUserModal.full_name || selectedUserModal.fullName || selectedUserModal.name || 'N/A'}</p></div>
                 <div><label className="dlabel">Email Address</label><p className="dval">{selectedUserModal.email}</p></div>
-                <div><label className="dlabel">Account Status</label><p className="dval" style={{ color: selectedUserModal.status === 'Suspended' ? '#ef4444' : '#10b981', fontWeight: 700 }}>{selectedUserModal.status || 'Active'}</p></div>
                 <div><label className="dlabel">Phone Number</label><p className="dval">{selectedUserModal.phone || 'N/A'}</p></div>
-                <div><label className="dlabel">Company Name</label><p className="dval">{selectedUserModal.company_name || selectedUserModal.business_name}</p></div>
+                <div><label className="dlabel">Account Status</label><p className="dval" style={{ color: selectedUserModal.status === 'Suspended' ? '#ef4444' : '#10b981', fontWeight: 700 }}>{selectedUserModal.status || 'Active'}</p></div>
+                <div><label className="dlabel">Business / Company</label><p className="dval">{selectedUserModal.business_name || selectedUserModal.company_name || selectedUserModal.businessName || selectedUserModal.companyName || 'Individual'}</p></div>
+                <div><label className="dlabel">Job Title</label><p className="dval">{selectedUserModal.job_title || selectedUserModal.jobTitle || 'N/A'}</p></div>
+                <div><label className="dlabel">Business Website</label><p className="dval">{(selectedUserModal.business_website || selectedUserModal.businessWebsite) ? <a href={selectedUserModal.business_website || selectedUserModal.businessWebsite} target="_blank" rel="noreferrer" style={{ color: '#3b82f6' }}>{(selectedUserModal.business_website || selectedUserModal.businessWebsite).replace(/^https?:\/\//, '')}</a> : 'N/A'}</p></div>
+                <div><label className="dlabel">Business Category</label><p className="dval">{selectedUserModal.business_category || selectedUserModal.businessCategory || 'General'}</p></div>
+                <div><label className="dlabel">Industry</label><p className="dval">{selectedUserModal.industry || 'Digital Marketing'}</p></div>
+                <div><label className="dlabel">Monthly Budget</label><p className="dval">{selectedUserModal.monthly_budget || selectedUserModal.monthlyBudget || 'Unspecified'}</p></div>
+                <div><label className="dlabel">Employees / Team</label><p className="dval">{selectedUserModal.employees_count || selectedUserModal.employeesCount || '1-10'}</p></div>
+                <div><label className="dlabel">Location</label><p className="dval">{selectedUserModal.city ? `${selectedUserModal.city}, ${selectedUserModal.country}` : selectedUserModal.country || 'N/A'}</p></div>
+                <div><label className="dlabel">Account Role</label><p className="dval" style={{ textTransform: 'capitalize' }}>{selectedUserModal.role || 'client'}</p></div>
+                <div><label className="dlabel">Joined Date</label><p className="dval">{new Date(selectedUserModal.created_at || selectedUserModal.createdAt || Date.now()).toLocaleDateString()}</p></div>
               </div>
             </div>
           </div>

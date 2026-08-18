@@ -94,15 +94,7 @@ router.post('/register', async (req, res) => {
     res.status(201).json({
       message: 'Registration successful',
       token,
-      user: {
-        id: newUser.id,
-        name: newUser.full_name,
-        email: newUser.email,
-        phone: newUser.phone,
-        businessName: newUser.business_name,
-        role: newUser.role,
-        avatar: newUser.avatar || '',
-      },
+      user: newUser,
     });
   } catch (err) {
     console.error('Registration API Error:', err);
@@ -141,7 +133,7 @@ router.post('/login', async (req, res) => {
     if (req.io) {
       const liveLoginEvent = {
         id: user.id,
-        fullName: user.full_name,
+        fullName: user.full_name || user.fullName,
         email: user.email,
         timestamp: new Date().toLocaleTimeString(),
       };
@@ -151,15 +143,7 @@ router.post('/login', async (req, res) => {
     res.json({
       message: 'Login successful',
       token,
-      user: {
-        id: user.id,
-        name: user.full_name,
-        email: user.email,
-        phone: user.phone,
-        businessName: user.business_name,
-        role: user.role,
-        avatar: user.avatar || '',
-      },
+      user,
     });
   } catch (err) {
     console.error('Login API Error:', err);
@@ -174,15 +158,7 @@ router.get('/me', authenticateToken, async (req, res) => {
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.json({
-      user: {
-        id: user.id,
-        name: user.full_name,
-        email: user.email,
-        phone: user.phone,
-        businessName: user.business_name,
-        role: user.role,
-        avatar: user.avatar || '',
-      },
+      user,
     });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -192,18 +168,12 @@ router.get('/me', authenticateToken, async (req, res) => {
 // PUT /api/user/profile (Update Profile & Avatar)
 router.put('/user/profile', async (req, res) => {
   try {
-    const { email, avatar, fullName, phone, jobTitle } = req.body;
+    const { email, ...rawUpdateData } = req.body;
     if (!email) {
       return res.status(400).json({ message: 'User email required' });
     }
 
-    const updateData = {};
-    if (avatar !== undefined) updateData.avatar = avatar;
-    if (fullName !== undefined) updateData.full_name = fullName;
-    if (phone !== undefined) updateData.phone = phone;
-    if (jobTitle !== undefined) updateData.job_title = jobTitle;
-
-    const updatedUser = await updateUserProfile(email, updateData);
+    const updatedUser = await updateUserProfile(email, rawUpdateData);
 
     return res.json({
       success: true,

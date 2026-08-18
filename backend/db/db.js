@@ -496,17 +496,73 @@ async function initDb() {
 initDb();
 
 // USER DB FUNCTIONS
+function formatUserRecord(u) {
+  if (!u) return null;
+  const fullName = u.full_name || u.fullName || u.name || '';
+  const companyName = u.company_name || u.companyName || '';
+  const businessName = u.business_name || u.businessName || companyName || 'Individual';
+  const jobTitle = u.job_title || u.jobTitle || '';
+  const businessWebsite = u.business_website || u.businessWebsite || '';
+  const businessCategory = u.business_category || u.businessCategory || 'General';
+  const industry = u.industry || 'Digital Marketing';
+  const employeesCount = u.employees_count || u.employeesCount || '1-10';
+  const monthlyBudget = u.monthly_budget || u.monthlyBudget || 'Unspecified';
+  let businessGoals = u.business_goals || u.businessGoals || [];
+  if (typeof businessGoals === 'string') {
+    try { businessGoals = JSON.parse(businessGoals); } catch (e) { businessGoals = [businessGoals]; }
+  }
+  const status = u.status || 'Active';
+  const createdAt = u.created_at || u.createdAt || new Date().toISOString();
+
+  return {
+    ...u,
+    id: u.id,
+    email: u.email,
+    phone: u.phone || '',
+    role: u.role || 'client',
+    avatar: u.avatar || '',
+    country: u.country || '',
+    city: u.city || '',
+    status,
+    // snake_case
+    full_name: fullName,
+    company_name: companyName,
+    business_name: businessName,
+    job_title: jobTitle,
+    business_website: businessWebsite,
+    business_category: businessCategory,
+    industry,
+    employees_count: employeesCount,
+    monthly_budget: monthlyBudget,
+    business_goals: businessGoals,
+    created_at: createdAt,
+    // camelCase
+    name: fullName,
+    fullName,
+    companyName,
+    businessName,
+    jobTitle,
+    businessWebsite,
+    businessCategory,
+    employeesCount,
+    monthlyBudget,
+    businessGoals,
+    createdAt,
+  };
+}
+
 async function findUserByEmail(email) {
   if (isPgConnected) {
     try {
       const res = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
-      if (res.rows[0]) return res.rows[0];
+      if (res.rows[0]) return formatUserRecord(res.rows[0]);
     } catch (err) {
       console.error('Pg findUserByEmail Error:', err);
     }
   }
   const store = readStore();
-  return store.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) || null;
+  const user = store.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) || null;
+  return formatUserRecord(user);
 }
 
 async function createUser(userData) {
@@ -522,26 +578,26 @@ async function createUser(userData) {
         ) RETURNING *;
       `;
       const values = [
-        userData.fullName,
+        userData.fullName || userData.full_name || '',
         userData.email,
         userData.phone || '',
-        userData.companyName || '',
-        userData.jobTitle || '',
+        userData.companyName || userData.company_name || '',
+        userData.jobTitle || userData.job_title || '',
         userData.country || 'United States',
         userData.city || '',
-        userData.businessName || '',
-        userData.businessWebsite || '',
-        userData.businessCategory || '',
+        userData.businessName || userData.business_name || '',
+        userData.businessWebsite || userData.business_website || '',
+        userData.businessCategory || userData.business_category || '',
         userData.industry || '',
-        userData.employeesCount || '',
-        userData.monthlyBudget || '',
-        JSON.stringify(userData.businessGoals || []),
+        userData.employeesCount || userData.employees_count || '',
+        userData.monthlyBudget || userData.monthly_budget || '',
+        JSON.stringify(userData.businessGoals || userData.business_goals || []),
         userData.passwordHash,
         userData.role || 'client',
         userData.avatar || '',
       ];
       const res = await pool.query(query, values);
-      return res.rows[0];
+      return formatUserRecord(res.rows[0]);
     } catch (err) {
       console.error('Pg createUser Error:', err);
     }
@@ -550,20 +606,20 @@ async function createUser(userData) {
   const store = readStore();
   const newUser = {
     id: store.users.length + 1,
-    full_name: userData.fullName,
+    full_name: userData.fullName || userData.full_name,
     email: userData.email,
     phone: userData.phone || '',
-    company_name: userData.companyName || '',
-    job_title: userData.jobTitle || '',
+    company_name: userData.companyName || userData.company_name || '',
+    job_title: userData.jobTitle || userData.job_title || '',
     country: userData.country || 'United States',
     city: userData.city || '',
-    business_name: userData.businessName || userData.companyName || '',
-    business_website: userData.businessWebsite || '',
-    business_category: userData.businessCategory || 'E-commerce',
+    business_name: userData.businessName || userData.business_name || userData.companyName || '',
+    business_website: userData.businessWebsite || userData.business_website || '',
+    business_category: userData.businessCategory || userData.business_category || 'E-commerce',
     industry: userData.industry || 'General',
-    employees_count: userData.employeesCount || '1-10 employees',
-    monthly_budget: userData.monthlyBudget || '₹50,000 - ₹1,00,000/mo',
-    business_goals: userData.businessGoals || ['SEO Optimization'],
+    employees_count: userData.employeesCount || userData.employees_count || '1-10 employees',
+    monthly_budget: userData.monthlyBudget || userData.monthly_budget || '₹50,000 - ₹1,00,000/mo',
+    business_goals: userData.businessGoals || userData.business_goals || ['SEO Optimization'],
     password_hash: userData.passwordHash,
     role: userData.role || 'client',
     avatar: userData.avatar || '',
@@ -572,7 +628,7 @@ async function createUser(userData) {
   };
   store.users.push(newUser);
   writeStore(store);
-  return newUser;
+  return formatUserRecord(newUser);
 }
 
 async function getAllUsers() {
@@ -582,7 +638,7 @@ async function getAllUsers() {
         'SELECT id, full_name, email, phone, company_name, job_title, country, city, business_name, business_website, business_category, industry, employees_count, monthly_budget, business_goals, role, avatar, status, created_at, last_login FROM users ORDER BY created_at DESC'
       );
       if (res.rows.length > 0) {
-        return res.rows.map((u) => ({ ...u, status: u.status || 'Active' }));
+        return res.rows.map(formatUserRecord);
       }
     } catch (err) {
       console.warn('Pg getAllUsers fallback:', err.message);
@@ -590,17 +646,14 @@ async function getAllUsers() {
     }
   }
   const store = readStore();
-  return store.users.map(({ password_hash, ...u }) => ({
-    ...u,
-    status: u.status || 'Active',
-  }));
+  return store.users.map(({ password_hash, ...u }) => formatUserRecord(u));
 }
 
 async function updateUserStatus(id, status) {
   if (isPgConnected) {
     try {
       const res = await pool.query('UPDATE users SET status = $1 WHERE id = $2 RETURNING *', [status, id]);
-      if (res.rows[0]) return res.rows[0];
+      if (res.rows[0]) return formatUserRecord(res.rows[0]);
     } catch (err) {
       console.error('Pg updateUserStatus Error:', err);
     }
@@ -611,7 +664,7 @@ async function updateUserStatus(id, status) {
   if (index !== -1) {
     store.users[index].status = status;
     writeStore(store);
-    return store.users[index];
+    return formatUserRecord(store.users[index]);
   }
   return null;
 }
@@ -636,15 +689,46 @@ async function deleteUser(id) {
   return false;
 }
 
+const camelToSnakeMap = {
+  fullName: 'full_name',
+  companyName: 'company_name',
+  jobTitle: 'job_title',
+  businessName: 'business_name',
+  businessWebsite: 'business_website',
+  businessCategory: 'business_category',
+  employeesCount: 'employees_count',
+  monthlyBudget: 'monthly_budget',
+  businessGoals: 'business_goals',
+  phone: 'phone',
+  country: 'country',
+  city: 'city',
+  industry: 'industry',
+  avatar: 'avatar',
+  status: 'status',
+  role: 'role'
+};
 
-async function updateUserProfile(email, updateData) {
+async function updateUserProfile(email, rawUpdateData) {
+  const updateData = {};
+  const pgUpdateData = {};
+
+  Object.entries(rawUpdateData || {}).forEach(([key, val]) => {
+    if (val !== undefined && key !== 'email' && key !== 'password') {
+      updateData[key] = val;
+      const pgCol = camelToSnakeMap[key] || key;
+      pgUpdateData[pgCol] = typeof val === 'object' && val !== null ? JSON.stringify(val) : val;
+    }
+  });
+
+  if (Object.keys(pgUpdateData).length === 0) return null;
+
   if (isPgConnected) {
     try {
-      const keys = Object.keys(updateData);
+      const keys = Object.keys(pgUpdateData);
       const setClause = keys.map((key, i) => `${key} = $${i + 2}`).join(', ');
-      const values = [email, ...Object.values(updateData)];
+      const values = [email, ...Object.values(pgUpdateData)];
       const res = await pool.query(`UPDATE users SET ${setClause} WHERE LOWER(email) = LOWER($1) RETURNING *`, values);
-      if (res.rows[0]) return res.rows[0];
+      if (res.rows[0]) return formatUserRecord(res.rows[0]);
     } catch (err) {
       console.error('Pg updateUserProfile Error:', err);
     }
@@ -653,9 +737,9 @@ async function updateUserProfile(email, updateData) {
   const store = readStore();
   const index = store.users.findIndex((u) => u.email.toLowerCase() === email.toLowerCase());
   if (index !== -1) {
-    store.users[index] = { ...store.users[index], ...updateData };
+    store.users[index] = { ...store.users[index], ...pgUpdateData, ...updateData };
     writeStore(store);
-    return store.users[index];
+    return formatUserRecord(store.users[index]);
   }
   return null;
 }
