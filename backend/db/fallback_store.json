@@ -148,6 +148,56 @@
       "avatar": "",
       "created_at": "2026-08-05T09:06:35.807Z",
       "last_login": "2026-08-05T09:06:35.807Z"
+    },
+    {
+      "id": 7,
+      "full_name": "Priyajit",
+      "email": "priyajitd80@gmail.com",
+      "phone": "+91 8768508264",
+      "company_name": "",
+      "job_title": "",
+      "country": "Bangladesh",
+      "city": "dhaka",
+      "business_name": "",
+      "business_website": "",
+      "business_category": "E-commerce & Retail",
+      "industry": "Consumer Goods",
+      "employees_count": "11-50 employees",
+      "monthly_budget": "₹5,000 - ₹10,000/mo",
+      "business_goals": [
+        "SEO Optimization",
+        "Lead Generation"
+      ],
+      "password_hash": "$2a$10$zmqmNx96erwfbKx5g6WZ8.JwToptolHIbeQwRiIkuQXas1AoD7kBC",
+      "role": "client",
+      "avatar": "",
+      "created_at": "2026-08-18T16:14:21.604Z",
+      "last_login": "2026-08-18T16:14:21.604Z"
+    },
+    {
+      "id": 8,
+      "full_name": "Test User Production",
+      "email": "testuser.prod@example.com",
+      "phone": "",
+      "company_name": "Test Corp",
+      "job_title": "CTO",
+      "country": "United States",
+      "city": "",
+      "business_name": "Test Corp",
+      "business_website": "",
+      "business_category": "E-commerce",
+      "industry": "General",
+      "employees_count": "1-10 employees",
+      "monthly_budget": "₹50,000 - ₹1,00,000/mo",
+      "business_goals": [
+        "SEO Optimization"
+      ],
+      "password_hash": "$2a$10$/wZXiHS7/ksUGhsS/hFfHeGTOSbItyLqu6eEDoq8KOyFZDrifio5W",
+      "role": "client",
+      "avatar": "",
+      "status": "Active",
+      "created_at": "2026-08-25T07:26:37.191Z",
+      "last_login": "2026-08-25T07:26:37.191Z"
     }
   ],
   "inquiries": [

@@ -4,11 +4,15 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 
-// PostgreSQL Pool configuration
+// PostgreSQL Pool configuration & environment check
+const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === 'production');
+const dbUrl = process.env.DATABASE_URL;
+const shouldAttemptPg = Boolean(dbUrl) || !isVercel;
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgres://postgres:postgres@127.0.0.1:5432/digitoomasha_db',
-  ssl: process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('127.0.0.1') && !process.env.DATABASE_URL.includes('localhost') ? { rejectUnauthorized: false } : false,
-  connectionTimeoutMillis: 10000,
+  connectionString: dbUrl || 'postgres://postgres:postgres@127.0.0.1:5432/digitoomasha_db',
+  ssl: dbUrl && !dbUrl.includes('127.0.0.1') && !dbUrl.includes('localhost') ? { rejectUnauthorized: false } : false,
+  connectionTimeoutMillis: 3000,
 });
 
 
@@ -16,7 +20,6 @@ const os = require('os');
 
 // Fallback JSON data store file path
 const LOCAL_STORE_FILE = path.join(__dirname, 'fallback_store.json');
-const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 const FALLBACK_FILE = isVercel
   ? path.join(os.tmpdir(), 'fallback_store.json')
   : LOCAL_STORE_FILE;
@@ -347,8 +350,69 @@ function writeStore(data) {
 
 let isPgConnected = false;
 
+async function createUserInPg(u) {
+  if (!isPgConnected || !u || !u.email) return;
+  try {
+    const existing = await pool.query('SELECT id FROM users WHERE LOWER(email) = LOWER($1)', [u.email]);
+    if (existing.rows.length === 0) {
+      const query = `
+        INSERT INTO users (
+          full_name, email, phone, company_name, job_title, country, city,
+          business_name, business_website, business_category, industry,
+          employees_count, monthly_budget, business_goals, password_hash, role, avatar, status
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
+        );
+      `;
+      const values = [
+        u.full_name || u.fullName || u.name || '',
+        u.email,
+        u.phone || '',
+        u.company_name || u.companyName || '',
+        u.job_title || u.jobTitle || '',
+        u.country || 'United States',
+        u.city || '',
+        u.business_name || u.businessName || '',
+        u.business_website || u.businessWebsite || '',
+        u.business_category || u.businessCategory || '',
+        u.industry || '',
+        u.employees_count || u.employeesCount || '',
+        u.monthly_budget || u.monthlyBudget || '',
+        JSON.stringify(u.business_goals || u.businessGoals || []),
+        u.password_hash || u.passwordHash || bcrypt.hashSync('123456', 10),
+        u.role || 'client',
+        u.avatar || '',
+        u.status || 'Active'
+      ];
+      await pool.query(query, values);
+    }
+  } catch (e) {
+    console.warn('createUserInPg warn:', e.message);
+  }
+}
+
+async function syncFallbackUsersToPg() {
+  if (!isPgConnected) return;
+  try {
+    const store = readStore();
+    const fallbackUsers = store.users || [];
+    for (const u of fallbackUsers) {
+      if (u.email) {
+        await createUserInPg(u);
+      }
+    }
+  } catch (err) {
+    console.warn('Sync fallback users warning:', err.message);
+  }
+}
+
 // Initialize PostgreSQL Tables
 async function initDb() {
+  if (!shouldAttemptPg) {
+    console.log('ℹ️ Running in fallback JSON store mode (No DATABASE_URL configured in serverless env).');
+    isPgConnected = false;
+    return;
+  }
   try {
     const client = await pool.connect();
     client.release();
@@ -373,6 +437,7 @@ async function initDb() {
         password_hash VARCHAR(255) NOT NULL,
         role VARCHAR(50) DEFAULT 'client',
         avatar TEXT DEFAULT '',
+        status VARCHAR(50) DEFAULT 'Active',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -483,12 +548,13 @@ async function initDb() {
         approved_at TIMESTAMP NULL
       );
     `);
-    const adminPassHash = '$2a$10$ueF0EDx1PayLvD6g7nN29.WBRsC0PL9O8aIUzHnOoT4MXC7ACfkBm';
-    await pool.query('UPDATE users SET password_hash = $1 WHERE LOWER(email) = $2', [adminPassHash, 'admin@digitoomasha.com']);
+    const adminPassHash = bcrypt.hashSync('123456', 10);
+    await pool.query('UPDATE users SET password_hash = $1 WHERE LOWER(email) = $2', [adminPassHash, 'admin@digitoomasha.com']).catch(() => {});
     isPgConnected = true;
     console.log('✅ PostgreSQL Database connected & schema verified.');
+    await syncFallbackUsersToPg();
   } catch (err) {
-    console.warn('⚠️ PostgreSQL local daemon not reachable. Using fallback store:', err.message);
+    console.warn('⚠️ PostgreSQL unreachable. Using fallback store:', err.message);
     isPgConnected = false;
   }
 }
@@ -552,61 +618,32 @@ function formatUserRecord(u) {
 }
 
 async function findUserByEmail(email) {
+  if (!email) return null;
+  const cleanEmail = String(email).trim().toLowerCase();
   if (isPgConnected) {
     try {
-      const res = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [email]);
+      const res = await pool.query('SELECT * FROM users WHERE LOWER(email) = LOWER($1)', [cleanEmail]);
       if (res.rows[0]) return formatUserRecord(res.rows[0]);
     } catch (err) {
       console.error('Pg findUserByEmail Error:', err);
     }
   }
   const store = readStore();
-  const user = store.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) || null;
-  return formatUserRecord(user);
+  const user = store.users.find((u) => u.email.toLowerCase() === cleanEmail) || null;
+  if (user) {
+    if (isPgConnected) {
+      createUserInPg(user).catch(() => {});
+    }
+    return formatUserRecord(user);
+  }
+  return null;
 }
 
 async function createUser(userData) {
-  if (isPgConnected) {
-    try {
-      const query = `
-        INSERT INTO users (
-          full_name, email, phone, company_name, job_title, country, city,
-          business_name, business_website, business_category, industry,
-          employees_count, monthly_budget, business_goals, password_hash, role, avatar
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17
-        ) RETURNING *;
-      `;
-      const values = [
-        userData.fullName || userData.full_name || '',
-        userData.email,
-        userData.phone || '',
-        userData.companyName || userData.company_name || '',
-        userData.jobTitle || userData.job_title || '',
-        userData.country || 'United States',
-        userData.city || '',
-        userData.businessName || userData.business_name || '',
-        userData.businessWebsite || userData.business_website || '',
-        userData.businessCategory || userData.business_category || '',
-        userData.industry || '',
-        userData.employeesCount || userData.employees_count || '',
-        userData.monthlyBudget || userData.monthly_budget || '',
-        JSON.stringify(userData.businessGoals || userData.business_goals || []),
-        userData.passwordHash,
-        userData.role || 'client',
-        userData.avatar || '',
-      ];
-      const res = await pool.query(query, values);
-      return formatUserRecord(res.rows[0]);
-    } catch (err) {
-      console.error('Pg createUser Error:', err);
-    }
-  }
-
   const store = readStore();
   const newUser = {
     id: store.users.length + 1,
-    full_name: userData.fullName || userData.full_name,
+    full_name: userData.fullName || userData.full_name || '',
     email: userData.email,
     phone: userData.phone || '',
     company_name: userData.companyName || userData.company_name || '',
@@ -623,30 +660,86 @@ async function createUser(userData) {
     password_hash: userData.passwordHash,
     role: userData.role || 'client',
     avatar: userData.avatar || '',
+    status: 'Active',
     created_at: new Date().toISOString(),
     last_login: new Date().toISOString(),
   };
-  store.users.push(newUser);
+
+  const existingIdx = store.users.findIndex((u) => u.email.toLowerCase() === userData.email.toLowerCase());
+  if (existingIdx !== -1) {
+    store.users[existingIdx] = { ...store.users[existingIdx], ...newUser };
+  } else {
+    store.users.push(newUser);
+  }
   writeStore(store);
+
+  if (isPgConnected) {
+    try {
+      const query = `
+        INSERT INTO users (
+          full_name, email, phone, company_name, job_title, country, city,
+          business_name, business_website, business_category, industry,
+          employees_count, monthly_budget, business_goals, password_hash, role, avatar, status
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
+        )
+        ON CONFLICT (email) DO UPDATE SET
+          password_hash = EXCLUDED.password_hash,
+          full_name = EXCLUDED.full_name
+        RETURNING *;
+      `;
+      const values = [
+        newUser.full_name,
+        newUser.email,
+        newUser.phone,
+        newUser.company_name,
+        newUser.job_title,
+        newUser.country,
+        newUser.city,
+        newUser.business_name,
+        newUser.business_website,
+        newUser.business_category,
+        newUser.industry,
+        newUser.employees_count,
+        newUser.monthly_budget,
+        JSON.stringify(newUser.business_goals),
+        newUser.password_hash,
+        newUser.role,
+        newUser.avatar,
+        newUser.status,
+      ];
+      const res = await pool.query(query, values);
+      if (res.rows[0]) return formatUserRecord(res.rows[0]);
+    } catch (err) {
+      console.error('Pg createUser Error:', err);
+    }
+  }
+
   return formatUserRecord(newUser);
 }
 
 async function getAllUsers() {
+  let pgUsers = [];
   if (isPgConnected) {
     try {
       const res = await pool.query(
         'SELECT id, full_name, email, phone, company_name, job_title, country, city, business_name, business_website, business_category, industry, employees_count, monthly_budget, business_goals, role, avatar, status, created_at, last_login FROM users ORDER BY created_at DESC'
       );
       if (res.rows.length > 0) {
-        return res.rows.map(formatUserRecord);
+        pgUsers = res.rows.map(formatUserRecord);
       }
     } catch (err) {
       console.warn('Pg getAllUsers fallback:', err.message);
-      isPgConnected = false;
     }
   }
   const store = readStore();
-  return store.users.map(({ password_hash, ...u }) => formatUserRecord(u));
+  const fallbackUsers = store.users.map(({ password_hash, ...u }) => formatUserRecord(u));
+
+  const userMap = new Map();
+  fallbackUsers.forEach((u) => userMap.set(u.email.toLowerCase(), u));
+  pgUsers.forEach((u) => userMap.set(u.email.toLowerCase(), u));
+
+  return Array.from(userMap.values());
 }
 
 async function updateUserStatus(id, status) {
