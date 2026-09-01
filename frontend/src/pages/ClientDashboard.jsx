@@ -4868,13 +4868,13 @@ export default function ClientDashboard() {
             </div>
           )}
           {(currentView === 'analytics' || currentView === 'analysis') && (
-            <div className="analytics-master-container animate-fade-in" style={{ paddingBottom: '3rem', background: '#FAF8F2', minHeight: '100vh', margin: '-1.5rem', padding: '1.5rem' }}>
+            <div className="analytics-master-container animate-fade-in">
               
               {/* 1. TOP TITLE & ACTION HEADER */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.2rem' }}>
-                    <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.02em' }}>
+              <div className="roas-header-wrap">
+                <div className="roas-header-title-group">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
+                    <h1>
                       Marketing Intelligence & ROAS Analytics
                     </h1>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#EAE6D6', color: '#1E3A2B', border: '1px solid #E0DDD2', padding: '0.15rem 0.55rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
@@ -4886,7 +4886,7 @@ export default function ClientDashboard() {
                   </p>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <div className="roas-header-actions">
                   <button
                     onClick={() => setShowAlertCenterModal(true)}
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', color: '#1A1A1A', border: '1px solid #E0DDD2', padding: '0.5rem 0.9rem', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
@@ -4915,10 +4915,10 @@ export default function ClientDashboard() {
               </div>
 
               {/* 2. TIMEFRAME & CHANNEL CONTROL BAR */}
-              <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.75rem 1.25rem', border: '1px solid #E0DDD2', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+              <div className="roas-control-bar">
                 {/* Timeframe selector */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5A5A55', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Timeframe:</span>
+                <div className="roas-filter-group">
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#5A5A55', textTransform: 'uppercase', letterSpacing: '0.5px', flexShrink: 0 }}>Timeframe:</span>
                   {[
                     { key: 'today', label: 'Today' },
                     { key: '7d', label: 'Last 7 Days' },
@@ -4936,6 +4936,7 @@ export default function ClientDashboard() {
                         fontWeight: 700,
                         border: 'none',
                         cursor: 'pointer',
+                        flexShrink: 0,
                         background: biDateRange === tf.key ? '#1E3A2B' : 'transparent',
                         color: biDateRange === tf.key ? '#ffffff' : '#5A5A55',
                         boxShadow: biDateRange === tf.key ? '0 2px 6px rgba(30,58,43,0.3)' : 'none',
@@ -4948,8 +4949,8 @@ export default function ClientDashboard() {
                 </div>
 
                 {/* Channel selector */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Channel:</span>
+                <div className="roas-filter-group">
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.5px', flexShrink: 0 }}>Channel:</span>
                   {[
                     { key: 'All', label: '🌐 All Channels' },
                     { key: 'Google Ads', label: 'Google Ads' },
@@ -4967,6 +4968,7 @@ export default function ClientDashboard() {
                         fontSize: '0.8rem',
                         fontWeight: 600,
                         border: '1px solid',
+                        flexShrink: 0,
                         borderColor: biChannelFilter === ch.key ? '#ddd6fe' : '#e2e8f0',
                         cursor: 'pointer',
                         background: biChannelFilter === ch.key ? '#f5f3ff' : '#ffffff',
@@ -4977,194 +4979,194 @@ export default function ClientDashboard() {
                       {ch.label}
                     </button>
                   ))}
-                  <button style={{ padding: '0.35rem 0.6rem', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', color: '#64748b', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <button style={{ padding: '0.35rem 0.6rem', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#fff', color: '#64748b', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', flexShrink: 0 }}>
                     ✕ More
                   </button>
                 </div>
               </div>
 
               {/* 3. TOP STRIP METRIC CARDS (7 Stat Tiles) */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.85rem', marginBottom: '1.25rem' }}>
+              <div className="roas-top-strip-grid">
                 {/* Tile 1: Live Active Visitors */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Users style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Live Active Visitors</span>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Live Active Visitors</span>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
-                      <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>342</strong>
+                      <strong className="roas-stat-tile-val">342</strong>
                       <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 700 }}>active</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Tile 2: Live Clicks / Hr */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <MousePointer style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Live Clicks / Hr</span>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Live Clicks / Hr</span>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
-                      <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>1,842</strong>
+                      <strong className="roas-stat-tile-val">1,842</strong>
                       <span style={{ fontSize: '0.7rem', color: '#2563eb', fontWeight: 700 }}>clicks</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Tile 3: Live Purchases Today */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#fce7f3', color: '#db2777', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <ShoppingBag style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Live Purchases Today</span>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Live Purchases Today</span>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
-                      <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a' }}>64</strong>
+                      <strong className="roas-stat-tile-val">64</strong>
                       <span style={{ fontSize: '0.7rem', color: '#db2777', fontWeight: 700 }}>orders</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Tile 4: Today's Revenue */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f0fdf4', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <DollarSign style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Today's Revenue</span>
-                    <strong style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a', marginTop: '2px', display: 'block' }}>₹38,420.00</strong>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Today's Revenue</span>
+                    <strong className="roas-stat-tile-val" style={{ color: '#16a34a', marginTop: '2px', display: 'block' }}>₹38,420.00</strong>
                   </div>
                 </div>
 
                 {/* Tile 5: Today's Ad Spend */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#fff7ed', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <CreditCard style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Today's Ad Spend</span>
-                    <strong style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ea580c', marginTop: '2px', display: 'block' }}>₹7,730.00</strong>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Today's Ad Spend</span>
+                    <strong className="roas-stat-tile-val" style={{ color: '#ea580c', marginTop: '2px', display: 'block' }}>₹7,730.00</strong>
                   </div>
                 </div>
 
                 {/* Tile 6: Current Real-Time ROAS */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f0fdf4', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <TrendingUp style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Current Real-Time ROAS</span>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Current Real-Time ROAS</span>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginTop: '2px' }}>
-                      <strong style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a' }}>4.97x</strong>
+                      <strong className="roas-stat-tile-val" style={{ color: '#16a34a' }}>4.97x</strong>
                       <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 800 }}>ROAS</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Tile 7: Bounce Rate */}
-                <div style={{ background: '#ffffff', borderRadius: '14px', padding: '0.85rem 1rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div className="roas-stat-tile">
                   <div style={{ width: 36, height: 36, borderRadius: '10px', background: '#f3e8ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Activity style={{ width: 18, height: 18 }} />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', display: 'block', lineHeight: 1.1 }}>Bounce Rate</span>
-                    <strong style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginTop: '2px', display: 'block' }}>28.4%</strong>
+                  <div className="roas-stat-tile-content">
+                    <span className="roas-stat-tile-title">Bounce Rate</span>
+                    <strong className="roas-stat-tile-val" style={{ marginTop: '2px', display: 'block' }}>28.4%</strong>
                   </div>
                 </div>
               </div>
 
               {/* 4. MAIN 3-COLUMN EXECUTIVE GRID */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.1fr) minmax(300px, 0.95fr) minmax(280px, 0.85fr)', gap: '1.25rem', marginBottom: '1.25rem' }}>
+              <div className="roas-exec-grid">
                 
                 {/* COLUMN 1: EXECUTIVE KPI SCORECARD */}
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
                   <h3 style={{ margin: '0 0 1rem', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Executive KPI Scorecard</h3>
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+                  <div className="roas-scorecard-grid">
                     {/* Card 1 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Revenue</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹48,600.00</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 28.6% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Total Revenue</span>
+                      <strong className="roas-scorecard-card-val">₹48,600.00</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 28.6% vs last period</span>
                     </div>
 
                     {/* Card 2 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Ad Spend</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹9,840.00</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#7c3aed', fontWeight: 700 }}>94.2% Budget Pacing</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Total Ad Spend</span>
+                      <strong className="roas-scorecard-card-val">₹9,840.00</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#7c3aed' }}>94.2% Budget Pacing</span>
                     </div>
 
                     {/* Card 3 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Blended ROAS</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#16a34a', display: 'block', margin: '3px 0' }}>4.94x</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>Excellent · Target: 3.5x</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Blended ROAS</span>
+                      <strong className="roas-scorecard-card-val" style={{ color: '#16a34a' }}>4.94x</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>Excellent · Target: 3.5x</span>
                     </div>
 
                     {/* Card 4 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Conversions</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>1,140 <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b' }}>SQLs</span></strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 19.8% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Total Conversions</span>
+                      <strong className="roas-scorecard-card-val">1,140 <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b' }}>SQLs</span></strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 19.8% vs last period</span>
                     </div>
 
                     {/* Card 5 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Conversion Rate</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>3.85%</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 0.65% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Conversion Rate</span>
+                      <strong className="roas-scorecard-card-val">3.85%</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 0.65% vs last period</span>
                     </div>
 
                     {/* Card 6 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Total Clicks</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>42,850</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 14.2% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Total Clicks</span>
+                      <strong className="roas-scorecard-card-val">42,850</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 14.2% vs last period</span>
                     </div>
 
                     {/* Card 7 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Impressions</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>890,500</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 18.5% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Impressions</span>
+                      <strong className="roas-scorecard-card-val">890,500</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 18.5% vs last period</span>
                     </div>
 
                     {/* Card 8 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Avg. CPC</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹1.13</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↓ 8.4% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Avg. CPC</span>
+                      <strong className="roas-scorecard-card-val">₹1.13</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↓ 8.4% vs last period</span>
                     </div>
 
                     {/* Card 9 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Cost per Acq (CPA)</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹8.60</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↓ 12.7% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Cost per Acq (CPA)</span>
+                      <strong className="roas-scorecard-card-val">₹8.60</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↓ 12.7% vs last period</span>
                     </div>
 
                     {/* Card 10 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Average Order Val</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹42.60</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 12.4% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Average Order Val</span>
+                      <strong className="roas-scorecard-card-val">₹42.60</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 12.4% vs last period</span>
                     </div>
 
                     {/* Card 11 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Customer LTV</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>₹376.00</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#7c3aed', fontWeight: 700 }}>8.8x LTV:CAC</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Customer LTV</span>
+                      <strong className="roas-scorecard-card-val">₹376.00</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#7c3aed' }}>8.8x LTV:CAC</span>
                     </div>
 
                     {/* Card 12 */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#64748b', display: 'block' }}>Returning Customers</span>
-                      <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', display: 'block', margin: '3px 0' }}>64.2%</strong>
-                      <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700 }}>↑ 5.1% vs last period</span>
+                    <div className="roas-scorecard-card">
+                      <span className="roas-scorecard-card-title">Returning Customers</span>
+                      <strong className="roas-scorecard-card-val">64.2%</strong>
+                      <span className="roas-scorecard-card-sub" style={{ color: '#16a34a' }}>↑ 5.1% vs last period</span>
                     </div>
                   </div>
                 </div>
@@ -5176,7 +5178,7 @@ export default function ClientDashboard() {
                     <p style={{ margin: '3px 0 1.25rem', fontSize: '0.8rem', color: '#64748b' }}>Revenue distribution and yield performance by channel</p>
 
                     {/* Donut & Legend Container */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div className="roas-donut-legend-wrap">
                       {/* SVG Donut Chart */}
                       <div style={{ position: 'relative', width: 140, height: 140, flexShrink: 0, margin: '0 auto' }}>
                         <svg width="140" height="140" viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)' }}>
@@ -5196,10 +5198,10 @@ export default function ClientDashboard() {
                       </div>
 
                       {/* Legend List */}
-                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                      <div className="roas-legend-list">
+                        <div className="roas-legend-item">
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2563eb' }} />
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2563eb', flexShrink: 0 }} />
                             <strong style={{ color: '#1e293b' }}>Google Search & Shopping</strong>
                           </div>
                           <div>
@@ -5208,9 +5210,9 @@ export default function ClientDashboard() {
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                        <div className="roas-legend-item">
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#c084fc' }} />
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#c084fc', flexShrink: 0 }} />
                             <strong style={{ color: '#1e293b' }}>Meta Ads (IG & FB)</strong>
                           </div>
                           <div>
@@ -5219,9 +5221,9 @@ export default function ClientDashboard() {
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                        <div className="roas-legend-item">
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#0891b2' }} />
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#0891b2', flexShrink: 0 }} />
                             <strong style={{ color: '#1e293b' }}>LinkedIn B2B Lead Gen</strong>
                           </div>
                           <div>
@@ -5230,9 +5232,9 @@ export default function ClientDashboard() {
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                        <div className="roas-legend-item">
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} />
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
                             <strong style={{ color: '#1e293b' }}>Organic SEO & Content</strong>
                           </div>
                           <div>
@@ -5260,7 +5262,7 @@ export default function ClientDashboard() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       {/* Card 1 */}
                       <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <div className="roas-ai-card-header">
                           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#16a34a', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <CheckCircle2 style={{ width: 14, height: 14 }} /> High Growth Opportunity
                           </span>
@@ -5276,7 +5278,7 @@ export default function ClientDashboard() {
 
                       {/* Card 2 */}
                       <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#fff7ed', border: '1px solid #fed7aa' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <div className="roas-ai-card-header">
                           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#ea580c', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <AlertTriangle style={{ width: 14, height: 14 }} /> Underperforming Alert
                           </span>
@@ -5292,7 +5294,7 @@ export default function ClientDashboard() {
 
                       {/* Card 3 */}
                       <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#eff6ff', border: '1px solid #bfdbfe' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <div className="roas-ai-card-header">
                           <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#2563eb', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <Sparkles style={{ width: 14, height: 14 }} /> Winning Creative Champion
                           </span>
@@ -5318,17 +5320,17 @@ export default function ClientDashboard() {
               </div>
 
               {/* 5. LOWER GRID: PERFORMANCE TRENDS & HEATMAP OVERVIEW */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.8fr) minmax(280px, 1.2fr)', gap: '1.25rem', marginBottom: '1.25rem' }}>
+              <div className="roas-lower-grid">
                 
                 {/* PERFORMANCE TRENDS (30 DAYS) */}
                 <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
                   <h3 style={{ margin: '0 0 1rem', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Performance Trends (30 Days)</h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.85rem' }}>
+                  <div className="roas-trends-grid">
                     {/* Revenue Trend */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9', minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>Revenue Trend</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Revenue Trend</span>
                         <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#16a34a' }}>↑ 28.6%</span>
                       </div>
                       <div style={{ height: 45, width: '100%' }}>
@@ -5339,9 +5341,9 @@ export default function ClientDashboard() {
                     </div>
 
                     {/* ROAS Trend */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9', minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>ROAS Trend</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>ROAS Trend</span>
                         <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#2563eb' }}>↑ 18.4%</span>
                       </div>
                       <div style={{ height: 45, width: '100%' }}>
@@ -5352,9 +5354,9 @@ export default function ClientDashboard() {
                     </div>
 
                     {/* Conversions Trend */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#FAF8F2', border: '1px solid #E0DDD2' }}>
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#FAF8F2', border: '1px solid #E0DDD2', minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#5A5A55' }}>Conversions Trend</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#5A5A55', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Conversions Trend</span>
                         <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#D99B00' }}>↑ 19.8%</span>
                       </div>
                       <div style={{ height: 45, width: '100%' }}>
@@ -5365,9 +5367,9 @@ export default function ClientDashboard() {
                     </div>
 
                     {/* Ad Spend Trend */}
-                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                    <div style={{ padding: '0.75rem', borderRadius: '12px', background: '#f8fafc', border: '1px solid #f1f5f9', minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569' }}>Ad Spend Trend</span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Ad Spend Trend</span>
                         <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c' }}>↓ 5.2%</span>
                       </div>
                       <div style={{ height: 45, width: '100%' }}>
@@ -5384,36 +5386,38 @@ export default function ClientDashboard() {
                   <div>
                     <h3 style={{ margin: '0 0 0.75rem', fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>Channel Performance Overview</h3>
                     
-                    <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '3px' }}>
-                      <thead>
-                        <tr>
-                          <th style={{ fontSize: '0.68rem', color: '#64748b', textAlign: 'left', fontWeight: 600 }}>Channel</th>
-                          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
-                            <th key={d} style={{ fontSize: '0.65rem', color: '#64748b', textAlign: 'center', fontWeight: 600 }}>{d}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[
-                          { name: 'Google Ads', row: ['#86efac', '#4ade80', '#22c55e', '#16a34a', '#86efac', '#4ade80', '#16a34a'] },
-                          { name: 'Meta Ads', row: ['#86efac', '#fde047', '#4ade80', '#22c55e', '#16a34a', '#86efac', '#4ade80'] },
-                          { name: 'LinkedIn Ads', row: ['#fca5a5', '#fde047', '#86efac', '#4ade80', '#fca5a5', '#fde047', '#86efac'] },
-                          { name: 'TikTok Ads', row: ['#fde047', '#86efac', '#4ade80', '#16a34a', '#4ade80', '#16a34a', '#fde047'] },
-                          { name: 'YouTube Ads', row: ['#fca5a5', '#fca5a5', '#fde047', '#86efac', '#fca5a5', '#fde047', '#fca5a5'] },
-                          { name: 'X Ads', row: ['#fde047', '#fca5a5', '#fde047', '#86efac', '#fde047', '#fca5a5', '#fde047'] }
-                        ].map((item, idx) => (
-                          <tr key={idx}>
-                            <td style={{ fontSize: '0.72rem', fontWeight: 600, color: '#334155', paddingRight: '4px' }}>{item.name}</td>
-                            {item.row.map((color, cIdx) => (
-                              <td key={cIdx} style={{ height: 16, background: color, borderRadius: '4px' }} />
+                    <div className="roas-heatmap-table-wrap">
+                      <table className="roas-heatmap-table">
+                        <thead>
+                          <tr>
+                            <th style={{ fontSize: '0.68rem', color: '#64748b', textAlign: 'left', fontWeight: 600 }}>Channel</th>
+                            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
+                              <th key={d} style={{ fontSize: '0.65rem', color: '#64748b', textAlign: 'center', fontWeight: 600 }}>{d}</th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {[
+                            { name: 'Google Ads', row: ['#86efac', '#4ade80', '#22c55e', '#16a34a', '#86efac', '#4ade80', '#16a34a'] },
+                            { name: 'Meta Ads', row: ['#86efac', '#fde047', '#4ade80', '#22c55e', '#16a34a', '#86efac', '#4ade80'] },
+                            { name: 'LinkedIn Ads', row: ['#fca5a5', '#fde047', '#86efac', '#4ade80', '#fca5a5', '#fde047', '#86efac'] },
+                            { name: 'TikTok Ads', row: ['#fde047', '#86efac', '#4ade80', '#16a34a', '#4ade80', '#16a34a', '#fde047'] },
+                            { name: 'YouTube Ads', row: ['#fca5a5', '#fca5a5', '#fde047', '#86efac', '#fca5a5', '#fde047', '#fca5a5'] },
+                            { name: 'X Ads', row: ['#fde047', '#fca5a5', '#fde047', '#86efac', '#fde047', '#fca5a5', '#fde047'] }
+                          ].map((item, idx) => (
+                            <tr key={idx}>
+                              <td style={{ fontSize: '0.72rem', fontWeight: 600, color: '#334155', paddingRight: '4px', whiteSpace: 'nowrap' }}>{item.name}</td>
+                              {item.row.map((color, cIdx) => (
+                                <td key={cIdx} style={{ height: 16, background: color, borderRadius: '4px' }} />
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '0.75rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '0.75rem', flexWrap: 'wrap' }}>
                     <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444' }} />
                     <span style={{ fontSize: '0.68rem', color: '#64748b' }}>Low ROAS</span>
                     <span style={{ width: 40, height: 4, borderRadius: 2, background: 'linear-gradient(90deg, #ef4444, #eab308, #22c55e)' }} />
@@ -5425,7 +5429,7 @@ export default function ClientDashboard() {
               </div>
 
               {/* 6. FOOTER TELEMETRY STATUS BAR */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', padding: '0.65rem 1.25rem', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontSize: '0.78rem', color: '#475569' }}>
+              <div className="roas-footer-bar">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <Activity style={{ width: 14, height: 14, color: '#16a34a' }} />
                   <span>Live Data Streams: <strong style={{ color: '#0f172a' }}>26 Active</strong></span>
@@ -5448,9 +5452,52 @@ export default function ClientDashboard() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#16a34a' }} />
-                  <span>System Status: <strong style={{ color: '#16a34a' }}>All Systems Operational</strong></span>
+                  <span>System Status: <strong style={{ color: '#16a34a' }}>All Operational</strong></span>
                 </div>
               </div>
+
+              {/* 7. ALERT CENTER MODAL OVERLAY */}
+              {showAlertCenterModal && (
+                <div className="social-composer-modal-overlay">
+                  <div className="social-composer-modal-card animate-scale-up" style={{ maxWidth: 520, padding: '1.5rem', width: '90%' }}>
+                    <div className="composer-modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Bell style={{ width: 20, height: 20, color: '#D99B00' }} />
+                        <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>Marketing Alert Center</h2>
+                      </div>
+                      <button onClick={() => setShowAlertCenterModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b' }}>
+                        <X style={{ width: 20, height: 20 }} />
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                      <div style={{ padding: '0.85rem', borderRadius: '10px', background: '#fef2f2', border: '1px solid #fecaca' }}>
+                        <strong style={{ fontSize: '0.85rem', color: '#dc2626', display: 'block' }}>⚠️ CPA Spike Warning on Meta Ads</strong>
+                        <p style={{ fontSize: '0.78rem', color: '#7f1d1d', margin: '4px 0 0' }}>Instagram Carousel Campaign #2 CPA increased by +18.4% in the last 2 hours. Creative fatigue detected.</p>
+                      </div>
+
+                      <div style={{ padding: '0.85rem', borderRadius: '10px', background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+                        <strong style={{ fontSize: '0.85rem', color: '#16a34a', display: 'block' }}>🚀 Record ROAS Yield on Google Search</strong>
+                        <p style={{ fontSize: '0.78rem', color: '#14532d', margin: '4px 0 0' }}>High-intent search ad group reached 5.85x ROAS. Scaling daily cap by +₹2,500 recommended.</p>
+                      </div>
+
+                      <div style={{ padding: '0.85rem', borderRadius: '10px', background: '#eff6ff', border: '1px solid #bfdbfe' }}>
+                        <strong style={{ fontSize: '0.85rem', color: '#2563eb', display: 'block' }}>✨ AI Model Auto-Optimization Complete</strong>
+                        <p style={{ fontSize: '0.78rem', color: '#1e3a8a', margin: '4px 0 0' }}>Reallocated ₹1,200 from paused TikTok segment to top-performing LinkedIn retargeting funnel.</p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid #f1f5f9' }}>
+                      <button
+                        onClick={() => setShowAlertCenterModal(false)}
+                        style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', border: 'none', background: '#1E3A2B', color: '#fff', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        Dismiss Alerts
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
             </div>
           )}
@@ -6943,7 +6990,7 @@ export default function ClientDashboard() {
           {/* FINANCIAL MANAGEMENT, BUDGET ALLOCATION & SPEND HUB        */}
           {/* ========================================================= */}
           {currentView === 'budget' && (
-            <div className="budget-container">
+            <div className="budget-container budget-master-container">
               {/* Breadcrumbs Row */}
               <div className="dash-breadcrumbs">
                 <span>Dashboard</span>
@@ -7035,7 +7082,7 @@ export default function ClientDashboard() {
               {/* Channel Spend Allocation Progress Matrix Grid */}
               <div className="margin-top-md">
                 <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Channel Allocation Pacing Breakdown</h3>
-                <div className="grid grid-cols-4 gap-4">
+                <div className="budget-channel-pacing-grid">
                   {[
                     { channel: 'Google Ads', allocated: 30000, spent: 23050, roas: '5.10x', color: 'purple' },
                     { channel: 'Meta Ads', allocated: 20000, spent: 14500, roas: '4.82x', color: 'blue' },
@@ -7079,7 +7126,7 @@ export default function ClientDashboard() {
                   <span className="bi-badge-pill">Real-Time Fiscal AI</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 margin-top-sm">
+                <div className="budget-ai-insights-grid margin-top-sm">
                   {budgetInsights.map((ins) => (
                     <div key={ins.id} className="bg-white p-4 rounded-xl border border-purple-100 shadow-sm flex flex-col justify-between">
                       <div>
@@ -7118,7 +7165,7 @@ export default function ClientDashboard() {
 
                 {/* Toolbar */}
                 <div className="bi-controls-toolbar margin-top-sm">
-                  <div className="flex items-center gap-2">
+                  <div className="budget-toolbar-filters">
                     {['All', 'Google Ads', 'Meta Ads', 'LinkedIn', 'Organic SEO'].map((ch) => (
                       <button
                         key={ch}
@@ -7143,7 +7190,7 @@ export default function ClientDashboard() {
                 </div>
 
                 {/* Table */}
-                <div className="bi-table-wrap margin-top-sm">
+                <div className="bi-table-wrap budget-table-scroll-wrap margin-top-sm">
                   <table className="bi-leaderboard-table">
                     <thead>
                       <tr>
@@ -7231,7 +7278,7 @@ export default function ClientDashboard() {
                       const cap = e.target.capInput.value;
                       handleUpdateCampaignBudget(selectedBudgetAdjust.id, alloc, cap);
                     }}>
-                      <div className="bi-detail-modal-body p-6 grid grid-cols-2 gap-4">
+                      <div className="bi-detail-modal-body p-6 budget-modal-grid">
                         <div className="form-group col-span-2">
                           <label className="composer-label">Campaign Channel</label>
                           <input type="text" disabled className="composer-input bg-slate-100" value={selectedBudgetAdjust.channel} />
@@ -7299,7 +7346,7 @@ export default function ClientDashboard() {
                     </div>
 
                     <form onSubmit={handleSaveNewBudget}>
-                      <div className="bi-detail-modal-body p-6 grid grid-cols-2 gap-4">
+                      <div className="bi-detail-modal-body p-6 budget-modal-grid">
                         <div className="form-group col-span-2">
                           <label className="composer-label">Campaign Workstream Name *</label>
                           <input
@@ -7370,7 +7417,7 @@ export default function ClientDashboard() {
           {/* OMNICHANNEL INTEGRATION ECOSYSTEM & API CONTROL HUB       */}
           {/* ========================================================= */}
           {currentView === 'integrations' && (
-            <div className="integrations-container">
+            <div className="integrations-container integrations-master-container">
               {/* Breadcrumbs Row */}
               <div className="dash-breadcrumbs">
                 <span>Dashboard</span>
@@ -7463,7 +7510,7 @@ export default function ClientDashboard() {
 
               {/* Category Filter Toolbar & Search Bar */}
               <div className="bi-controls-toolbar margin-top-md">
-                <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                <div className="integrations-toolbar-filters">
                   {['All', 'Ad Networks', 'Social Media', 'CRM & Email', 'Analytics', 'Cloud Storage', 'Workflow Engine', 'E-Commerce'].map((cat) => (
                     <button
                       key={cat}
@@ -7488,7 +7535,7 @@ export default function ClientDashboard() {
               </div>
 
               {/* 12-Service Integration Grid */}
-              <div className="grid grid-cols-3 gap-5 margin-top-md">
+              <div className="integrations-services-grid margin-top-md">
                 {filteredIntegrations.map((service) => {
                   const isConn = service.status === 'Connected';
                   return (
@@ -7566,7 +7613,7 @@ export default function ClientDashboard() {
                     </div>
 
                     <form onSubmit={handleSaveServiceConfig}>
-                      <div className="bi-detail-modal-body p-6 grid grid-cols-2 gap-4">
+                      <div className="bi-detail-modal-body p-6 integrations-modal-grid">
                         <div className="form-group col-span-2">
                           <label className="composer-label">Integration Category</label>
                           <input type="text" disabled className="composer-input bg-slate-100" value={selectedServiceConfig.category} />
@@ -7633,7 +7680,7 @@ export default function ClientDashboard() {
                     </div>
 
                     <form onSubmit={handleSaveCustomWebhook}>
-                      <div className="bi-detail-modal-body p-6 grid grid-cols-2 gap-4">
+                      <div className="bi-detail-modal-body p-6 integrations-modal-grid">
                         <div className="form-group col-span-2">
                           <label className="composer-label">Webhook Name *</label>
                           <input
@@ -8198,7 +8245,7 @@ export default function ClientDashboard() {
                         </div>
 
                         <div className="card-block-body">
-                          <div className="table-responsive-wrapper">
+                          <div className="table-responsive-wrapper settings-table-scroll-wrap">
                             <table className="login-history-table">
                               <thead>
                                 <tr>
@@ -8546,59 +8593,6 @@ export default function ClientDashboard() {
                       </div>
 
 
-
-                      {/* 2. ACCENT COLOR SELECTION */}
-                      <div className="settings-card-block margin-top-md">
-                        <div className="card-block-header">
-                          <Palette className="card-block-ic text-purple" />
-                          <div>
-                            <h3 className="card-block-title">Brand Accent Color</h3>
-                            <p className="card-block-sub">Select your preferred primary accent color for active buttons, badges, and focus rings.</p>
-                          </div>
-                        </div>
-
-                        <div className="card-block-body">
-                          <div className="accent-color-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.85rem' }}>
-                            {[
-                              { id: 'purple', name: 'Electric Purple', hex: '#7c3aed', bg: '#f3e8ff' },
-                              { id: 'blue', name: 'Ocean Blue', hex: '#2563eb', bg: '#dbeafe' },
-                              { id: 'emerald', name: 'Emerald Green', hex: '#10b981', bg: '#d1fae5' },
-                              { id: 'orange', name: 'Sunset Orange', hex: '#f97316', bg: '#ffedd5' },
-                              { id: 'rose', name: 'Rose Pink', hex: '#ec4899', bg: '#fce7f3' },
-                              { id: 'cyan', name: 'Midnight Cyan', hex: '#06b6d4', bg: '#cffafe' },
-                            ].map((col) => (
-                              <button
-                                key={col.id}
-                                type="button"
-                                className={`accent-swatch-item ${accentColor === col.id ? 'active-swatch' : ''}`}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '0.6rem',
-                                  padding: '0.65rem 0.85rem',
-                                  borderRadius: '12px',
-                                  border: accentColor === col.id ? `2px solid ${col.hex}` : '1px solid var(--border-color, #e2e8f0)',
-                                  backgroundColor: themeMode === 'light' ? col.bg : 'var(--pill-bg, #151e2e)',
-                                  color: 'var(--text-primary, #1e293b)',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.2s ease',
-                                  outline: 'none'
-                                }}
-                                onClick={async () => {
-                                  setAccentColor(col.id);
-                                  setAppearanceSaveSuccess(true);
-                                  await syncSecurityFieldToBackend({ accentColor: col.id });
-                                  setTimeout(() => setAppearanceSaveSuccess(false), 2500);
-                                }}
-                              >
-                                <span style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: col.hex, display: 'inline-block', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}></span>
-                                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'inherit' }}>{col.name}</span>
-                                {accentColor === col.id && <Check className="w-3.5 h-3.5 ml-auto" style={{ color: col.hex }} />}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
 
                       {/* 3. DASHBOARD LAYOUT */}
                       <div className="settings-card-block margin-top-md">
