@@ -3309,81 +3309,118 @@ export default function ClientDashboard() {
                 {/* LEFT COLUMN: Announcements, Active Campaigns, Performance Chart */}
                 <div className="intel-left-column">
 
-                  {/* Announcement Section */}
-                  <div className="intel-card-box">
-                    <div className="icard-header">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#1E3A2B] text-[#D99B00] flex items-center justify-center shrink-0 shadow-md">
-                          <Megaphone className="w-5 h-5" />
+                  {/* Premium Animated & Dynamic Color Announcement Section */}
+                  <div className="relative overflow-hidden rounded-[24px] p-6 text-white bg-gradient-to-br from-[#1E3A2B] via-[#142B20] to-[#0A1A12] border border-[#D99B00]/40 shadow-2xl transition-all duration-300">
+                    {/* Background Glowing Radial Aura */}
+                    <div className="absolute -top-20 -right-20 w-72 h-72 bg-[#D99B00]/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
+                    <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#22c55e]/15 rounded-full blur-3xl pointer-events-none" />
+
+                    {/* Header */}
+                    <div className="relative z-10 flex items-start justify-between gap-4 mb-5">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D99B00] to-[#B88300] text-[#1E3A2B] flex items-center justify-center shrink-0 shadow-lg shadow-[#D99B00]/20 transform hover:scale-105 transition-transform duration-300">
+                          <Megaphone className="w-6 h-6 animate-bounce" style={{ animationDuration: '2.5s' }} />
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-extrabold uppercase tracking-widest bg-[#D99B00]/15 text-[#D99B00] px-2.5 py-0.5 rounded-full border border-[#D99B00]/30">
+                            <span className="relative flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#D99B00]/20 border border-[#D99B00]/50 text-[#F5C451] text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+                              <span className="w-2 h-2 rounded-full bg-[#F5C451] animate-ping absolute" />
+                              <span className="w-2 h-2 rounded-full bg-[#F5C451] relative" />
                               ANNOUNCEMENT
                             </span>
-                            <span className="text-xs text-[#5A5A55] font-medium">• Q3 2026 Release</span>
+                            <span className="text-xs text-[#E0DDD2]/70 font-medium">• Q3 2026 Live Release</span>
                           </div>
-                          <h3 className="icard-title">DigiToomasha Growth Engine Upgrades</h3>
-                          <p className="icard-sub">Latest agency telemetry tools & campaign automation features live in your portal.</p>
+                          <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-white font-sans">
+                            DigiToomasha Growth Engine Upgrades
+                          </h3>
+                          <p className="text-xs text-[#E0DDD2]/80 mt-0.5">
+                            Latest agency telemetry tools & campaign automation features live in your portal.
+                          </p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="space-y-3.5 mt-4">
+                    {/* Items List */}
+                    <div className="relative z-10 space-y-3.5">
                       {/* Announcement Item 1 */}
-                      <div className="p-3.5 rounded-xl bg-[#FAF8F2] border border-[#E0DDD2] flex items-start gap-3 hover:border-[#1E3A2B]/40 transition-colors">
-                        <div className="p-2 rounded-lg bg-[#1E3A2B]/10 text-[#1E3A2B] mt-0.5">
-                          <Sparkles className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <strong className="text-sm font-bold text-[#1A1A1A]">AI Conversion Telemetry v3.2 Live</strong>
-                            <span className="text-[11px] font-semibold text-[#1E3A2B] bg-[#EAE6D6] px-2 py-0.5 rounded-md">New Feature</span>
+                      <div className="group relative p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[#D99B00]/60 hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-[#D99B00]/10 cursor-pointer overflow-hidden">
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#D99B00] to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="flex items-start gap-3.5">
+                          <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mt-0.5 shrink-0">
+                            <Sparkles className="w-4 h-4" />
                           </div>
-                          <p className="text-xs text-[#5A5A55] leading-relaxed">
-                            Multi-touch attribution for Meta Ads, Google Search & TikTok is now synchronized in real-time. Track CPA per channel instantly.
-                          </p>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <strong className="text-sm font-bold text-white group-hover:text-[#F5C451] transition-colors">
+                                AI Conversion Telemetry v3.2 Live
+                              </strong>
+                              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm">
+                                New Feature
+                              </span>
+                            </div>
+                            <p className="text-xs text-[#E0DDD2]/90 leading-relaxed">
+                              Multi-touch attribution for Meta Ads, Google Search & TikTok is now synchronized in real-time. Track CPA per channel instantly.
+                            </p>
+                          </div>
                         </div>
                       </div>
 
                       {/* Announcement Item 2 */}
-                      <div className="p-3.5 rounded-xl bg-[#FAF8F2] border border-[#E0DDD2] flex items-start gap-3 hover:border-[#1E3A2B]/40 transition-colors">
-                        <div className="p-2 rounded-lg bg-[#D99B00]/15 text-[#D99B00] mt-0.5">
-                          <Zap className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <strong className="text-sm font-bold text-[#1A1A1A]">1-Click Budget Auto-Reallocation</strong>
-                            <span className="text-[11px] font-semibold text-[#D99B00] bg-[#D99B00]/10 px-2 py-0.5 rounded-md">Optimization</span>
+                      <div className="group relative p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[#D99B00]/60 hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-[#D99B00]/10 cursor-pointer overflow-hidden">
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#D99B00] to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="flex items-start gap-3.5">
+                          <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mt-0.5 shrink-0">
+                            <Zap className="w-4 h-4" />
                           </div>
-                          <p className="text-xs text-[#5A5A55] leading-relaxed">
-                            Smart ROAS engine can now automatically shift budget from low-converting ad sets to top-performing search keywords.
-                          </p>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <strong className="text-sm font-bold text-white group-hover:text-[#F5C451] transition-colors">
+                                1-Click Budget Auto-Reallocation
+                              </strong>
+                              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm">
+                                Optimization
+                              </span>
+                            </div>
+                            <p className="text-xs text-[#E0DDD2]/90 leading-relaxed">
+                              Smart ROAS engine can now automatically shift budget from low-converting ad sets to top-performing search keywords.
+                            </p>
+                          </div>
                         </div>
                       </div>
 
                       {/* Announcement Item 3 */}
-                      <div className="p-3.5 rounded-xl bg-[#FAF8F2] border border-[#E0DDD2] flex items-start gap-3 hover:border-[#1E3A2B]/40 transition-colors">
-                        <div className="p-2 rounded-lg bg-[#1E3A2B]/10 text-[#1E3A2B] mt-0.5">
-                          <Bell className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <strong className="text-sm font-bold text-[#1A1A1A]">Q3 Strategic Growth Review Open</strong>
-                            <span className="text-[11px] font-semibold text-[#5A5A55] bg-[#EAE6D6] px-2 py-0.5 rounded-md">Scheduled</span>
+                      <div className="group relative p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-[#D99B00]/60 hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-[#D99B00]/10 cursor-pointer overflow-hidden">
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#D99B00] to-sky-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="flex items-start gap-3.5">
+                          <div className="p-2.5 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mt-0.5 shrink-0">
+                            <Bell className="w-4 h-4" />
                           </div>
-                          <p className="text-xs text-[#5A5A55] leading-relaxed">
-                            Book your 1-on-1 Q3 campaign strategy review with your dedicated DigiToomasha account director.
-                          </p>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <strong className="text-sm font-bold text-white group-hover:text-[#F5C451] transition-colors">
+                                Q3 Strategic Growth Review Open
+                              </strong>
+                              <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm">
+                                Scheduled
+                              </span>
+                            </div>
+                            <p className="text-xs text-[#E0DDD2]/90 leading-relaxed">
+                              Book your 1-on-1 Q3 campaign strategy review with your dedicated DigiToomasha account director.
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-[#E0DDD2] flex items-center justify-between">
-                      <span className="text-xs text-[#5A5A55]">Posted by <strong>DigiToomasha Product Team</strong></span>
-                      <button className="text-xs font-bold uppercase tracking-wider text-[#1E3A2B] hover:text-[#D99B00] flex items-center gap-1.5 transition-colors">
-                        View Product Changelog
-                        <ChevronRight className="w-3.5 h-3.5" />
+                    {/* Footer */}
+                    <div className="relative z-10 mt-5 pt-3.5 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 text-xs text-[#E0DDD2]/80">
+                        <span className="w-2 h-2 rounded-full bg-[#4ade80]" />
+                        <span>Posted by <strong className="text-white">DigiToomasha Product Team</strong></span>
+                      </div>
+                      <button className="group text-xs font-bold uppercase tracking-wider text-[#F5C451] hover:text-white px-4 py-2 rounded-full bg-[#D99B00]/15 hover:bg-[#D99B00] hover:text-[#1E3A2B] border border-[#D99B00]/30 transition-all duration-300 flex items-center gap-1.5 shadow-sm w-fit">
+                        <span>View Product Changelog</span>
+                        <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                       </button>
                     </div>
                   </div>
