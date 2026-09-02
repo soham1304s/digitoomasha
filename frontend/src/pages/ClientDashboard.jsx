@@ -3306,67 +3306,85 @@ export default function ClientDashboard() {
               {/* 3. MAIN DASHBOARD 2-COLUMN INTELLIGENCE GRID */}
               <div className="dash-intel-main-grid">
 
-                {/* LEFT COLUMN: Performance Chart, Active Campaigns, Creatives */}
+                {/* LEFT COLUMN: Announcements, Active Campaigns, Performance Chart */}
                 <div className="intel-left-column">
 
-                  {/* Performance Analytics Funnel & Chart Box */}
+                  {/* Announcement Section */}
                   <div className="intel-card-box">
                     <div className="icard-header">
-                      <div>
-                        <h3 className="icard-title">Weekly Performance & Lead Funnel</h3>
-                        <p className="icard-sub">Lead conversions and total impressions across active traffic channels.</p>
-                      </div>
-
-                      {/* Time Range Selector */}
-                      <div className="time-range-toggle-group">
-                        {['7D', '30D', '90D', '1Y'].map((t) => (
-                          <button
-                            key={t}
-                            className={`trange-btn ${timeRange === t ? 'active' : ''}`}
-                            onClick={() => setTimeRange(t)}
-                          >
-                            {t}
-                          </button>
-                        ))}
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#1E3A2B] text-[#D99B00] flex items-center justify-center shrink-0 shadow-md">
+                          <Megaphone className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-extrabold uppercase tracking-widest bg-[#D99B00]/15 text-[#D99B00] px-2.5 py-0.5 rounded-full border border-[#D99B00]/30">
+                              ANNOUNCEMENT
+                            </span>
+                            <span className="text-xs text-[#5A5A55] font-medium">• Q3 2026 Release</span>
+                          </div>
+                          <h3 className="icard-title">DigiToomasha Growth Engine Upgrades</h3>
+                          <p className="icard-sub">Latest agency telemetry tools & campaign automation features live in your portal.</p>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Chart Visualization Simulation */}
-                    <div className="funnel-chart-wrapper">
-                      <div className="chart-bars-group">
-                        {[
-                          { day: 'Mon', leads: 280, impr: 180, height: '65%' },
-                          { day: 'Tue', leads: 340, impr: 220, height: '80%' },
-                          { day: 'Wed', leads: 410, impr: 290, height: '95%' },
-                          { day: 'Thu', leads: 310, impr: 210, height: '72%' },
-                          { day: 'Fri', leads: 480, impr: 350, height: '100%' },
-                          { day: 'Sat', leads: 260, impr: 170, height: '60%' },
-                          { day: 'Sun', leads: 165, impr: 110, height: '40%' }
-                        ].map((b, idx) => (
-                          <div key={idx} className="chart-bar-col">
-                            <div className="bar-hover-tooltip">{b.leads} Leads ({b.impr}k Impr.)</div>
-                            <div className="bar-pillar-wrap">
-                              <div className="bar-pillar-fill" style={{ height: b.height }} />
-                            </div>
-                            <span className="bar-day-label">{b.day}</span>
+                    <div className="space-y-3.5 mt-4">
+                      {/* Announcement Item 1 */}
+                      <div className="p-3.5 rounded-xl bg-[#FAF8F2] border border-[#E0DDD2] flex items-start gap-3 hover:border-[#1E3A2B]/40 transition-colors">
+                        <div className="p-2 rounded-lg bg-[#1E3A2B]/10 text-[#1E3A2B] mt-0.5">
+                          <Sparkles className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <strong className="text-sm font-bold text-[#1A1A1A]">AI Conversion Telemetry v3.2 Live</strong>
+                            <span className="text-[11px] font-semibold text-[#1E3A2B] bg-[#EAE6D6] px-2 py-0.5 rounded-md">New Feature</span>
                           </div>
-                        ))}
+                          <p className="text-xs text-[#5A5A55] leading-relaxed">
+                            Multi-touch attribution for Meta Ads, Google Search & TikTok is now synchronized in real-time. Track CPA per channel instantly.
+                          </p>
+                        </div>
                       </div>
 
-                      <div className="chart-legend-row">
-                        <div className="clegend-item">
-                          <span className="clegend-dot bg-purple-dot" />
-                          <span>Meta Paid Ads (55%)</span>
+                      {/* Announcement Item 2 */}
+                      <div className="p-3.5 rounded-xl bg-[#FAF8F2] border border-[#E0DDD2] flex items-start gap-3 hover:border-[#1E3A2B]/40 transition-colors">
+                        <div className="p-2 rounded-lg bg-[#D99B00]/15 text-[#D99B00] mt-0.5">
+                          <Zap className="w-4 h-4" />
                         </div>
-                        <div className="clegend-item">
-                          <span className="clegend-dot bg-orange-dot" />
-                          <span>Google Search (32%)</span>
-                        </div>
-                        <div className="clegend-item">
-                          <span className="clegend-dot bg-cyan-dot" />
-                          <span>TikTok UGC (13%)</span>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <strong className="text-sm font-bold text-[#1A1A1A]">1-Click Budget Auto-Reallocation</strong>
+                            <span className="text-[11px] font-semibold text-[#D99B00] bg-[#D99B00]/10 px-2 py-0.5 rounded-md">Optimization</span>
+                          </div>
+                          <p className="text-xs text-[#5A5A55] leading-relaxed">
+                            Smart ROAS engine can now automatically shift budget from low-converting ad sets to top-performing search keywords.
+                          </p>
                         </div>
                       </div>
+
+                      {/* Announcement Item 3 */}
+                      <div className="p-3.5 rounded-xl bg-[#FAF8F2] border border-[#E0DDD2] flex items-start gap-3 hover:border-[#1E3A2B]/40 transition-colors">
+                        <div className="p-2 rounded-lg bg-[#1E3A2B]/10 text-[#1E3A2B] mt-0.5">
+                          <Bell className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <strong className="text-sm font-bold text-[#1A1A1A]">Q3 Strategic Growth Review Open</strong>
+                            <span className="text-[11px] font-semibold text-[#5A5A55] bg-[#EAE6D6] px-2 py-0.5 rounded-md">Scheduled</span>
+                          </div>
+                          <p className="text-xs text-[#5A5A55] leading-relaxed">
+                            Book your 1-on-1 Q3 campaign strategy review with your dedicated DigiToomasha account director.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-[#E0DDD2] flex items-center justify-between">
+                      <span className="text-xs text-[#5A5A55]">Posted by <strong>DigiToomasha Product Team</strong></span>
+                      <button className="text-xs font-bold uppercase tracking-wider text-[#1E3A2B] hover:text-[#D99B00] flex items-center gap-1.5 transition-colors">
+                        View Product Changelog
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
 
@@ -3432,6 +3450,67 @@ export default function ClientDashboard() {
                           </div>
                         );
                       })}
+                    </div>
+                  </div>
+
+                  {/* Shifted: Performance Analytics Funnel & Chart Box (Moved to Bottom) */}
+                  <div className="intel-card-box margin-top-md">
+                    <div className="icard-header">
+                      <div>
+                        <h3 className="icard-title">Weekly Performance & Lead Funnel</h3>
+                        <p className="icard-sub">Lead conversions and total impressions across active traffic channels.</p>
+                      </div>
+
+                      {/* Time Range Selector */}
+                      <div className="time-range-toggle-group">
+                        {['7D', '30D', '90D', '1Y'].map((t) => (
+                          <button
+                            key={t}
+                            className={`trange-btn ${timeRange === t ? 'active' : ''}`}
+                            onClick={() => setTimeRange(t)}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Chart Visualization Simulation */}
+                    <div className="funnel-chart-wrapper">
+                      <div className="chart-bars-group">
+                        {[
+                          { day: 'Mon', leads: 280, impr: 180, height: '65%' },
+                          { day: 'Tue', leads: 340, impr: 220, height: '80%' },
+                          { day: 'Wed', leads: 410, impr: 290, height: '95%' },
+                          { day: 'Thu', leads: 310, impr: 210, height: '72%' },
+                          { day: 'Fri', leads: 480, impr: 350, height: '100%' },
+                          { day: 'Sat', leads: 260, impr: 170, height: '60%' },
+                          { day: 'Sun', leads: 165, impr: 110, height: '40%' }
+                        ].map((b, idx) => (
+                          <div key={idx} className="chart-bar-col">
+                            <div className="bar-hover-tooltip">{b.leads} Leads ({b.impr}k Impr.)</div>
+                            <div className="bar-pillar-wrap">
+                              <div className="bar-pillar-fill" style={{ height: b.height }} />
+                            </div>
+                            <span className="bar-day-label">{b.day}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="chart-legend-row">
+                        <div className="clegend-item">
+                          <span className="clegend-dot bg-purple-dot" />
+                          <span>Meta Paid Ads (55%)</span>
+                        </div>
+                        <div className="clegend-item">
+                          <span className="clegend-dot bg-orange-dot" />
+                          <span>Google Search (32%)</span>
+                        </div>
+                        <div className="clegend-item">
+                          <span className="clegend-dot bg-cyan-dot" />
+                          <span>TikTok UGC (13%)</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
