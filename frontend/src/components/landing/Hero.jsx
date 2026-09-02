@@ -1,18 +1,18 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { Lottie } from 'lottie-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { ArrowRight, ArrowDown } from 'lucide-react';
-import growthChartImg from '@/assets/driving_growth_chart.png';
+import { ArrowRight } from 'lucide-react';
+import digitalMarketingAnimation from '@/assets/Digital Marketing Animation.json';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const Hero = () => {
   const containerRef = useRef(null);
   const contentRef = useRef(null);
-  const cardRef = useRef(null);
-  const heroWrapperRef = useRef(null);
+  const animationRef = useRef(null);
 
   useGSAP(() => {
     // Intro Timeline
@@ -37,7 +37,7 @@ export const Hero = () => {
         { opacity: 1, scale: 1, duration: 0.8 },
         '-=0.6'
       )
-      .fromTo(cardRef.current,
+      .fromTo(animationRef.current,
         { opacity: 0, scale: 0.88, rotateY: -10, y: 50 },
         { opacity: 1, scale: 1, rotateY: 0, y: 0, duration: 1.4, ease: 'power3.out' },
         '-=1.0'
@@ -119,33 +119,19 @@ export const Hero = () => {
 
           </div>
 
-          {/* Right Visual Card Component */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end relative">
-
-            {/* Background Golden Arch behind card matching reference image */}
-            <div className="absolute -top-10 -right-6 w-[88%] h-[110%] bg-[#EFE1B3] rounded-t-[14rem] rounded-b-[3rem] -z-0 opacity-80" />
-
-            <div
-              ref={cardRef}
-              className="relative z-10 w-full max-w-[480px] bg-[#FAF8F2] border border-[#E0DDD2] p-4 md:p-6 rounded-[2.5rem] shadow-2xl hover:shadow-3xl transition-shadow duration-500 group"
-            >
-              {/* Media Preview Box */}
-              <div className="relative w-full h-[320px] md:h-[400px] overflow-hidden rounded-[2rem] bg-[#1E3A2B]">
-                {/* Image */}
-                <img
-                  src={growthChartImg}
-                  alt="DigiToomasha Digital Performance Growth Showcase"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out opacity-95"
-                />
-              </div>
-
-              {/* Arrow Action Button */}
-              <div className="mt-4 flex items-center justify-end px-2">
-                <div className="w-10 h-10 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center font-bold text-xs group-hover:bg-[#D99B00] group-hover:text-white transition-all duration-300">
-                  →
-                </div>
-              </div>
-
+          {/* Right Visual Lottie Animation Section (Frameless) */}
+          <div
+            ref={animationRef}
+            className="lg:col-span-5 flex justify-center lg:justify-end items-center relative w-full"
+          >
+            <div className="w-full max-w-[520px] h-[360px] md:h-[460px] flex items-center justify-center">
+              <Lottie
+                src={digitalMarketingAnimation}
+                animationData={digitalMarketingAnimation}
+                loop={true}
+                autoplay={true}
+                className="w-full h-full object-contain"
+              />
             </div>
           </div>
 

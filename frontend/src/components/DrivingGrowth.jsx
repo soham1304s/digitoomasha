@@ -76,7 +76,7 @@ export default function DrivingGrowth() {
           </p>
 
           <div className="growth-cta-wrapper">
-            <button 
+            <button
               className="learn-more-btn"
               onClick={() => setIsModalOpen(true)}
             >
@@ -103,7 +103,7 @@ export default function DrivingGrowth() {
       {isModalOpen && (
         <div className="growth-modal-overlay" onClick={() => setIsModalOpen(false)}>
           <div className="growth-modal-card" onClick={(e) => e.stopPropagation()}>
-            
+
             {/* Header Section */}
             <div className="growth-modal-header">
               <div>
@@ -117,7 +117,7 @@ export default function DrivingGrowth() {
                 </p>
               </div>
 
-              <button 
+              <button
                 className="growth-modal-close-btn"
                 onClick={() => setIsModalOpen(false)}
                 title="Close (Esc)"
@@ -128,7 +128,7 @@ export default function DrivingGrowth() {
 
             {/* Modal Body */}
             <div className="growth-modal-body">
-              
+
               {/* Key Metrics Summary Banner */}
               <div className="growth-modal-metrics-grid">
                 <div className="growth-modal-metric-card">
@@ -188,7 +188,7 @@ export default function DrivingGrowth() {
               {activeTab === 'pillars' && (
                 <div className="growth-tab-content-pane">
                   <div className="growth-pillars-grid">
-                    
+
                     <div className="growth-pillar-card">
                       <div className="pillar-icon-box">
                         <TrendingUp style={{ width: 18, height: 18 }} />
@@ -253,7 +253,7 @@ export default function DrivingGrowth() {
               {activeTab === 'roadmap' && (
                 <div className="growth-tab-content-pane">
                   <div className="roadmap-timeline">
-                    
+
                     <div className="roadmap-step-item">
                       <div className="roadmap-phase-badge">Step 1</div>
                       <div className="roadmap-step-content">
@@ -302,7 +302,7 @@ export default function DrivingGrowth() {
               {activeTab === 'tech' && (
                 <div className="growth-tab-content-pane">
                   <div className="tech-stack-grid">
-                    
+
                     <div className="tech-stack-card">
                       <div className="tech-icon-circle">
                         <Activity style={{ width: 20, height: 20 }} />
@@ -359,7 +359,7 @@ export default function DrivingGrowth() {
               {activeTab === 'cases' && (
                 <div className="growth-tab-content-pane">
                   <div className="case-highlights-grid">
-                    
+
                     <div className="case-highlight-card">
                       <div>
                         <h4 className="ch-client-name">Lumière Skincare</h4>
@@ -410,14 +410,14 @@ export default function DrivingGrowth() {
 
             {/* Footer Action Bar */}
             <div className="growth-modal-footer">
-              <button 
+              <button
                 className="gm-footer-btn-secondary"
                 onClick={() => setIsModalOpen(false)}
               >
                 Close
               </button>
 
-              <button 
+              <button
                 className="gm-footer-btn-primary"
                 onClick={() => {
                   setIsModalOpen(false);
